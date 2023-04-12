@@ -26,8 +26,8 @@ const allSkrining = ({ search, sortBy, sortOrder, limit, offset }) => {
     Pool.query(
       `SELECT tbl_skrining.id, tbl_skrining.id_pasien, 
               tbl_pasien.nama_lengkap AS nama_lengkap, tbl_pasien.jenis_kelamin AS jenis_kelamin, tbl_pasien.nomor_kitas AS nomor_kitas, tbl_pasien.nomor_hp AS nomor_hp,
-          to_char( tbl_skrining.created_at, 'DD Month YYYY - HH:MI' ) AS created_at,
-          to_char( tbl_skrining.updated_at, 'DD Month YYYY - HH:MI' ) AS updated_at
+          to_char( tbl_skrining.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+          to_char( tbl_skrining.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
         FROM tbl_skrining AS tbl_skrining
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_skrining.id_pasien = tbl_pasien.id
         WHERE tbl_pasien.nama_lengkap
@@ -53,8 +53,8 @@ const getSkriningById = ({ id }) => {
     Pool.query(
       `SELECT tbl_skrining.id, tbl_skrining.id_pasien, 
             tbl_pasien.nama_lengkap AS nama_lengkap, tbl_pasien.jenis_kelamin AS jenis_kelamin, tbl_pasien.nomor_kitas AS nomor_kitas, tbl_pasien.nomor_hp AS nomor_hp,
-        to_char( tbl_skrining.created_at, 'DD Month YYYY - HH:MI' ) AS created_at,
-        to_char( tbl_skrining.updated_at, 'DD Month YYYY - HH:MI' ) AS updated_at
+        to_char( tbl_skrining.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+        to_char( tbl_skrining.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
         FROM tbl_skrining AS tbl_skrining
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_skrining.id_pasien = tbl_pasien.id
         WHERE tbl_skrining.id = '${id}'`,
