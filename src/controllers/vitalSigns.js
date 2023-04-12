@@ -6,10 +6,10 @@ const {
   getVitalById,
   findVitalById,
   editVital,
-} = require(`../models/vital`);
+} = require(`../models/vitalSigns`);
 const { v4: uuidv4 } = require('uuid');
 
-const vitalControllers = {
+const vitalSignsControllers = {
   add: async (req, res, next) => {
     try {
       let data = {
@@ -147,4 +147,4 @@ const vitalControllers = {
   },
 };
 
-exports.vitalControllers = vitalControllers;
+exports.vitalSignsControllers = vitalSignsControllers;
