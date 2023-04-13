@@ -108,7 +108,7 @@ const diagnosisControllers = {
         let data = {
           id,
           id_kunjungan: req.body.id_kunjungan,
-          id_penyakit: req.body.nama_penyakit,
+          id_penyakit: req.body.id_penyakit,
         };
 
         await editDiagnosis(data);
