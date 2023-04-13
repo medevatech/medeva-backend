@@ -1,5 +1,12 @@
 /node_modules
+<<<<<<< HEAD
 .env
 note.txt
 package-lock.json
 query.sql
+=======
+package-lock.json
+.env
+note.txt
+query.sql
+>>>>>>> f546193b330e26aebd5fa1976395e47675fb9495
