@@ -15,8 +15,8 @@ const kunjunganControllers = {
       let data = {
         id: uuidv4(),
         id_jaga: req.body.id_jaga,
-        id_pasien: req.body.id_pasien,
         id_vs: req.body.id_vs,
+        id_pasien: req.body.id_pasien,
         waktu_mulai: req.body.waktu_mulai,
         waktu_selesai: req.body.waktu_selesai,
         tipe: req.body.tipe,
@@ -25,6 +25,7 @@ const kunjunganControllers = {
         prognosa: req.body.prognosa,
         kasus_kll: req.body.kasus_kll,
         status_pulang: req.body.status_pulang,
+        keluhan: req.body.keluhan,
       };
 
       await insertKunjungan(data);
@@ -117,8 +118,8 @@ const kunjunganControllers = {
         let data = {
           id,
           id_jaga: req.body.id_jaga,
-          id_pasien: req.body.id_pasien,
           id_vs: req.body.id_vs,
+          id_pasien: req.body.id_pasien,
           waktu_mulai: req.body.waktu_mulai,
           waktu_selesai: req.body.waktu_selesai,
           tipe: req.body.tipe,
@@ -127,6 +128,7 @@ const kunjunganControllers = {
           prognosa: req.body.prognosa,
           kasus_kll: req.body.kasus_kll,
           status_pulang: req.body.status_pulang,
+          keluhan: req.body.keluhan,
         };
 
         await editKunjungan(data);
