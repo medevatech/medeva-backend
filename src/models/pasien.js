@@ -5,6 +5,7 @@ const insertPasien = (data) => {
     id,
     nama_lengkap,
     jenis_kelamin,
+    tipe_kitas,
     nomor_kitas,
     nomor_hp,
     tempat_lahir,
@@ -24,12 +25,12 @@ const insertPasien = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_pasien 
-        (id, nama_lengkap, jenis_kelamin, nomor_kitas, nomor_hp,
-            tempat_lahir, tanggal_lahir, alamat, kelurahan, kecamatan,
+        (id, nama_lengkap, jenis_kelamin, tipe_kitas, nomor_kitas, 
+            nomor_hp, tempat_lahir, tanggal_lahir, alamat, kelurahan, kecamatan,
             kabupaten, provinsi, kode_pos, agama, kewarganegaraan,
             pekerjaan, status_menikah, golongan_darah, created_at, updated_at) 
         VALUES
-        ('${id}', '${nama_lengkap}', '${jenis_kelamin}', '${nomor_kitas}', '${nomor_hp}',
+        ('${id}', '${nama_lengkap}', '${jenis_kelamin}', '${tipe_kitas}', '${nomor_kitas}', '${nomor_hp}',
             '${tempat_lahir}', '${tanggal_lahir}', '${alamat}', '${kelurahan}', '${kecamatan}', 
             '${kabupaten}', '${provinsi}', '${kode_pos}', '${agama}', '${kewarganegaraan}',
             '${pekerjaan}', '${status_menikah}', '${golongan_darah}', NOW(), NOW())`,
@@ -47,8 +48,8 @@ const insertPasien = (data) => {
 const allPasien = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.nomor_kitas, tbl_pasien.nomor_hp, 
-        tbl_pasien.tempat_lahir, 
+      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
+        tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
         to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
         tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kabupaten, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
@@ -77,8 +78,8 @@ const countAllPasien = () => {
 const getPasienById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.nomor_kitas, tbl_pasien.nomor_hp, 
-        tbl_pasien.tempat_lahir, 
+      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
+        tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
         to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
         tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kabupaten, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
@@ -119,6 +120,7 @@ const editPasien = (data) => {
     id,
     nama_lengkap,
     jenis_kelamin,
+    tipe_kitas,
     nomor_kitas,
     nomor_hp,
     tempat_lahir,
@@ -139,8 +141,8 @@ const editPasien = (data) => {
     Pool.query(
       `UPDATE tbl_pasien 
           SET
-            nama_lengkap='${nama_lengkap}', jenis_kelamin='${jenis_kelamin}', nomor_kitas='${nomor_kitas}', nomor_hp='${nomor_hp}', 
-            tempat_lahir='${tempat_lahir}', tanggal_lahir='${tanggal_lahir}', alamat='${alamat}', kelurahan='${kelurahan}', kecamatan='${kecamatan}', 
+            nama_lengkap='${nama_lengkap}', jenis_kelamin='${jenis_kelamin}', tipe_kitas='${tipe_kitas}', nomor_kitas='${nomor_kitas}', 
+            nomor_hp='${nomor_hp}', tempat_lahir='${tempat_lahir}', tanggal_lahir='${tanggal_lahir}', alamat='${alamat}', kelurahan='${kelurahan}', kecamatan='${kecamatan}', 
             kabupaten='${kabupaten}', provinsi='${provinsi}', kode_pos='${kode_pos}', agama='${agama}', kewarganegaraan='${kewarganegaraan}', 
             pekerjaan='${pekerjaan}', status_menikah='${status_menikah}', golongan_darah='${golongan_darah}', 
             updated_at=NOW()

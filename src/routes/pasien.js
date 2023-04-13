@@ -5,9 +5,9 @@ const { protect } = require('../middleware/auth');
 let multer = require('multer');
 let uploaded = multer();
 
-router.post(`/add`, uploaded.array(), pasienControllers.addPasien);
+router.post(`/add`, uploaded.array(), pasienControllers.add);
 router.get(`/`, pasienControllers.getAll);
 router.get(`/:id`, pasienControllers.getById);
-router.put(`/:id`, uploaded.array(), pasienControllers.editPasien);
+router.put(`/:id`, uploaded.array(), pasienControllers.edit);
 
 module.exports = router;

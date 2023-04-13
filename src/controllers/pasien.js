@@ -10,11 +10,12 @@ const {
 const { v4: uuidv4 } = require('uuid');
 
 const pasienControllers = {
-  addPasien: async (req, res, next) => {
+  add: async (req, res, next) => {
     try {
       const {
         nama_lengkap,
         jenis_kelamin,
+        tipe_kitas,
         nomor_kitas,
         nomor_hp,
         tempat_lahir,
@@ -36,6 +37,7 @@ const pasienControllers = {
         id: uuidv4(),
         nama_lengkap,
         jenis_kelamin,
+        tipe_kitas,
         nomor_kitas,
         nomor_hp,
         tempat_lahir,
@@ -124,26 +126,9 @@ const pasienControllers = {
       response(res, 404, false, error, 'get pasien failed');
     }
   },
-  editPasien: async (req, res, next) => {
+  edit: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const {
-        nama_lengkap,
-        jenis_kelamin,
-        nomor_kitas,
-        nomor_hp,
-        id_asuransi,
-        alergi,
-        penyakit_kronis,
-        alamat,
-        tempat_lahir,
-        tanggal_lahir,
-        agama,
-        kewarganegaraan,
-        pekerjaan,
-        status_menikah,
-        golongan_darah,
-      } = req.body;
 
       const {
         rows: [findPasien],
@@ -152,21 +137,21 @@ const pasienControllers = {
       if (findPasien) {
         let data = {
           id,
-          nama_lengkap,
-          jenis_kelamin,
-          nomor_kitas,
-          nomor_hp,
-          id_asuransi,
-          alergi,
-          penyakit_kronis,
-          alamat,
-          tempat_lahir,
-          tanggal_lahir,
-          agama,
-          kewarganegaraan,
-          pekerjaan,
-          status_menikah,
-          golongan_darah,
+          nama_lengkap: req.body.nama_lengkap,
+          jenis_kelamin: req.body.jenis_kelamin,
+          tipe_kitas: req.body.tipe_kitas,
+          nomor_kitas: req.body.nomor_kitas,
+          nomor_hp: req.body.nomor_hp,
+          alergi: req.body.alergi,
+          penyakit_kronis: req.body.penyakit_kronis,
+          alamat: req.body.alamat,
+          tempat_lahir: req.body.tempat_lahir,
+          tanggal_lahir: req.body.tanggal_lahir,
+          agama: req.body.agama,
+          kewarganegaraan: req.body.kewarganegaraan,
+          pekerjaan: req.body.pekerjaan,
+          status_menikah: req.body.status_menikah,
+          golongan_darah: req.body.golongan_darah,
         };
 
         await editPasien(data);
