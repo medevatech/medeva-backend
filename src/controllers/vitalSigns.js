@@ -25,6 +25,7 @@ const vitalSignsControllers = {
         diastole: req.body.diastole,
         respiratory_rate: req.body.respiratory_rate,
         heart_rate: req.body.heart_rate,
+        catatan_tambahan: req.body.catatan_tambahan,
       };
 
       await insertVital(data);
@@ -127,6 +128,7 @@ const vitalSignsControllers = {
           diastole: req.body.diastole,
           respiratory_rate: req.body.respiratory_rate,
           heart_rate: req.body.heart_rate,
+          catatan_tambahan: req.body.catatan_tambahan,
         };
 
         await editVital(data);
