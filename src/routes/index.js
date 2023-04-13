@@ -12,6 +12,7 @@ const diagnosisControllers = require('./diagnosis');
 const tempKunjunganControllers = require('./tempKunjungan');
 const pemeriksaanControllers = require('./pemeriksaan');
 const pemeriksaanPenunjangControllers = require('./pemeriksaanPenunjang');
+const poliControllers = require('./poli');
 
 router.use('/pasien', pasienControllers);
 router.use('/skrining', skriningControllers);
@@ -24,5 +25,6 @@ router.use('/diagnosis', diagnosisControllers);
 router.use('/temp-kunjungan', tempKunjunganControllers);
 router.use('/pemeriksaan', pemeriksaanControllers);
 router.use('/pemeriksaan-penunjang', pemeriksaanPenunjangControllers);
+router.use('/poli', poliControllers);
 
 module.exports = router;
