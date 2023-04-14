@@ -66,7 +66,7 @@ const pasienControllers = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 5;
-      const sortBy = req.query.sortBy || 'nama_lengkap';
+      const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
