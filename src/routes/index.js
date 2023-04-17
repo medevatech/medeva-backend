@@ -13,6 +13,7 @@ const tempKunjunganControllers = require('./tempKunjungan');
 const pemeriksaanControllers = require('./pemeriksaan');
 const pemeriksaanPenunjangControllers = require('./pemeriksaanPenunjang');
 const poliControllers = require('./poli');
+const rekamMedisControllers = require('./rekamMedis');
 
 router.use('/pasien', pasienControllers);
 router.use('/asuransi', asuransiControllers);
@@ -27,5 +28,6 @@ router.use('/temp-kunjungan', tempKunjunganControllers);
 router.use('/pemeriksaan', pemeriksaanControllers);
 router.use('/pemeriksaan-penunjang', pemeriksaanPenunjangControllers);
 router.use('/poli', poliControllers);
+router.use('/rekam-medis', rekamMedisControllers);
 
 module.exports = router;
