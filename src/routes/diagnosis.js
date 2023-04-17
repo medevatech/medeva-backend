@@ -5,7 +5,7 @@ const { protect } = require('../middleware/auth');
 let multer = require('multer');
 let uploaded = multer();
 
-router.post(`/add`, uploaded.array(), diagnosisControllers.add);
+router.post(`/`, uploaded.array(), diagnosisControllers.add);
 router.get(`/`, diagnosisControllers.getAll);
 router.get(`/:id`, diagnosisControllers.getById);
 router.put(`/:id`, uploaded.array(), diagnosisControllers.edit);

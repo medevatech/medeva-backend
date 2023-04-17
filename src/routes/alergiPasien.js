@@ -5,7 +5,7 @@ const { protect } = require('../middleware/auth');
 let multer = require('multer');
 let uploaded = multer();
 
-router.post(`/add`, uploaded.array(), alergiPasienControllers.add);
+router.post(`/`, uploaded.array(), alergiPasienControllers.add);
 router.get(`/`, alergiPasienControllers.getAll);
 router.get(`/:id`, alergiPasienControllers.getById);
 router.put(`/:id`, uploaded.array(), alergiPasienControllers.edit);
