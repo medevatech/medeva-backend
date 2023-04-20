@@ -16,8 +16,8 @@ const alergiPasienControllers = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
         id_alergi: req.body.id_alergi,
-        id_kunjungan_dicatat: req.body.id_kunjungan_dicatat,
-        id_kunjungan_dihapus: req.body.id_kunjungan_dihapus,
+        tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
+        tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
       };
 
       await insertAlergiPasien(data);
@@ -111,8 +111,8 @@ const alergiPasienControllers = {
           id,
           id_pasien: req.body.id_pasien,
           id_alergi: req.body.id_alergi,
-          id_kunjungan_dicatat: req.body.id_kunjungan_dicatat,
-          id_kunjungan_dihapus: req.body.id_kunjungan_dihapus,
+          tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
+          tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
         };
 
         await editAlergiPasien(data);
