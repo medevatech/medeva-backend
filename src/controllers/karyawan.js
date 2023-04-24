@@ -231,7 +231,7 @@ const karyawanController = {
   },
   updatePassword: async (req, res, next) => {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
       const hash = await argon2.hash(req.body.password);
       const password = `${hash}`;
       const data = {
