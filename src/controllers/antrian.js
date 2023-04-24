@@ -29,14 +29,15 @@ const antrianController = {
         id += digits[Math.floor(Math.random() * 10)];
       }
       const tanggal = new Date().toISOString().slice(0, 10);
-      console.log(tanggal);
       const data = {
         id,
+        id_jaga: req.body.id_jaga,
+        id_pasien: req.body.id_pasien,
         tanggal,
         no_antrian,
       };
-      result = await createAntrian(data);
-      return response(res, 200, true, null, "Create antrian success");
+      await createAntrian(data);
+      return response(res, 200, true, data, "Create antrian success");
     } catch (err) {
       console.log(err);
       return response(res, 400, false, err, "Create antrian failed");

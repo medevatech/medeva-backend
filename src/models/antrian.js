@@ -17,10 +17,10 @@ const countAntrian = () => {
 };
 
 const createAntrian = (data) => {
-  const { id, no_antrian, tanggal } = data;
+  const { id, id_jaga, id_pasien, no_antrian, tanggal } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_antrian (id, tanggal, no_antrian, status, created_at, updated_at) VALUES('${id}', '${tanggal}', '${no_antrian}', 1, NOW(), NOW())`,
+      `INSERT INTO tbl_antrian (id, id_jaga, id_pasien, tanggal, no_antrian, status, created_at, updated_at) VALUES('${id}', '${id_jaga}', '${id_pasien}', '${tanggal}', '${no_antrian}', 1, NOW(), NOW())`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -36,7 +36,7 @@ const getAntrian = () => {
   var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT id, no_antrian FROM tbl_antrian WHERE tanggal = '${date}' AND status = 1`,
+      `SELECT id, id_jaga, id_pasien, no_antrian FROM tbl_antrian WHERE tanggal = '${date}' AND status = 1`,
       (err, res) => {
         if (!err) {
           resolve(res);
