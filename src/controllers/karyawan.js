@@ -70,16 +70,13 @@ const karyawanController = {
         tipe: req.body.tipe,
         spesialis: req.body.spesialis,
       };
+      if (data.kadaluarsa_izin === "") {
+        data.kadaluarsa_izin = "1900/01/01";
+      }
       try {
         const result = await createKaryawan(data);
         if (result) {
-          return response(
-            res,
-            200,
-            true,
-            { result: result.rows },
-            "Add karyawan success"
-          );
+          return response(res, 200, true, data, "Add karyawan success");
         }
       } catch (err) {
         return response(res, 400, false, err, "Add karyawan failed");
@@ -139,7 +136,6 @@ const karyawanController = {
         limit,
         offset,
       });
-      console.log(result);
       const {
         rows: [count],
       } = await countKaryawan();
@@ -164,14 +160,16 @@ const karyawanController = {
       return response(res, 400, false, err, "Get karyawan data failed");
     }
   },
-  getById: async (req, res, next) => {
+  getById: async (req, res) => {
     try {
-      const result = await getKaryawanById(req.params.id);
+      const id = req.params.id;
+      const result = await getKaryawanById({ id });
+      console.log(result);
       return response(
         res,
         200,
         true,
-        { result: result.rows },
+        result.rows,
         "Get karyawan data by ID success"
       );
     } catch (err) {
