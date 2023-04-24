@@ -162,8 +162,7 @@ const karyawanController = {
   },
   getById: async (req, res) => {
     try {
-      const id = req.params.id;
-      const result = await getKaryawanById({ id });
+      const result = await getKaryawanById(req.params.id);
       console.log(result);
       return response(
         res,

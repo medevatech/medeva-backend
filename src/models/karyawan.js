@@ -116,7 +116,7 @@ const getKaryawan = ({
   });
 };
 
-const getKaryawanById = ({ id }) => {
+const getKaryawanById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT kry.id, kry.nama, kry.username, kry.email, kry.is_dev, kry.is_manager, kry.is_admin, kry.is_resepsionis, kry.is_perawat, kry.is_dokter, kry.is_manajemen, kry.jenis_kelamin, kry.nomor_kitas, kry.tipe_izin, kry.nomor_izin, to_char(kry.kadaluarsa_izin, 'DD-MM-YYYY') as kadaluarsa_izin, kry.nomor_hp, kry.tempat_lahir, to_char(kry.tanggal_lahir, 'DD-MM-YYYY') as tanggal_lahir, kry.alamat, kry.provinsi, kry.kota, kry.kecamatan, kry.kelurahan, kry.kode_pos, kry.status_menikah, kry.tipe, kry.spesialis, kry.is_active, to_char(kry.created_at, 'DD Month YYYY - HH24:MI') as created_at, to_char(kry.updated_at, 'DD Month YYYY - HH24:MI') as updated_at FROM tbl_karyawan as kry WHERE kry.id = '${id}'`,
