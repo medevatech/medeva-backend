@@ -28,7 +28,7 @@ app.all('*', (req, res, next) => {
   res.status(404).json({
     status: 'error',
     statusCode: 404,
-    message: 'this is root, check again the endpoint API',
+    message: 'check again your endpoint',
   });
 });
 
