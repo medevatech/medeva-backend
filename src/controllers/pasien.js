@@ -12,48 +12,33 @@ const { v4: uuidv4 } = require('uuid');
 const pasienControllers = {
   add: async (req, res, next) => {
     try {
-      const {
-        nama_lengkap,
-        jenis_kelamin,
-        tipe_kitas,
-        nomor_kitas,
-        nomor_hp,
-        tempat_lahir,
-        tanggal_lahir,
-        alamat,
-        kelurahan,
-        kecamatan,
-        kabupaten,
-        provinsi,
-        kode_pos,
-        agama,
-        kewarganegaraan,
-        pekerjaan,
-        status_menikah,
-        golongan_darah,
-      } = req.body;
-
       let data = {
         id: uuidv4(),
-        nama_lengkap,
-        jenis_kelamin,
-        tipe_kitas,
-        nomor_kitas,
-        nomor_hp,
-        tempat_lahir,
-        tanggal_lahir,
-        alamat,
-        kelurahan,
-        kecamatan,
-        kabupaten,
-        provinsi,
-        kode_pos,
-        agama,
-        kewarganegaraan,
-        pekerjaan,
-        status_menikah,
-        golongan_darah,
+        nama_lengkap: req.body.nama_lengkap,
+        jenis_kelamin: req.body.jenis_kelamin,
+        tipe_kitas: req.body.tipe_kitas,
+        nomor_kitas: req.body.nomor_kitas,
+        nomor_hp: req.body.nomor_hp,
+        tempat_lahir: req.body.tempat_lahir,
+        tanggal_lahir: req.body.tanggal_lahir,
+        alamat: req.body.alamat,
+        kelurahan: req.body.kelurahan,
+        kecamatan: req.body.kecamatan,
+        kota: req.body.kota,
+        provinsi: req.body.provinsi,
+        kode_pos: req.body.kode_pos,
+        agama: req.body.agama,
+        kewarganegaraan: req.body.kewarganegaraan,
+        pekerjaan: req.body.pekerjaan,
+        status_menikah: req.body.status_menikah,
+        golongan_darah: req.body.golongan_darah,
       };
+
+      if (req.body.tanggal_lahir === '') {
+        data.tanggal_lahir = '1970-01-01';
+      }
+
+      // console.log(data.tanggal_lahir);
 
       await insertPasien(data);
       response(res, 200, true, data, 'insert pasien success');
