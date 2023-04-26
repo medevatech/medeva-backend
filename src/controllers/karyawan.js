@@ -73,6 +73,9 @@ const karyawanController = {
       if (data.kadaluarsa_izin === "") {
         data.kadaluarsa_izin = "1900/01/01";
       }
+      if (data.tanggal_lahir === "") {
+        data.tanggal_lahir = "1900/01/01";
+      }
       try {
         const result = await createKaryawan(data);
         if (result) {
@@ -119,8 +122,8 @@ const karyawanController = {
   },
   get: async (req, res, next) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
       const sortBy = req.query.sortBy || "nama";
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
