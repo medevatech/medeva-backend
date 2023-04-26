@@ -177,13 +177,12 @@ const karyawanController = {
   },
   update: async (req, res, next) => {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
       const data = {
         id: id,
         nama: req.body.nama,
         username: req.body.username,
         email: req.body.email,
-        password,
         is_admin: parseInt(req.body.is_admin),
         is_resepsionis: parseInt(req.body.is_resepsionis),
         is_perawat: parseInt(req.body.is_perawat),
@@ -210,12 +209,13 @@ const karyawanController = {
       await updateKaryawan(data);
       return response(res, 200, true, data, "Update karyawan success");
     } catch (err) {
+      console.log(err);
       return response(res, 400, false, err, "Update karyawan failed");
     }
   },
   updatePhoto: async (req, res, next) => {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
       const foto = await cloudinary.uploader.upload(req.file.path, {
         folder: "foto_kry_kln",
       });
@@ -226,7 +226,8 @@ const karyawanController = {
       await updatePhotoKaryawan(data);
       return response(res, 200, true, data, "Update foto karyawan success");
     } catch (err) {
-      return response(res, 400, false, err, "Update foto karyawan failed");
+      console.log(err);
+      response(res, 400, false, err, "Update foto karyawan failed");
     }
   },
   updatePassword: async (req, res, next) => {
