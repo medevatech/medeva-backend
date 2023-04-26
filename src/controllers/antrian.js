@@ -46,9 +46,16 @@ const antrianController = {
   },
   get: async (req, res, next) => {
     try {
+      const searchName = req.query.searchName || "";
+      const searchDivisi = req.query.searchDivisi || "";
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
-      const result = await getAntrian({ sortBy, sortOrder });
+      const result = await getAntrian({
+        searchName,
+        searchDivisi,
+        sortBy,
+        sortOrder,
+      });
       return response(res, 200, true, result.rows, "Get antrian success");
     } catch (err) {
       console.log(err);
