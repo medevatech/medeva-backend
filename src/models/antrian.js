@@ -36,7 +36,7 @@ const getAntrian = ({ sortBy, sortOrder }) => {
   var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, jaga.id_karyawan as id_karyawan FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id WHERE tanggal = '${date}' AND status = 1 ORDER BY antrian.${sortBy} ${sortOrder}`,
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, jaga.id_karyawan as id_karyawan, karyawan.nama as nama_karyawan FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id WHERE tanggal = '${date}' AND status = 1 ORDER BY antrian.${sortBy} ${sortOrder}`,
       (err, res) => {
         if (!err) {
           resolve(res);
