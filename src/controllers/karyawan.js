@@ -73,6 +73,9 @@ const karyawanController = {
       if (data.kadaluarsa_izin === "") {
         data.kadaluarsa_izin = "1900/01/01";
       }
+      if (data.tanggal_lahir === "") {
+        data.tanggal_lahir = "1900/01/01";
+      }
       try {
         const result = await createKaryawan(data);
         if (result) {
