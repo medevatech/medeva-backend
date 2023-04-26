@@ -5,6 +5,8 @@ const {
   countAllAlergiPasien,
   getAlergiPasienById,
   findAlergiPasienById,
+  getAlergiPasienByIdPasien,
+  findAlergiPasienByIdPasien,
   editAlergiPasien,
 } = require(`../models/alergiPasien`);
 const { v4: uuidv4 } = require('uuid');
@@ -81,6 +83,34 @@ const alergiPasienControllers = {
       const {
         rows: [findAlergiPasien],
       } = await findAlergiPasienById(id);
+
+      if (findAlergiPasien) {
+        response(res, 200, true, result.rows, 'get alergi pasien success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id alergi pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get alergi pasien failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getAlergiPasienByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findAlergiPasien],
+      } = await findAlergiPasienByIdPasien(id_pasien);
 
       if (findAlergiPasien) {
         response(res, 200, true, result.rows, 'get alergi pasien success');

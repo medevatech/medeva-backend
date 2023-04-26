@@ -98,6 +98,48 @@ const findAlergiPasienById = (id) => {
   );
 };
 
+const getAlergiPasienByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_alergi_pasien.id, 
+            tbl_alergi_pasien.id_pasien, 
+                tbl_pasien.nama_lengkap AS nama_lengkap,
+            tbl_alergi_pasien.alergi,
+            tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus,
+              to_char( tbl_alergi_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+              to_char( tbl_alergi_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        FROM tbl_alergi_pasien AS tbl_alergi_pasien
+        INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
+        WHERE tbl_alergi_pasien.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findAlergiPasienByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_alergi_pasien 
+        WHERE
+            id_pasien = '${id_pasien}' 
+        `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editAlergiPasien = (data) => {
   const {
     id,
@@ -130,5 +172,7 @@ module.exports = {
   countAllAlergiPasien,
   getAlergiPasienById,
   findAlergiPasienById,
+  getAlergiPasienByIdPasien,
+  findAlergiPasienByIdPasien,
   editAlergiPasien,
 };
