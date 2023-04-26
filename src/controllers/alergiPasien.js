@@ -120,7 +120,7 @@ const alergiPasienControllers = {
           404,
           false,
           null,
-          `id alergi pasien not found, check again`
+          `id pasien not found, check again`
         );
       }
     } catch (error) {
