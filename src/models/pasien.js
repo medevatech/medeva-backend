@@ -158,6 +158,25 @@ const editPasien = (data) => {
   );
 };
 
+const archivePasien = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_pasien 
+          SET
+            deleted_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertPasien,
   allPasien,
@@ -165,4 +184,5 @@ module.exports = {
   findPasienById,
   getPasienById,
   editPasien,
+  archivePasien,
 };

@@ -6,6 +6,7 @@ const {
   getPasienById,
   findPasienById,
   editPasien,
+  archivePasien,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -154,6 +155,35 @@ const pasienControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit pasien failed');
+    }
+  },
+  archive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPasien],
+      } = await findPasienById(id);
+
+      if (findPasien) {
+        let data = {
+          id,
+        };
+
+        await archivePasien(data);
+        response(res, 200, true, data, 'archive pasien success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive pasien failed');
     }
   },
 };
