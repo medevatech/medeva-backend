@@ -7,6 +7,8 @@ const {
   findPasienById,
   editPasien,
   archivePasien,
+  allArchivePasien,
+  countAllArchivePasien,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -184,6 +186,49 @@ const pasienControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'archive pasien failed');
+    }
+  },
+  getAllArchive: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 5;
+      const sortBy = req.query.sortBy || 'created_at';
+      const sortOrder = req.query.sortOrder || 'DESC';
+      const search = req.query.search || '';
+      const offset = (page - 1) * limit;
+
+      const result = await allArchivePasien({
+        search,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+
+      const {
+        rows: [count],
+      } = await countAllArchivePasien();
+
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        'get archive pasien success',
+        pagination
+      );
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get archive pasien failed');
     }
   },
 };
