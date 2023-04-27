@@ -5,6 +5,8 @@ const {
   countAllKunjungan,
   getKunjunganById,
   findKunjunganById,
+  getKunjunganByIdPasien,
+  findKunjunganByIdPasien,
   editKunjungan,
 } = require(`../models/kunjungan`);
 const { v4: uuidv4 } = require('uuid');
@@ -78,7 +80,7 @@ const kunjunganControllers = {
       response(res, 404, false, error, 'get kunjungan failed');
     }
   },
-  getById: async (req, res) => {
+  getByIdKunjungan: async (req, res) => {
     try {
       const id = req.params.id;
 
@@ -99,6 +101,34 @@ const kunjunganControllers = {
           false,
           null,
           `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get kunjungan failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getKunjunganByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findKunjungan],
+      } = await findKunjunganByIdPasien(id_pasien);
+
+      if (findKunjungan) {
+        response(res, 200, true, result.rows, 'get kunjungan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
         );
       }
     } catch (error) {

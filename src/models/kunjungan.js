@@ -109,6 +109,47 @@ const findKunjunganById = (id) => {
   );
 };
 
+const getKunjunganByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_kunjungan.id, tbl_kunjungan.id_jaga, id_vs, 
+        tbl_kunjungan.id_pasien, 
+            tbl_pasien.nama_lengkap AS nama_lengkap, 
+        tbl_kunjungan.waktu_mulai, tbl_kunjungan.waktu_selesai, 
+        tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
+        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang,  tbl_kunjungan.keluhan, 
+        to_char( tbl_kunjungan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+        to_char( tbl_kunjungan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      FROM tbl_kunjungan AS tbl_kunjungan
+      INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
+      WHERE tbl_kunjungan.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findKunjunganByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_kunjungan WHERE id_pasien = '${id_pasien}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editKunjungan = (data) => {
   const {
     id,
@@ -149,7 +190,9 @@ module.exports = {
   insertKunjungan,
   allKunjungan,
   countAllKunjungan,
-  findKunjunganById,
   getKunjunganById,
+  findKunjunganById,
+  getKunjunganByIdPasien,
+  findKunjunganByIdPasien,
   editKunjungan,
 };
