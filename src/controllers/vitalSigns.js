@@ -5,6 +5,8 @@ const {
   countAllVital,
   getVitalById,
   findVitalById,
+  getVitalByIdPasien,
+  findVitalByIdPasien,
   editVital,
 } = require(`../models/vitalSigns`);
 const { v4: uuidv4 } = require('uuid');
@@ -78,7 +80,7 @@ const vitalSignsControllers = {
       response(res, 404, false, error, 'get vital signs failed');
     }
   },
-  getById: async (req, res) => {
+  getByIdVS: async (req, res) => {
     try {
       const id = req.params.id;
 
@@ -99,6 +101,34 @@ const vitalSignsControllers = {
           false,
           null,
           `id vital signs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get vital signs failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getVitalByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findVital],
+      } = await findVitalByIdPasien(id_pasien);
+
+      if (findVital) {
+        response(res, 200, true, result.rows, 'get vital signs success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
         );
       }
     } catch (error) {

@@ -7,7 +7,13 @@ let uploaded = multer();
 
 router.post(`/`, uploaded.array(), asuransiControllers.add);
 router.get(`/`, asuransiControllers.getAll);
-router.get(`/:id`, asuransiControllers.getById);
-router.put(`/:id`, uploaded.array(), asuransiControllers.edit);
+router.get(`/:id`, asuransiControllers.getByIdAsuransi);
+router.get(`/pasien/:id_pasien`, asuransiControllers.getByIdPasien);
+// router.put(`/:id`, uploaded.array(), asuransiControllers.editByIdAsuransi);
+router.put(
+  `/edit`,
+  uploaded.array(),
+  asuransiControllers.editWithoutIdAsuransi
+);
 
 module.exports = router;

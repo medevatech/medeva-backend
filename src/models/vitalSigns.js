@@ -109,6 +109,46 @@ const findVitalById = (id) => {
   );
 };
 
+const getVitalByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_vital_signs.id, tbl_vital_signs.id_pasien, 
+          tbl_pasien.nama_lengkap AS nama_lengkap,
+        tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
+        tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
+        tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
+        to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+        to_char( tbl_vital_signs.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      FROM tbl_vital_signs AS tbl_vital_signs
+      INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
+      WHERE tbl_vital_signs.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findVitalByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_vital_signs WHERE id_pasien = '${id_pasien}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editVital = (data) => {
   const {
     id,
@@ -151,5 +191,7 @@ module.exports = {
   countAllVital,
   findVitalById,
   getVitalById,
+  findVitalByIdPasien,
+  getVitalByIdPasien,
   editVital,
 };
