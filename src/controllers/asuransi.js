@@ -5,6 +5,8 @@ const {
   countAllAsuransi,
   getAsuransiById,
   findAsuransiById,
+  getAsuransiByIdPasien,
+  findAsuransiByIdPasien,
   editAsuransi,
 } = require(`../models/asuransi`);
 const { v4: uuidv4 } = require('uuid');
@@ -64,7 +66,7 @@ const asuransiControllers = {
       response(res, 404, false, error, 'get asuransi failed');
     }
   },
-  getById: async (req, res) => {
+  getByIdAsuransi: async (req, res) => {
     try {
       const id = req.params.id;
 
@@ -92,7 +94,35 @@ const asuransiControllers = {
       response(res, 404, false, error, 'get asuransi failed');
     }
   },
-  edit: async (req, res, next) => {
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getAsuransiByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findAsuransi],
+      } = await findAsuransiByIdPasien(id_pasien);
+
+      if (findAsuransi) {
+        response(res, 200, true, result.rows, 'get asuransi success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get asuransi failed');
+    }
+  },
+  editByIdAsuransi: async (req, res, next) => {
     try {
       const id = req.params.id;
 
@@ -119,6 +149,22 @@ const asuransiControllers = {
           `id asuransi not found, check again`
         );
       }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'edit asuransi failed');
+    }
+  },
+  editWithoutIdAsuransi: async (req, res, next) => {
+    try {
+      let data = {
+        id: req.body.id,
+        id_pasien: req.body.id_pasien,
+        tipe_asuransi: req.body.tipe_asuransi,
+        nomor_asuransi: req.body.nomor_asuransi,
+      };
+
+      await editAsuransi(data);
+      response(res, 200, true, data, 'edit asuransi success');
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit asuransi failed');
