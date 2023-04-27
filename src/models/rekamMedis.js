@@ -34,9 +34,10 @@ const insertRekamMedis = (data) => {
 const allRekamMedis = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_rekam_medis.id, tbl_rekam_medis.id_kunjungan, 
-            to_char( tbl_rekam_medis.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-            to_char( tbl_rekam_medis.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      `SELECT tbl_rekam_medis.id, tbl_rekam_medis.id_kunjungan, tbl_rekam_medis.id_vital_signs, tbl_rekam_medis.id_anamnesis, tbl_rekam_medis.pemeriksaan_fisik, 
+          tbl_rekam_medis.id_diagnosis, tbl_rekam_medis.id_tata_laksana, 
+          to_char( tbl_rekam_medis.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+          to_char( tbl_rekam_medis.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
         FROM tbl_rekam_medis AS tbl_rekam_medis
         WHERE tbl_rekam_medis.pemeriksaan_fisik
         ILIKE '%${search}%' ORDER BY tbl_rekam_medis.${sortBy} ${sortOrder} 
@@ -59,7 +60,8 @@ const countAllRekamMedis = () => {
 const getRekamMedisById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_rekam_medis.id, tbl_rekam_medis.id_kunjungan, 
+      `SELECT tbl_rekam_medis.id, tbl_rekam_medis.id_kunjungan, tbl_rekam_medis.id_vital_signs, tbl_rekam_medis.id_anamnesis, tbl_rekam_medis.pemeriksaan_fisik, 
+        tbl_rekam_medis.id_diagnosis, tbl_rekam_medis.id_tata_laksana, 
         to_char( tbl_rekam_medis.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
         to_char( tbl_rekam_medis.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
       FROM tbl_rekam_medis AS tbl_rekam_medis
