@@ -7,9 +7,11 @@ let uploaded = multer();
 
 router.post(`/`, uploaded.array(), pasienControllers.add);
 router.get(`/`, pasienControllers.getAll);
+router.get(`/active/:is_active`, pasienControllers.getAllActive);
+router.get(`/archive/:is_archive`, pasienControllers.getAllArchive);
 router.get(`/:id`, pasienControllers.getById);
 router.put(`/:id`, uploaded.array(), pasienControllers.edit);
-router.put(`/archive/:id`, uploaded.array(), pasienControllers.archive);
-router.get(`/archive/all`, uploaded.array(), pasienControllers.getAllArchive);
+router.put(`/active/:id`, uploaded.array(), pasienControllers.editActive);
+router.put(`/archive/:id`, uploaded.array(), pasienControllers.editArchive);
 
 module.exports = router;
