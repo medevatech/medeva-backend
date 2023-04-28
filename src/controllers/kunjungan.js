@@ -30,6 +30,14 @@ const kunjunganControllers = {
         keluhan: req.body.keluhan,
       };
 
+      if (req.body.waktu_mulai === '') {
+        data.waktu_mulai = '1970-01-01';
+      }
+
+      if (req.body.waktu_selesai === '') {
+        data.waktu_selesai = '1970-01-01';
+      }
+
       await insertKunjungan(data);
       response(res, 200, true, data, 'insert kunjungan success');
     } catch (error) {

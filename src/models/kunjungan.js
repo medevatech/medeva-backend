@@ -125,7 +125,7 @@ const getKunjunganByIdPasien = ({ id_pasien }) => {
         to_char( tbl_kunjungan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
-      WHERE tbl_kunjungan.id_pasien = '${id_pasien}'`,
+      WHERE tbl_kunjungan.id_pasien = '${id_pasien}' ORDER BY created_at DESC`,
       (err, result) => {
         if (!err) {
           resolve(result);
