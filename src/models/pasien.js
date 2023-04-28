@@ -292,4 +292,6 @@ module.exports = {
   getPasienById,
   findPasienById,
   editPasien,
+  editPasienActive,
+  editPasienArchive,
 };
