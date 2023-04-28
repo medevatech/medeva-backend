@@ -1,6 +1,7 @@
 const { response } = require("../middleware/common");
 const {
-  countAntrian,
+  countAntrianDaily,
+  countAntrianAll,
   createAntrian,
   getAntrian,
   getTotalAntrian,
@@ -8,13 +9,14 @@ const {
   getNowAntrian,
   getNextAntrian,
   updateAntrian,
+  deleteAntrian,
 } = require("../models/antrian");
 
 const antrianController = {
   create: async (req, res, next) => {
     const {
       rows: [count],
-    } = await countAntrian();
+    } = await countAntrianDaily();
     const total = parseInt(count.total);
     var no_antrian = "";
     if (total > 0) {
@@ -46,17 +48,40 @@ const antrianController = {
   },
   get: async (req, res, next) => {
     try {
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
+      const offset = (page - 1) * limit;
       const result = await getAntrian({
         searchName,
         searchDivisi,
         sortBy,
         sortOrder,
+        limit,
+        offset,
       });
-      return response(res, 200, true, result.rows, "Get antrian success");
+      const {
+        rows: [countAll],
+      } = await countAntrianAll();
+      const totalData = parseInt(countAll.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      return response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get antrian success",
+        pagination
+      );
     } catch (err) {
       console.log(err);
       return response(res, 400, false, err, "Get antrian failed");
@@ -108,6 +133,16 @@ const antrianController = {
     } catch (err) {
       console.log(err);
       return response(res, 400, false, null, "Update antrian failed");
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await deleteAntrian(id);
+      return response(res, 200, true, [], "Delete antrian success");
+    } catch (err) {
+      console.log(err);
+      return response(res, 400, false, null, "Delete antrian failed");
     }
   },
 };
