@@ -4,6 +4,7 @@ const insertVital = (data) => {
   const {
     id,
     id_pasien,
+    keluhan,
     kesadaran,
     temperatur,
     tinggi_badan,
@@ -19,12 +20,12 @@ const insertVital = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_vital_signs 
-        (id, id_pasien, kesadaran, temperatur, tinggi_badan,
+        (id, id_pasien, keluhan, kesadaran, temperatur, tinggi_badan,
             berat_badan, lingkar_perut, imt, sistole, diastole,
             respiratory_rate, heart_rate, catatan_tambahan, 
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_pasien}', '${kesadaran}', '${temperatur}', '${tinggi_badan}',
+        ('${id}', '${id_pasien}', '${keluhan}', '${kesadaran}', '${temperatur}', '${tinggi_badan}',
             '${berat_badan}', '${lingkar_perut}', '${imt}', '${sistole}', '${diastole}', 
             '${respiratory_rate}', '${heart_rate}', '${catatan_tambahan}',
             NOW(), NOW())`,
@@ -44,7 +45,7 @@ const allVital = ({ search, sortBy, sortOrder, limit, offset }) => {
     Pool.query(
       `SELECT tbl_vital_signs.id, tbl_vital_signs.id_pasien, 
           tbl_pasien.nama_lengkap AS nama_lengkap,
-        tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
+        tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
         to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
@@ -74,7 +75,7 @@ const getVitalById = ({ id }) => {
     Pool.query(
       `SELECT tbl_vital_signs.id, tbl_vital_signs.id_pasien, 
           tbl_pasien.nama_lengkap AS nama_lengkap,
-        tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
+        tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
         to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
@@ -114,7 +115,7 @@ const getVitalByIdPasien = ({ id_pasien }) => {
     Pool.query(
       `SELECT tbl_vital_signs.id, tbl_vital_signs.id_pasien, 
           tbl_pasien.nama_lengkap AS nama_lengkap,
-        tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
+        tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
         to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
@@ -153,6 +154,7 @@ const editVital = (data) => {
   const {
     id,
     id_pasien,
+    keluhan,
     kesadaran,
     temperatur,
     tinggi_badan,
@@ -169,7 +171,7 @@ const editVital = (data) => {
     Pool.query(
       `UPDATE tbl_vital_signs 
           SET
-            id_pasien='${id_pasien}', kesadaran='${kesadaran}', temperatur='${temperatur}', tinggi_badan='${tinggi_badan}', 
+            id_pasien='${id_pasien}', keluhan='${keluhan}', kesadaran='${kesadaran}', temperatur='${temperatur}', tinggi_badan='${tinggi_badan}', 
             berat_badan='${berat_badan}', lingkar_perut='${lingkar_perut}', imt='${imt}', sistole='${sistole}', 
             diastole='${diastole}', respiratory_rate='${respiratory_rate}', heart_rate='${heart_rate}', catatan_tambahan='${catatan_tambahan}', 
             updated_at=NOW()
