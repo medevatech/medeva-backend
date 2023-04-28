@@ -50,7 +50,7 @@ const allPasien = ({ search, sortBy, sortOrder, limit, offset, is_active }) => {
     Pool.query(
       `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
         tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
-        to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
+        to_char( tbl_pasien.tanggal_lahir, 'YYYY-MM-DD' ) AS tanggal_lahir,
         tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,
@@ -161,7 +161,7 @@ const getPasienById = ({ id }) => {
     Pool.query(
       `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
         tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
-        to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
+        to_char( tbl_pasien.tanggal_lahir, 'YYYY-MM-DD' ) AS tanggal_lahir,
         tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,

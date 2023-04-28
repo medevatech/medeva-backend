@@ -5,6 +5,8 @@ const {
   countAllAlergiPasien,
   getAlergiPasienById,
   findAlergiPasienById,
+  getAlergiPasienByIdPasien,
+  findAlergiPasienByIdPasien,
   editAlergiPasien,
 } = require(`../models/alergiPasien`);
 const { v4: uuidv4 } = require('uuid');
@@ -15,9 +17,9 @@ const alergiPasienControllers = {
       let data = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
-        id_alergi: req.body.id_alergi,
-        id_kunjungan_dicatat: req.body.id_kunjungan_dicatat,
-        id_kunjungan_dihapus: req.body.id_kunjungan_dihapus,
+        alergi: req.body.alergi,
+        tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
+        tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
       };
 
       await insertAlergiPasien(data);
@@ -98,6 +100,34 @@ const alergiPasienControllers = {
       response(res, 404, false, error, 'get alergi pasien failed');
     }
   },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getAlergiPasienByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findAlergiPasien],
+      } = await findAlergiPasienByIdPasien(id_pasien);
+
+      if (findAlergiPasien) {
+        response(res, 200, true, result.rows, 'get alergi pasien success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get alergi pasien failed');
+    }
+  },
   edit: async (req, res, next) => {
     try {
       const id = req.params.id;
@@ -110,9 +140,9 @@ const alergiPasienControllers = {
         let data = {
           id,
           id_pasien: req.body.id_pasien,
-          id_alergi: req.body.id_alergi,
-          id_kunjungan_dicatat: req.body.id_kunjungan_dicatat,
-          id_kunjungan_dihapus: req.body.id_kunjungan_dihapus,
+          alergi: req.body.alergi,
+          tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
+          tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
         };
 
         await editAlergiPasien(data);

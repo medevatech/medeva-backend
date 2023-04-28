@@ -87,13 +87,52 @@ const findAsuransiById = (id) => {
   );
 };
 
+const getAsuransiByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_asuransi.id, 
+        tbl_asuransi.id_pasien, 
+            tbl_pasien.nama_lengkap AS nama_lengkap, 
+        tbl_asuransi.tipe_asuransi, tbl_asuransi.nomor_asuransi,
+        to_char( tbl_asuransi.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+        to_char( tbl_asuransi.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      FROM tbl_asuransi AS tbl_asuransi
+      INNER JOIN tbl_pasien AS tbl_pasien ON tbl_asuransi.id_pasien = tbl_pasien.id
+      WHERE tbl_asuransi.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findAsuransiByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_asuransi WHERE id_pasien = '${id_pasien}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editAsuransi = (data) => {
   const { id, id_pasien, tipe_asuransi, nomor_asuransi } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_asuransi 
           SET
-            id_pasien='${id_pasien}', tipe_asuransi='${tipe_asuransi}', nomor_asuransi='${nomor_asuransi}', 
+          id='${id}', id_pasien='${id_pasien}', tipe_asuransi='${tipe_asuransi}', nomor_asuransi='${nomor_asuransi}', 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -111,7 +150,9 @@ module.exports = {
   insertAsuransi,
   allAsuransi,
   countAllAsuransi,
-  findAsuransiById,
   getAsuransiById,
+  findAsuransiById,
+  getAsuransiByIdPasien,
+  findAsuransiByIdPasien,
   editAsuransi,
 };
