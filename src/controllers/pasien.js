@@ -56,22 +56,17 @@ const pasienControllers = {
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
 
-      const is_active = req.query.is_active || 0;
-      const is_archive = req.query.is_archive || 0;
-
       const result = await allPasien({
         search,
         sortBy,
         sortOrder,
         limit,
         offset,
-        is_active,
-        is_archive,
       });
 
       const {
         rows: [count],
-      } = await countAllPasien(is_active, is_archive);
+      } = await countAllPasien();
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
