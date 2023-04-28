@@ -45,7 +45,15 @@ const insertPasien = (data) => {
   );
 };
 
-const allPasien = ({ search, sortBy, sortOrder, limit, offset, is_active }) => {
+const allPasien = ({
+  search,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+  is_active,
+  is_archive,
+}) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
@@ -58,7 +66,9 @@ const allPasien = ({ search, sortBy, sortOrder, limit, offset, is_active }) => {
           to_char( tbl_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
           to_char( tbl_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
       FROM tbl_pasien AS tbl_pasien
-      WHERE tbl_pasien.is_active = ${is_active} AND tbl_pasien.nama_lengkap 
+      WHERE tbl_pasien.is_active = ${is_active} 
+        AND tbl_pasien.is_archive = ${is_archive} 
+        AND tbl_pasien.nama_lengkap 
       ILIKE '%${search}%' ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -72,88 +82,11 @@ const allPasien = ({ search, sortBy, sortOrder, limit, offset, is_active }) => {
   );
 };
 
-const countAllPasien = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_pasien`);
-};
-
-const allPasienActive = ({
-  search,
-  sortBy,
-  sortOrder,
-  limit,
-  offset,
-  is_active,
-}) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
-        tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
-        to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
-        tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
-        tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
-        tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,
-        tbl_pasien.is_active, tbl_pasien.is_archive,
-          to_char( tbl_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-      FROM tbl_pasien AS tbl_pasien
-      WHERE tbl_pasien.is_active = ${is_active} AND tbl_pasien.nama_lengkap 
-      ILIKE '%${search}%' ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
-      LIMIT ${limit} OFFSET ${offset}`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
-const countAllPasienActive = (is_active) => {
-  return Pool.query(
-    `SELECT COUNT(*) AS total FROM tbl_pasien WHERE is_active = ${is_active}`
-  );
-};
-
-const allPasienArchive = ({
-  search,
-  sortBy,
-  sortOrder,
-  limit,
-  offset,
-  is_archive,
-}) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
-        tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, 
-        to_char( tbl_pasien.tanggal_lahir, 'DD-MM-YYYY' ) AS tanggal_lahir,
-        tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
-        tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
-        tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,
-        tbl_pasien.is_active, tbl_pasien.is_archive,
-          to_char( tbl_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-      FROM tbl_pasien AS tbl_pasien
-      WHERE tbl_pasien.is_archive = ${is_archive} AND tbl_pasien.nama_lengkap 
-      ILIKE '%${search}%' ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
-      LIMIT ${limit} OFFSET ${offset}`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
-const countAllPasienArchive = (is_archive) => {
-  return Pool.query(
-    `SELECT COUNT(*) AS total FROM tbl_pasien WHERE is_archive = ${is_archive}`
-  );
+const countAllPasien = (is_active, is_archive) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total FROM tbl_pasien 
+  WHERE tbl_pasien.is_active = ${is_active} 
+  AND tbl_pasien.is_archive = ${is_archive}`);
 };
 
 const getPasienById = ({ id }) => {
@@ -285,10 +218,6 @@ module.exports = {
   insertPasien,
   allPasien,
   countAllPasien,
-  allPasienActive,
-  countAllPasienActive,
-  allPasienArchive,
-  countAllPasienArchive,
   getPasienById,
   findPasienById,
   editPasien,

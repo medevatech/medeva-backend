@@ -3,10 +3,6 @@ const {
   insertPasien,
   allPasien,
   countAllPasien,
-  allPasienActive,
-  countAllPasienActive,
-  allPasienArchive,
-  countAllPasienArchive,
   getPasienById,
   findPasienById,
   editPasien,
@@ -59,7 +55,9 @@ const pasienControllers = {
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
+
       const is_active = req.query.is_active || 0;
+      const is_archive = req.query.is_archive || 0;
 
       const result = await allPasien({
         search,
@@ -68,11 +66,12 @@ const pasienControllers = {
         limit,
         offset,
         is_active,
+        is_archive,
       });
 
       const {
         rows: [count],
-      } = await countAllPasien();
+      } = await countAllPasien(is_active, is_archive);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -84,238 +83,6 @@ const pasienControllers = {
       };
 
       response(res, 200, true, result.rows, 'get pasien success', pagination);
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get pasien failed');
-    }
-  },
-  getAllActive: async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
-      const sortBy = req.query.sortBy || 'is_active';
-      const sortOrder = req.query.sortOrder || 'DESC';
-      const search = req.query.search || '';
-      const offset = (page - 1) * limit;
-
-      const is_active = req.params.is_active;
-
-      if (is_active == 0) {
-        console.log(is_active, 'tampilin yang non activeaja');
-
-        const result = await allPasienActive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_active,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienActive(is_active);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          result.rows,
-          'get pasien non active success',
-          pagination
-        );
-      } else if (is_active == 1) {
-        console.log(is_active, 'tampilin yang activeaja');
-
-        const result = await allPasienActive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_active,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienActive(is_active);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          result.rows,
-          'get pasien active success',
-          pagination
-        );
-      } else {
-        console.log(is_active, 'id kamu salah');
-
-        const result = await allPasienActive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_active,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienActive(is_active);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          [],
-          'params is_active not found, get pasien active failed',
-          pagination
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get pasien active failed');
-    }
-  },
-  getAllArchive: async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
-      const sortBy = req.query.sortBy || 'created_at';
-      const sortOrder = req.query.sortOrder || 'DESC';
-      const search = req.query.search || '';
-      const offset = (page - 1) * limit;
-
-      const is_archive = req.params.is_archive;
-
-      if (is_archive == 0) {
-        console.log(is_archive, 'tampilin yang non activeaja');
-
-        const result = await allPasienArchive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_archive,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienArchive(is_archive);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          result.rows,
-          'get pasien non archive success',
-          pagination
-        );
-      } else if (is_archive == 1) {
-        console.log(is_archive, 'tampilin yang archiveaja');
-
-        const result = await allPasienArchive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_archive,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienArchive(is_archive);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          result.rows,
-          'get pasien archive success',
-          pagination
-        );
-      } else {
-        console.log(is_archive, 'id kamu salah');
-
-        const result = await allPasienArchive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_archive,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasienArchive(is_archive);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(
-          res,
-          200,
-          true,
-          [],
-          'params is_archive not found, get pasien archive failed',
-          pagination
-        );
-      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get pasien failed');
