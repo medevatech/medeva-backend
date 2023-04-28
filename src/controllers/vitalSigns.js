@@ -17,6 +17,7 @@ const vitalSignsControllers = {
       let data = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
+        keluhan: req.body.keluhan,
         kesadaran: req.body.kesadaran,
         temperatur: req.body.temperatur,
         tinggi_badan: req.body.tinggi_badan,
@@ -148,6 +149,7 @@ const vitalSignsControllers = {
         let data = {
           id,
           id_pasien: req.body.id_pasien,
+          keluhan: req.body.keluhan,
           kesadaran: req.body.kesadaran,
           temperatur: req.body.temperatur,
           tinggi_badan: req.body.tinggi_badan,
