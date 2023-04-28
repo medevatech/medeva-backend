@@ -1,6 +1,8 @@
 const { response } = require(`../middleware/common`);
 const {
   insertPasien,
+  allPasienActive,
+  countAllPasienActive,
   allPasien,
   countAllPasien,
   getPasienById,
@@ -55,28 +57,59 @@ const pasienControllers = {
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
 
-      const result = await allPasien({
-        search,
-        sortBy,
-        sortOrder,
-        limit,
-        offset,
-      });
+      if (req.query.is_active) {
+        console.log('pakai req.query.is_active');
 
-      const {
-        rows: [count],
-      } = await countAllPasien();
+        const is_active = req.query.is_active;
 
-      const totalData = parseInt(count.total);
-      const totalPage = Math.ceil(totalData / limit);
-      const pagination = {
-        currentPage: page,
-        limit,
-        totalData,
-        totalPage,
-      };
+        const result = await allPasienActive({
+          search,
+          sortBy,
+          sortOrder,
+          limit,
+          offset,
+          is_active,
+        });
 
-      response(res, 200, true, result.rows, 'get pasien success', pagination);
+        const {
+          rows: [count],
+        } = await countAllPasienActive(is_active);
+
+        const totalData = parseInt(count.total);
+        const totalPage = Math.ceil(totalData / limit);
+        const pagination = {
+          currentPage: page,
+          limit,
+          totalData,
+          totalPage,
+        };
+
+        response(res, 200, true, result.rows, 'get pasien success', pagination);
+      } else {
+        console.log('tidak pakai req.query.is_active');
+        const result = await allPasien({
+          search,
+          sortBy,
+          sortOrder,
+          limit,
+          offset,
+        });
+
+        const {
+          rows: [count],
+        } = await countAllPasien();
+
+        const totalData = parseInt(count.total);
+        const totalPage = Math.ceil(totalData / limit);
+        const pagination = {
+          currentPage: page,
+          limit,
+          totalData,
+          totalPage,
+        };
+
+        response(res, 200, true, result.rows, 'get pasien success', pagination);
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get pasien failed');
