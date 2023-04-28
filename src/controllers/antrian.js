@@ -111,7 +111,7 @@ const antrianController = {
       return response(res, 400, false, null, "Update antrian failed");
     }
   },
-  delete: async (res, res, next) => {
+  delete: async (req, res, next) => {
     try {
       const id = req.params.id;
       await deleteAntrian(id);
