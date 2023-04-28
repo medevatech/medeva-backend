@@ -1,6 +1,6 @@
 const pool = require("../config/db");
 
-const countAntrian = () => {
+const countAntrianDaily = () => {
   var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {
     pool.query(
@@ -14,6 +14,10 @@ const countAntrian = () => {
       }
     );
   });
+};
+
+const countAntrianAll = () => {
+  return pool.query(`SELECT COUNT(*) AS total FROM tbl_antrian`);
 };
 
 const createAntrian = (data) => {
@@ -32,13 +36,19 @@ const createAntrian = (data) => {
   });
 };
 
-const getAntrian = ({ searchName, searchDivisi, sortBy, sortOrder }) => {
+const getAntrian = ({
+  searchName,
+  searchDivisi,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   // var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {
     pool.query(
       // `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id WHERE tanggal = '${date}' AND status = 1 AND divisi.tipe ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' ORDER BY antrian.${sortBy} ${sortOrder}`,
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id WHERE status = 1 AND divisi.tipe ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' ORDER BY antrian.${sortBy} ${sortOrder}`,
-
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id WHERE status = 1 AND divisi.tipe ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' ORDER BY antrian.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -142,7 +152,8 @@ const deleteAntrian = (id) => {
 };
 
 module.exports = {
-  countAntrian,
+  countAntrianDaily,
+  countAntrianAll,
   createAntrian,
   getAntrian,
   getTotalAntrian,
