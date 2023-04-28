@@ -8,6 +8,7 @@ const {
   getNowAntrian,
   getNextAntrian,
   updateAntrian,
+  deleteAntrian,
 } = require("../models/antrian");
 
 const antrianController = {
@@ -108,6 +109,16 @@ const antrianController = {
     } catch (err) {
       console.log(err);
       return response(res, 400, false, null, "Update antrian failed");
+    }
+  },
+  delete: async (res, res, next) => {
+    try {
+      const id = req.params.id;
+      await deleteAntrian(id);
+      return response(res, 200, true, [], "Delete antrian success");
+    } catch (err) {
+      console.log(err);
+      return response(res, 400, false, null, "Delete antrian failed");
     }
   },
 };

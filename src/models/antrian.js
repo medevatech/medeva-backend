@@ -129,6 +129,18 @@ const updateAntrian = (id) => {
   });
 };
 
+const deleteAntrian = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`DELETE FROM tbl_antrian WHERE id = '${id}'`, (err, res) => {
+      if (!err) {
+        resolve(res);
+      } else {
+        reject(err);
+      }
+    });
+  });
+};
+
 module.exports = {
   countAntrian,
   createAntrian,
@@ -138,4 +150,5 @@ module.exports = {
   getNowAntrian,
   getNextAntrian,
   updateAntrian,
+  deleteAntrian,
 };
