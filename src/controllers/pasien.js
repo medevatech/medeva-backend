@@ -7,7 +7,6 @@ const {
   findPasienById,
   editPasien,
   editPasienActive,
-  editPasienArchive,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -204,46 +203,6 @@ const pasienControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit pasien active failed');
-    }
-  },
-  editArchive: async (req, res, next) => {
-    try {
-      const id = req.params.id;
-
-      const {
-        rows: [findPasien],
-      } = await findPasienById(id);
-
-      if (findPasien) {
-        if (findPasien.is_archive == 0) {
-          console.log('akun ini 0');
-
-          let data = {
-            id,
-            is_archive: 1,
-          };
-
-          await editPasienArchive(data);
-          response(res, 200, true, data, 'edit pasien on archive success');
-        } else if (findPasien.is_archive == 1) {
-          console.log('akun ini 1');
-
-          let data = {
-            id,
-            is_archive: 0,
-          };
-
-          await editPasienArchive(data);
-          response(res, 200, true, data, 'edit pasien off archive success');
-        } else {
-          console.log('column is_archive on your account not eligable');
-        }
-      } else {
-        return response(res, 200, [], null, `id pasien not found, check again`);
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'edit pasien archive failed');
     }
   },
 };
