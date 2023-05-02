@@ -28,12 +28,12 @@ const insertPasien = (data) => {
         (id, nama_lengkap, jenis_kelamin, tipe_kitas, nomor_kitas, 
             nomor_hp, tempat_lahir, tanggal_lahir, alamat, kelurahan, kecamatan,
             kota, provinsi, kode_pos, agama, kewarganegaraan,
-            pekerjaan, status_menikah, golongan_darah, created_at, updated_at, is_active, is_archive) 
+            pekerjaan, status_menikah, golongan_darah, created_at, updated_at, is_active) 
         VALUES
         ('${id}', '${nama_lengkap}', '${jenis_kelamin}', '${tipe_kitas}', '${nomor_kitas}', '${nomor_hp}',
             '${tempat_lahir}', '${tanggal_lahir}', '${alamat}', '${kelurahan}', '${kecamatan}', 
             '${kota}', '${provinsi}', '${kode_pos}', '${agama}', '${kewarganegaraan}',
-            '${pekerjaan}', '${status_menikah}', '${golongan_darah}', NOW(), NOW(), 1, 0)`,
+            '${pekerjaan}', '${status_menikah}', '${golongan_darah}', NOW(), NOW(), 1)`,
       (err, result) => {
         if (!err) {
           resolve(result);
