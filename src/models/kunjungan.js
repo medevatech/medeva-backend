@@ -153,6 +153,12 @@ const findKunjunganByIdPasien = (id_pasien) => {
   );
 };
 
+const countAllKunjunganPasien = (id_pasien) => {
+  return Pool.query(
+    `SELECT COUNT(*) AS total FROM tbl_kunjungan WHERE id_pasien = '${id_pasien}'`
+  );
+};
+
 const editKunjungan = (data) => {
   const {
     id,
@@ -197,5 +203,6 @@ module.exports = {
   findKunjunganById,
   getKunjunganByIdPasien,
   findKunjunganByIdPasien,
+  countAllKunjunganPasien,
   editKunjungan,
 };
