@@ -43,6 +43,7 @@ const getAntrian = ({
   sortOrder,
   limit,
   offset,
+  // date,
 }) => {
   // var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {

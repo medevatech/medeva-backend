@@ -55,6 +55,8 @@ const antrianController = {
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
+      // const dateNow = new Date().toISOString().slice(0, 10);
+      // const date = req.query.date;
       const result = await getAntrian({
         searchName,
         searchDivisi,
@@ -62,6 +64,7 @@ const antrianController = {
         sortOrder,
         limit,
         offset,
+        // date,
       });
       const {
         rows: [countAll],
