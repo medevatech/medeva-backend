@@ -8,7 +8,7 @@ const {
   getPasienById,
   findPasienById,
   editPasien,
-  editPasienActive,
+  editPasienActiveArchive,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -198,7 +198,7 @@ const pasienControllers = {
       response(res, 404, false, error, 'edit pasien failed');
     }
   },
-  editActive: async (req, res, next) => {
+  editActivate: async (req, res, next) => {
     try {
       const id = req.params.id;
 
@@ -207,29 +207,37 @@ const pasienControllers = {
       } = await findPasienById(id);
 
       if (findPasien) {
-        if (findPasien.is_active == 0) {
-          console.log('akun ini 0');
+        let data = {
+          id,
+          is_active: 1,
+        };
 
-          let data = {
-            id,
-            is_active: 1,
-          };
+        await editPasienActiveArchive(data);
+        response(res, 200, true, data, 'activate pasien success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'edit pasien active failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
 
-          await editPasienActive(data);
-          response(res, 200, true, data, 'edit pasien on active success');
-        } else if (findPasien.is_active == 1) {
-          console.log('akun ini 1');
+      const {
+        rows: [findPasien],
+      } = await findPasienById(id);
 
-          let data = {
-            id,
-            is_active: 0,
-          };
+      if (findPasien) {
+        let data = {
+          id,
+          is_active: 0,
+        };
 
-          await editPasienActive(data);
-          response(res, 200, true, data, 'edit pasien off active success');
-        } else {
-          console.log('column is_active on your account not eligable');
-        }
+        await editPasienActiveArchive(data);
+        response(res, 200, true, data, 'archive pasien success');
       } else {
         return response(res, 200, [], null, `id pasien not found, check again`);
       }

@@ -202,7 +202,7 @@ const editPasien = (data) => {
   );
 };
 
-const editPasienActive = (data) => {
+const editPasienActiveArchive = (data) => {
   const { id, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
@@ -231,5 +231,5 @@ module.exports = {
   getPasienById,
   findPasienById,
   editPasien,
-  editPasienActive,
+  editPasienActiveArchive,
 };
