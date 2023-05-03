@@ -97,6 +97,7 @@ const getKaryawan = ({
   searchName,
   searchTipe,
   searchSpesialis,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
@@ -104,7 +105,7 @@ const getKaryawan = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT kry.id, kry.nama, kry.username, kry.email, kry.is_dev, kry.is_manager, kry.is_admin, kry.is_resepsionis, kry.is_perawat, kry.is_dokter, kry.is_manajemen, kry.jenis_kelamin, kry.nomor_kitas, kry.tipe_izin, kry.nomor_izin, to_char(kry.kadaluarsa_izin, 'YYYY-MM-DD') as kadaluarsa_izin, kry.nomor_hp, kry.tempat_lahir, to_char(kry.tanggal_lahir, 'YYYY-MM-DD') as tanggal_lahir, kry.alamat, kry.provinsi, kry.kota, kry.kecamatan, kry.kelurahan, kry.kode_pos, kry.status_menikah, kry.tipe, kry.spesialis, kry.is_active, to_char(kry.created_at, 'DD Month YYYY - HH24:MI') as created_at, to_char(kry.updated_at, 'DD Month YYYY - HH24:MI') as updated_at FROM tbl_karyawan as kry WHERE kry.nama ILIKE '%${searchName}%' AND kry.tipe ILIKE '%${searchTipe}%' AND kry.spesialis ILIKE '%${searchSpesialis}%' ORDER BY kry.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT kry.id, kry.nama, kry.username, kry.email, kry.is_dev, kry.is_manager, kry.is_admin, kry.is_resepsionis, kry.is_perawat, kry.is_dokter, kry.is_manajemen, kry.jenis_kelamin, kry.nomor_kitas, kry.tipe_izin, kry.nomor_izin, to_char(kry.kadaluarsa_izin, 'YYYY-MM-DD') as kadaluarsa_izin, kry.nomor_hp, kry.tempat_lahir, to_char(kry.tanggal_lahir, 'YYYY-MM-DD') as tanggal_lahir, kry.alamat, kry.provinsi, kry.kota, kry.kecamatan, kry.kelurahan, kry.kode_pos, kry.status_menikah, kry.tipe, kry.spesialis, kry.is_active, to_char(kry.created_at, 'DD Month YYYY - HH24:MI') as created_at, to_char(kry.updated_at, 'DD Month YYYY - HH24:MI') as updated_at FROM tbl_karyawan as kry WHERE kry.nama ILIKE '%${searchName}%' AND kry.tipe ILIKE '%${searchTipe}%' AND kry.spesialis ILIKE '%${searchSpesialis}%' AND kry.is_active ILIKE '%${searchStatus}%' ORDER BY kry.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
