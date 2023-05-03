@@ -129,11 +129,13 @@ const karyawanController = {
       const searchName = req.query.searchName || "";
       const searchTipe = req.query.searchTipe || "";
       const searchSpesialis = req.query.searchSpesialis || "";
+      const searchStatus = req.query.searchStatus || "";
       const offset = (page - 1) * limit;
       const result = await getKaryawan({
         searchName,
         searchTipe,
         searchSpesialis,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
