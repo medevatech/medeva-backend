@@ -9,6 +9,7 @@ const {
   findPasienById,
   editPasien,
   editPasienActiveArchive,
+  deletePasien,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -219,7 +220,7 @@ const pasienControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit pasien active failed');
+      response(res, 404, false, error, 'active pasien failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -243,7 +244,34 @@ const pasienControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit pasien active failed');
+      response(res, 404, false, error, 'archive pasien failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPasien],
+      } = await findPasienById(id);
+
+      if (findPasien) {
+        // let text = 'delete';
+
+        // let result = text.concat('-', id);
+
+        let data = {
+          id,
+        };
+
+        await deletePasien(data);
+        response(res, 200, true, data, 'delete pasien success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete failed');
     }
   },
 };

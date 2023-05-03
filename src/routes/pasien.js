@@ -11,5 +11,6 @@ router.get(`/:id`, pasienControllers.getById);
 router.put(`/:id`, uploaded.array(), pasienControllers.edit);
 router.put(`/activate/:id`, uploaded.array(), pasienControllers.editActivate);
 router.put(`/archive/:id`, uploaded.array(), pasienControllers.editArchive);
+router.put(`/delete/:id`, uploaded.array(), pasienControllers.delete);
 
 module.exports = router;
