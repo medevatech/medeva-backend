@@ -15,6 +15,10 @@ const findKlinik = (nama_klinik) => {
   });
 };
 
+const countKlinik = () => {
+  return pool.query(`SELECT COUNT(*) AS total FROM tbl_klinik`);
+};
+
 const createKlinik = (data) => {
   const { id, nama_klinik, tipe, alamat, nomor_telepon } = data;
   return new Promise((resolve, reject) => {
@@ -103,6 +107,7 @@ const deleteKlinik = (id) => {
 module.exports = {
   createKlinik,
   findKlinik,
+  countKlinik,
   getKlinik,
   getKlinikById,
   updateKlinik,
