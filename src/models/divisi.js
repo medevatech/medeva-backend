@@ -50,7 +50,7 @@ const getDivisi = ({
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik 
         ON divisi.id_klinik = klinik.id
-        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND klinik.id_klinik ILIKE '%${searchKlinik}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
