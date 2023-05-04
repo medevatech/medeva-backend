@@ -1,14 +1,13 @@
 const { response } = require(`../middleware/common`);
 const {
   insertPasien,
-  allPasienActive,
-  countAllPasienActive,
   allPasien,
   countAllPasien,
   getPasienById,
   findPasienById,
   editPasien,
   editPasienActiveArchive,
+  deletePasien,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -56,60 +55,31 @@ const pasienControllers = {
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
+      const searchStatus = req.query.searchStatus || '';
 
-      if (req.query.is_active) {
-        console.log('pakai req.query.is_active');
+      const result = await allPasien({
+        search,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+        searchStatus,
+      });
 
-        const is_active = req.query.is_active;
+      const {
+        rows: [count],
+      } = await countAllPasien();
 
-        const result = await allPasienActive({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-          is_active,
-        });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
 
-        const {
-          rows: [count],
-        } = await countAllPasienActive(is_active);
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(res, 200, true, result.rows, 'get pasien success', pagination);
-      } else {
-        console.log('tidak pakai req.query.is_active');
-        const result = await allPasien({
-          search,
-          sortBy,
-          sortOrder,
-          limit,
-          offset,
-        });
-
-        const {
-          rows: [count],
-        } = await countAllPasien();
-
-        const totalData = parseInt(count.total);
-        const totalPage = Math.ceil(totalData / limit);
-        const pagination = {
-          currentPage: page,
-          limit,
-          totalData,
-          totalPage,
-        };
-
-        response(res, 200, true, result.rows, 'get pasien success', pagination);
-      }
+      response(res, 200, true, result.rows, 'get pasien success', pagination);
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get pasien failed');
@@ -219,7 +189,7 @@ const pasienControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit pasien active failed');
+      response(res, 404, false, error, 'active pasien failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -243,7 +213,34 @@ const pasienControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit pasien active failed');
+      response(res, 404, false, error, 'archive pasien failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPasien],
+      } = await findPasienById(id);
+
+      if (findPasien) {
+        // let text = 'delete';
+
+        // let result = text.concat('-', id);
+
+        let data = {
+          id,
+        };
+
+        await deletePasien(data);
+        response(res, 200, true, data, 'delete pasien success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete failed');
     }
   },
 };
