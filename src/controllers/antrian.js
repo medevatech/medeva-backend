@@ -52,6 +52,7 @@ const antrianController = {
       const limit = req.query.limit || 10;
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
+      const searchJaga = req.query.searchJaga || "";
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
@@ -60,6 +61,7 @@ const antrianController = {
       const result = await getAntrian({
         searchName,
         searchDivisi,
+        searchJaga,
         sortBy,
         sortOrder,
         limit,
