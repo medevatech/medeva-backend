@@ -4,3 +4,4 @@ note.txt
 package-lock.json
 query.sql
 /tests
+/.github/workflows
