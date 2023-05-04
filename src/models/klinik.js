@@ -15,6 +15,10 @@ const findKlinik = (nama_klinik) => {
   });
 };
 
+const countKlinik = () => {
+  return pool.query(`SELECT COUNT(*) AS total FROM tbl_klinik`);
+};
+
 const createKlinik = (data) => {
   const { id, nama_klinik, tipe, alamat, nomor_telepon } = data;
   return new Promise((resolve, reject) => {
@@ -31,11 +35,11 @@ const createKlinik = (data) => {
   });
 };
 
-const getKlinik = ({ search, sortBy, sortOrder, limit, offset }) => {
+const getKlinik = ({ searchName, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT * FROM tbl_klinik
-              WHERE tbl_klinik.nama_klinik ILIKE ('%${search}%')
+              WHERE tbl_klinik.nama_klinik ILIKE ('%${searchName}%')
               ORDER BY tbl_klinik.${sortBy} ${sortOrder}
               LIMIT ${limit}
               OFFSET ${offset}`,
@@ -103,6 +107,7 @@ const deleteKlinik = (id) => {
 module.exports = {
   createKlinik,
   findKlinik,
+  countKlinik,
   getKlinik,
   getKlinikById,
   updateKlinik,

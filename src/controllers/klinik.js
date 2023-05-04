@@ -2,6 +2,7 @@ const { response } = require("../middleware/common");
 const {
   createKlinik,
   findKlinik,
+  countKlinik,
   getKlinik,
   getKlinikById,
   updateKlinik,
@@ -39,24 +40,36 @@ const klinikController = {
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
+      const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "nama_klinik";
       const sortOrder = req.query.sortOrder || "desc";
-      const search = req.query.search || "";
+      const searchName = req.query.searchName || "";
       const offset = (page - 1) * limit;
       const result = await getKlinik({
-        search,
+        searchName,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
+      const {
+        rows: [count],
+      } = await countKlinik();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
       response(
         res,
         200,
         true,
-        { result: result.rows },
-        "Get clinic data success"
+        result.rows,
+        "Get clinic data success",
+        pagination
       );
     } catch (err) {
       console.log("Get clinic data error", err);
@@ -74,14 +87,14 @@ const klinikController = {
   },
   update: async (req, res, next) => {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
       const nama_klinik = req.body.nama_klinik;
       const tipe = req.body.tipe;
       const alamat = req.body.alamat;
       const nomor_telepon = req.body.nomor_telepon;
       const data = {
         id,
-        nama,
+        nama_klinik,
         tipe,
         alamat,
         nomor_telepon,

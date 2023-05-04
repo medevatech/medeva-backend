@@ -2,9 +2,12 @@ const { response } = require("../middleware/common");
 const {
   createDivisi,
   findDivisi,
+  countDivisi,
   getDivisi,
   getDivisiById,
   updateDivisi,
+  archiveDivisi,
+  activateDivisi,
   deleteDivisi,
 } = require("../models/divisi");
 
@@ -37,24 +40,38 @@ const divisiController = {
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
+      const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "tipe";
       const sortOrder = req.query.sortOrder || "desc";
-      const search = req.query.search || "";
+      const searchName = req.query.searchName || "";
+      const searchStatus = req.query.searchStatus || "";
       const offset = (page - 1) * limit;
       const result = await getDivisi({
-        search,
+        searchName,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
+      const {
+        rows: [count],
+      } = await countDivisi();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
       response(
         res,
         200,
         true,
-        { result: result.rows },
-        "Get division data success"
+        result.rows,
+        "Get division data success",
+        pagination
       );
     } catch (err) {
       console.log("Get division data error", err);
@@ -85,6 +102,22 @@ const divisiController = {
     } catch (err) {
       console.log("Update division data error", err);
       response(res, 400, false, "Update division data failed");
+    }
+  },
+  archive: async (req, res, next) => {
+    try {
+      await archiveDivisi(req.params.id);
+      return response(res, 200, true, null, "Archive divisi success");
+    } catch (err) {
+      return response(res, 400, false, err, "Archive divisi failed");
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      await activateDivisi(req.params.id);
+      return response(res, 200, true, null, "Activate divisi success");
+    } catch (err) {
+      return response(res, 400, false, err, "Activate divisi failed");
     }
   },
   delete: async (req, res, next) => {
