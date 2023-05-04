@@ -1,10 +1,12 @@
 const { response } = require('../middleware/common');
 const {
   createJaga,
+  countJaga,
   getJaga,
   getJagaById,
   updateJaga,
-
+  archiveJaga,
+  activateJaga,
   deleteJaga,
 } = require('../models/jaga');
 
@@ -36,21 +38,33 @@ const jagaController = {
       const limit = parseInt(req.query.limit) || 5;
       const sortBy = req.query.sortBy || 'id';
       const sortOrder = req.query.sortOrder || 'desc';
-      const search = req.query.search || '';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
       const result = await getJaga({
-        search,
+        searchName,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
-
+      const {
+        rows: [count],
+      } = await countJaga();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
       response(
         res,
         200,
         true,
-        { result: result.rows },
+        result.rows,
         'Get jaga data success',
         pagination
       );
@@ -89,7 +103,22 @@ const jagaController = {
       response(res, 400, false, 'Update jaga data failed');
     }
   },
-
+  archive: async (req, res, next) => {
+    try {
+      await archiveJaga(req.params.id);
+      return response(res, 200, true, null, 'Archive jaga success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Archive jaga failed');
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      await activateJaga(req.params.id);
+      return response(res, 200, true, null, 'Activate jaga success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Activate jaga failed');
+    }
+  },
   delete: async (req, res, next) => {
     try {
       await deleteJaga(req.params.id);

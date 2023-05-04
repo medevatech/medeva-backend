@@ -6,6 +6,8 @@ const {
   getDivisi,
   getDivisiById,
   updateDivisi,
+  archiveDivisi,
+  activateDivisi,
   deleteDivisi,
 } = require('../models/divisi');
 
@@ -42,10 +44,11 @@ const divisiController = {
       const sortBy = req.query.sortBy || 'tipe';
       const sortOrder = req.query.sortOrder || 'desc';
       const searchName = req.query.searchName || '';
-
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
       const result = await getDivisi({
         searchName,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -101,7 +104,22 @@ const divisiController = {
       response(res, 400, false, 'Update division data failed');
     }
   },
-
+  archive: async (req, res, next) => {
+    try {
+      await archiveDivisi(req.params.id);
+      return response(res, 200, true, null, 'Archive divisi success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Archive divisi failed');
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      await activateDivisi(req.params.id);
+      return response(res, 200, true, null, 'Activate divisi success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Activate divisi failed');
+    }
+  },
   delete: async (req, res, next) => {
     try {
       await deleteDivisi(req.params.id);

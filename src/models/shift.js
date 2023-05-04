@@ -24,11 +24,22 @@ const createShift = (data) => {
   });
 };
 
-const getShift = ({ search, sortBy, sortOrder, limit, offset }) => {
+const countShift = () => {
+  return pool.query(`SELECT COUNT(*) AS total FROM tbl_shift`);
+};
+
+const getShift = ({
+  searchName,
+  searchStatus,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id 
-      WHERE tbl_shift.hari ILIKE ('%${search}%')
+      `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_shift.is_active, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id 
+                WHERE tbl_shift.hari ILIKE '%${searchName}%' AND tbl_shift.is_active ILIKE '%${searchStatus}%'
                 ORDER BY tbl_shift.${sortBy} ${sortOrder}
                 LIMIT ${limit}
                 OFFSET ${offset}`,
@@ -46,7 +57,7 @@ const getShift = ({ search, sortBy, sortOrder, limit, offset }) => {
 const getShiftById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id
+      `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_shift.is_active, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id
                 WHERE tbl_shift.id = '${id}'`,
       (err, res) => {
         if (!err) {
@@ -85,6 +96,36 @@ const updateShift = (data) => {
   });
 };
 
+const archiveShift = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE tbl_shift SET is_active = 0 WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const activateShift = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE tbl_shift SET is_active = 1 WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const deleteShift = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -103,8 +144,11 @@ const deleteShift = (id) => {
 
 module.exports = {
   createShift,
+  countShift,
   getShift,
   getShiftById,
   updateShift,
+  archiveShift,
+  activateShift,
   deleteShift,
 };

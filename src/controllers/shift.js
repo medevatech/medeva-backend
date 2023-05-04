@@ -1,9 +1,12 @@
 const { response } = require('../middleware/common');
 const {
   createShift,
+  countShift,
   getShift,
   getShiftById,
   updateShift,
+  archiveShift,
+  activateShift,
   deleteShift,
 } = require('../models/shift');
 
@@ -37,21 +40,33 @@ const shiftController = {
       const limit = parseInt(req.query.limit) || 5;
       const sortBy = req.query.sortBy || 'hari';
       const sortOrder = req.query.sortOrder || 'desc';
-      const search = req.query.search || '';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
       const result = await getShift({
-        search,
+        searchName,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
-
+      const {
+        rows: [count],
+      } = await countShift();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
       response(
         res,
         200,
         true,
-        { result: result.rows },
+        result.rows,
         'Get shift data success',
         pagination
       );
@@ -94,7 +109,22 @@ const shiftController = {
       response(res, 400, false, 'Update shift data failed');
     }
   },
-
+  archive: async (req, res, next) => {
+    try {
+      await archiveShift(req.params.id);
+      return response(res, 200, true, null, 'Archive shift success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Archive shift failed');
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      await activateShift(req.params.id);
+      return response(res, 200, true, null, 'Activate shift success');
+    } catch (err) {
+      return response(res, 400, false, err, 'Activate shift failed');
+    }
+  },
   delete: async (req, res, next) => {
     try {
       await deleteShift(req.params.id);
