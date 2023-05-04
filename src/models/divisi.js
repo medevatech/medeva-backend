@@ -23,7 +23,7 @@ const createDivisi = (data) => {
   const { id, id_klinik, tipe } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_divisi (id, id_klinik, tipe) VALUES('${id}', '${id_klinik}', '${tipe}')`,
+      `INSERT INTO tbl_divisi (id, id_klinik, tipe, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${tipe}', '1', NOW(), NOW())`,
       (err, res) => {
         if (!err) {
           resolve(res);
