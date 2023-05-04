@@ -1,24 +1,25 @@
-name: Deploy website on push
-
-on:
-  push:
-    branches:
-      - main
-      
+name: cpanellaravel
+on: push
 jobs:
-  web-deploy: Deploy
-  
-  runs-on: ubuntu-latest
-  
-  steps: 
-  - name: Get lates code
-  
-    uses: actions/checkout@v2
-  
-  - name: Sync files
-    uses: SamKirland/FTP-Deploy-Action@4.1.0
-    with: 
-    server: ${{ secrets.FTP_HOST }}
-    username: ${{ secrets.FTP_USERNAME }}
-    password: ${{ secrets.FTP_PASSWORD }}
-    server-dir: /
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
+    - name: Upload ftp
+      uses : SamKirkland/FTP-Deploy-Action@4.3.2
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+    - name: running command ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_SSH }}
+        username: ${{ secrets.USERNAME_SSH }}
+        password: ${{ secrets.PASSWORD_SSH }}
+        port: ${{ secrets.PORT_SSH }}
+        script: |
+          cd panelpdd/
+          composer install
