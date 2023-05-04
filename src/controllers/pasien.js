@@ -225,10 +225,6 @@ const pasienControllers = {
       } = await findPasienById(id);
 
       if (findPasien) {
-        // let text = 'delete';
-
-        // let result = text.concat('-', id);
-
         let data = {
           id,
         };

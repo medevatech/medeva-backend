@@ -192,19 +192,13 @@ const editPasienActiveArchive = (data) => {
 const deletePasien = (data) => {
   const { id } = data;
   return new Promise((resolve, reject) =>
-    Pool.query(
-      `UPDATE tbl_pasien 
-          SET
-            deleted_at=NOW()
-          WHERE id='${id}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
+    Pool.query(`DELETE FROM tbl_pasien WHERE id='${id}'`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
       }
-    )
+    })
   );
 };
 
