@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require("../config/db");
 
 const findDivisi = (tipe) => {
   return new Promise((resolve, reject) => {
@@ -38,6 +38,7 @@ const createDivisi = (data) => {
 const getDivisi = ({
   searchName,
   searchStatus,
+  searchKlinik,
   sortBy,
   sortOrder,
   limit,
@@ -49,7 +50,7 @@ const getDivisi = ({
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik 
         ON divisi.id_klinik = klinik.id
-        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND klinik.nama_klinik ILIKE '%${searchKlinik}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
