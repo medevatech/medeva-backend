@@ -40,13 +40,13 @@ const klinikController = {
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
+      const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "nama_klinik";
       const sortOrder = req.query.sortOrder || "desc";
-      const search = req.query.search || "";
+      const searchName = req.query.searchName || "";
       const offset = (page - 1) * limit;
       const result = await getKlinik({
-        search,
+        searchName,
         sortBy,
         sortOrder,
         limit,
