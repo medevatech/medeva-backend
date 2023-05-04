@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
 
 const findDivisi = (tipe) => {
   return new Promise((resolve, reject) => {
@@ -35,22 +35,14 @@ const createDivisi = (data) => {
   });
 };
 
-const getDivisi = ({
-  searchName,
-  searchStatus,
-  sortBy,
-  sortOrder,
-  limit,
-  offset,
-}) => {
+const getDivisi = ({ searchName, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, divisi.is_active, klinik.nama_klinik as nama_klinik
+      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, klinik.nama_klinik as nama_klinik
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik 
         ON divisi.id_klinik = klinik.id
-        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
-      `,
+        WHERE divisi.tipe ILIKE ('%${searchName}%') ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -65,7 +57,7 @@ const getDivisi = ({
 const getDivisiById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, divisi.is_active, klinik.nama_klinik as nama_klinik
+      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, klinik.nama_klinik as nama_klinik
       FROM tbl_divisi as divisi 
       INNER JOIN tbl_klinik as klinik 
       ON divisi.id_klinik = klinik.id
@@ -88,36 +80,6 @@ const updateDivisi = (data) => {
       `UPDATE tbl_divisi
                 SET id_klinik = '${id_klinik}', tipe = '${tipe}'
                 WHERE id = '${id}'`,
-      (err, res) => {
-        if (!err) {
-          resolve(res);
-        } else {
-          reject(err);
-        }
-      }
-    );
-  });
-};
-
-const archiveDivisi = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_divisi SET is_active = 0 WHERE id = '${id}'`,
-      (err, res) => {
-        if (!err) {
-          resolve(res);
-        } else {
-          reject(err);
-        }
-      }
-    );
-  });
-};
-
-const activateDivisi = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_divisi SET is_active = 1 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -152,7 +114,5 @@ module.exports = {
   getDivisi,
   getDivisiById,
   updateDivisi,
-  archiveDivisi,
-  activateDivisi,
   deleteDivisi,
 };
