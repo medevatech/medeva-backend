@@ -6,11 +6,11 @@ let multer = require('multer');
 let uploaded = multer();
 
 router.post(`/`, uploaded.array(), pasienControllers.add);
-router.get(`/`, pasienControllers.getAll);
+router.get(`/all/`, pasienControllers.getAll);
 router.get(`/:id`, pasienControllers.getById);
 router.put(`/:id`, uploaded.array(), pasienControllers.edit);
 router.put(`/activate/:id`, uploaded.array(), pasienControllers.editActivate);
 router.put(`/archive/:id`, uploaded.array(), pasienControllers.editArchive);
-router.delete(`/delete/:id`, uploaded.array(), pasienControllers.delete);
+router.delete(`/:id`, uploaded.array(), pasienControllers.delete);
 
 module.exports = router;
