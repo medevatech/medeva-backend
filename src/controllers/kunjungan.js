@@ -31,13 +31,13 @@ const kunjunganControllers = {
         keluhan: req.body.keluhan,
       };
 
-      if (req.body.waktu_mulai === '') {
-        data.waktu_mulai = '1970-01-01 00:00:00';
-      }
+      // if (req.body.waktu_mulai === '') {
+      //   data.waktu_mulai = '1970-01-01 00:00:00';
+      // }
 
-      if (req.body.waktu_selesai === '') {
-        data.waktu_selesai = '1970-01-01 00:00:00';
-      }
+      // if (req.body.waktu_selesai === '') {
+      //   data.waktu_selesai = '1970-01-01 00:00:00';
+      // }
 
       if (req.body.kasus_kll === '') {
         data.kasus_kll = false;
