@@ -40,7 +40,7 @@ const kunjunganControllers = {
       }
 
       if (req.body.kasus_kll === '') {
-        data.waktu_selesai = false;
+        data.kasus_kll = false;
       }
 
       await insertKunjungan(data);
