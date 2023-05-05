@@ -23,7 +23,7 @@ const insertKunjungan = (data) => {
           pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
           created_at, updated_at) 
       VALUES
-      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
+      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}',  NOW(), '${tipe}', '${anamnesis}', 
           '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
           NOW(), NOW())`,
       (err, res) => {
