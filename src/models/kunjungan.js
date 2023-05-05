@@ -1,5 +1,42 @@
 const Pool = require('../config/db');
 
+// const insertKunjungan1 = (data) => {
+//   const {
+//     id,
+//     id_jaga,
+//     id_vs,
+//     id_pasien,
+//     waktu_mulai,
+//     waktu_selesai,
+//     tipe,
+//     anamnesis,
+//     pemeriksaan_fisik,
+//     prognosa,
+//     kasus_kll,
+//     status_pulang,
+//     keluhan,
+//   } = data;
+//   return new Promise((resolve, reject) =>
+//     Pool.query(
+//       `INSERT INTO tbl_kunjungan 
+//         (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
+//             pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
+//             created_at, updated_at) 
+//         VALUES
+//         ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
+//             '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
+//             NOW(), NOW())`,
+//       (err, result) => {
+//         if (!err) {
+//           resolve(result);
+//         } else {
+//           reject(err);
+//         }
+//       }
+//     )
+//   );
+};
+
 const insertKunjungan = (data) => {
   const {
     id,
@@ -16,25 +53,25 @@ const insertKunjungan = (data) => {
     status_pulang,
     keluhan,
   } = data;
-  return new Promise((resolve, reject) =>
-    Pool.query(
+  return new Promise((resolve, reject) => {
+    pool.query(
       `INSERT INTO tbl_kunjungan 
-        (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
-            pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
-            created_at, updated_at) 
-        VALUES
-        ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
-            '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
-            NOW(), NOW())`,
-      (err, result) => {
+      (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
+          pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
+          created_at, updated_at) 
+      VALUES
+      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
+          '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
+          NOW(), NOW())`,
+      (err, res) => {
         if (!err) {
-          resolve(result);
+          resolve(res);
         } else {
           reject(err);
         }
       }
-    )
-  );
+    );
+  });
 };
 
 const allKunjungan = ({ search, sortBy, sortOrder, limit, offset }) => {
