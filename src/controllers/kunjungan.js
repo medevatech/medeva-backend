@@ -20,8 +20,7 @@ const kunjunganControllers = {
         id_jaga: req.body.id_jaga,
         id_vs: req.body.id_vs,
         id_pasien: req.body.id_pasien,
-        waktu_mulai: req.body.waktu_mulai,
-        waktu_selesai: req.body.waktu_selesai,
+
         tipe: req.body.tipe,
         anamnesis: req.body.anamnesis,
         pemeriksaan_fisik: req.body.pemeriksaan_fisik,
@@ -30,14 +29,6 @@ const kunjunganControllers = {
         status_pulang: req.body.status_pulang,
         keluhan: req.body.keluhan,
       };
-
-      if (req.body.waktu_mulai === '') {
-        data.waktu_mulai = '1970-01-01';
-      }
-
-      if (req.body.waktu_selesai === '') {
-        data.waktu_selesai = '1970-01-01';
-      }
 
       if (req.body.kasus_kll === '') {
         data.kasus_kll = false;
