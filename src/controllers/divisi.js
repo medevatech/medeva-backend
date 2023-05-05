@@ -91,7 +91,7 @@ const divisiController = {
   },
   update: async (req, res, next) => {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
       const id_klinik = req.body.id_klinik;
       const tipe = req.body.tipe;
       const data = {
