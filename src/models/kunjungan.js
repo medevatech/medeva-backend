@@ -6,6 +6,8 @@ const insertKunjungan = (data) => {
     id_jaga,
     id_vs,
     id_pasien,
+    waktu_mulai,
+    waktu_selesai,
     tipe,
     anamnesis,
     pemeriksaan_fisik,
@@ -17,11 +19,11 @@ const insertKunjungan = (data) => {
   return new Promise((resolve, reject) => {
     Pool.query(
       `INSERT INTO tbl_kunjungan 
-      (id, id_jaga, id_vs, id_pasien,  tipe, anamnesis, 
+      (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
           pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
           created_at, updated_at) 
       VALUES
-      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}',  '${tipe}', '${anamnesis}', 
+      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
           '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
           NOW(), NOW())`,
       (err, res) => {
