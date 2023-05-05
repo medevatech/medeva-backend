@@ -39,6 +39,10 @@ const kunjunganControllers = {
         data.waktu_selesai = '1970-01-01';
       }
 
+      if (req.body.kasus_kll === '') {
+        data.waktu_selesai = false;
+      }
+
       await insertKunjungan(data);
       response(res, 200, true, data, 'insert kunjungan success');
     } catch (error) {
