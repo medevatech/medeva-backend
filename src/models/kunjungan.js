@@ -54,7 +54,7 @@ const insertKunjungan = (data) => {
     keluhan,
   } = data;
   return new Promise((resolve, reject) => {
-    pool.query(
+    Pool.query(
       `INSERT INTO tbl_kunjungan 
       (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
           pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
