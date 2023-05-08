@@ -34,8 +34,8 @@ const allAlergiPasien = ({ search, sortBy, sortOrder, limit, offset }) => {
           tbl_alergi_pasien.id_pasien, 
           tbl_alergi_pasien.alergi,
           tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus,
-            to_char( tbl_alergi_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-            to_char( tbl_alergi_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+            tbl_alergi_pasien.created_at,
+            tbl_alergi_pasien.updated_at
         FROM tbl_alergi_pasien AS tbl_alergi_pasien
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
         WHERE tbl_alergi_pasien.id
@@ -64,8 +64,8 @@ const getAlergiPasienById = ({ id }) => {
                 tbl_pasien.nama_lengkap AS nama_lengkap,
             tbl_alergi_pasien.alergi,
             tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus,
-              to_char( tbl_alergi_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-              to_char( tbl_alergi_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+              tbl_alergi_pasien.created_at,
+              tbl_alergi_pasien.updated_at
         FROM tbl_alergi_pasien AS tbl_alergi_pasien
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
         WHERE tbl_alergi_pasien.id = '${id}'`,
@@ -106,8 +106,8 @@ const getAlergiPasienByIdPasien = ({ id_pasien }) => {
                 tbl_pasien.nama_lengkap AS nama_lengkap,
             tbl_alergi_pasien.alergi,
             tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus,
-              to_char( tbl_alergi_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-              to_char( tbl_alergi_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+              tbl_alergi_pasien.created_at,
+              tbl_alergi_pasien.updated_at
         FROM tbl_alergi_pasien AS tbl_alergi_pasien
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
         WHERE tbl_alergi_pasien.id_pasien = '${id_pasien}'`,
