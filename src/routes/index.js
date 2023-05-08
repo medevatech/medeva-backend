@@ -21,6 +21,7 @@ const divisiRouter = require("./divisi");
 const shiftRouter = require("./shift");
 const jagaRouter = require("./jaga");
 const antrianRouter = require("./antrian");
+const daftarLayananRouter = require("./daftarLayanan");
 
 router.use("/pasien", pasienControllers);
 router.use("/asuransi", asuransiControllers);
@@ -43,5 +44,6 @@ router.use("/divisi", divisiRouter);
 router.use("/shift", shiftRouter);
 router.use("/jaga", jagaRouter);
 router.use("/antrian", antrianRouter);
+router.use("/daftar-layanan", daftarLayananRouter);
 
 module.exports = router;

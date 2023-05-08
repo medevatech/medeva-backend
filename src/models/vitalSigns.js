@@ -48,8 +48,8 @@ const allVital = ({ search, sortBy, sortOrder, limit, offset }) => {
         tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
-        to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_vital_signs.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_vital_signs.created_at,
+        tbl_vital_signs.updated_at
       FROM tbl_vital_signs AS tbl_vital_signs
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
       WHERE tbl_pasien.nama_lengkap
@@ -78,8 +78,8 @@ const getVitalById = ({ id }) => {
         tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
-        to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_vital_signs.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_vital_signs.created_at,
+        tbl_vital_signs.updated_at
       FROM tbl_vital_signs AS tbl_vital_signs
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
       WHERE tbl_vital_signs.id = '${id}'`,
@@ -118,8 +118,8 @@ const getVitalByIdPasien = ({ id_pasien }) => {
         tbl_vital_signs.keluhan, tbl_vital_signs.kesadaran, tbl_vital_signs.temperatur, tbl_vital_signs.tinggi_badan, tbl_vital_signs.berat_badan, 
         tbl_vital_signs.lingkar_perut, tbl_vital_signs.imt, tbl_vital_signs.sistole, tbl_vital_signs.diastole, 
         tbl_vital_signs.respiratory_rate, tbl_vital_signs.heart_rate, tbl_vital_signs.catatan_tambahan,
-        to_char( tbl_vital_signs.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_vital_signs.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_vital_signs.created_at,
+        tbl_vital_signs.updated_at
       FROM tbl_vital_signs AS tbl_vital_signs
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
       WHERE tbl_vital_signs.id_pasien = '${id_pasien}'`,

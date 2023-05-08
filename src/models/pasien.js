@@ -62,8 +62,8 @@ const allPasien = ({
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,
         tbl_pasien.is_active, 
-          to_char( tbl_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+          tbl_pasien.created_at,
+          tbl_pasien.updated_at
       FROM tbl_pasien AS tbl_pasien
       WHERE tbl_pasien.is_active ILIKE '%${searchStatus}%' 
         AND tbl_pasien.nama_lengkap ILIKE '%${search}%' 
@@ -95,8 +95,8 @@ const getPasienById = ({ id }) => {
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah,
         tbl_pasien.is_active, 
-          to_char( tbl_pasien.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_pasien.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+          tbl_pasien.created_at,
+          tbl_pasien.updated_at
       FROM tbl_pasien AS tbl_pasien
       WHERE tbl_pasien.id = '${id}'`,
       (err, result) => {

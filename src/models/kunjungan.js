@@ -16,25 +16,25 @@ const insertKunjungan = (data) => {
     status_pulang,
     keluhan,
   } = data;
-  return new Promise((resolve, reject) =>
+  return new Promise((resolve, reject) => {
     Pool.query(
       `INSERT INTO tbl_kunjungan 
-        (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
-            pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
-            created_at, updated_at) 
-        VALUES
-        ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}', '${waktu_selesai}', '${tipe}', '${anamnesis}', 
-            '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
-            NOW(), NOW())`,
-      (err, result) => {
+      (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
+          pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan,
+          created_at, updated_at) 
+      VALUES
+      ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}',  NOW(), '${tipe}', '${anamnesis}', 
+          '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}',
+          NOW(), NOW())`,
+      (err, res) => {
         if (!err) {
-          resolve(result);
+          resolve(res);
         } else {
           reject(err);
         }
       }
-    )
-  );
+    );
+  });
 };
 
 const allKunjungan = ({ search, sortBy, sortOrder, limit, offset }) => {
@@ -43,12 +43,12 @@ const allKunjungan = ({ search, sortBy, sortOrder, limit, offset }) => {
       `SELECT tbl_kunjungan.id, tbl_kunjungan.id_jaga, id_vs,
           tbl_kunjungan.id_pasien, 
             tbl_pasien.nama_lengkap AS nama_lengkap, 
-          to_char( tbl_kunjungan.waktu_mulai, 'DD Month YYYY - HH24:MI' ) AS waktu_mulai,
-          to_char( tbl_kunjungan.waktu_selesai, 'DD Month YYYY - HH24:MI' ) AS waktu_selesai,
+            tbl_kunjungan.waktu_mulai,
+            tbl_kunjungan.waktu_selesai,
           tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
           tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, 
-          to_char( tbl_kunjungan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_kunjungan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+          tbl_kunjungan.created_at,
+          tbl_kunjungan.updated_at
         FROM tbl_kunjungan AS tbl_kunjungan
         INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
         WHERE tbl_pasien.nama_lengkap
@@ -75,12 +75,12 @@ const getKunjunganById = ({ id }) => {
       `SELECT tbl_kunjungan.id, tbl_kunjungan.id_jaga, id_vs, 
         tbl_kunjungan.id_pasien, 
           tbl_pasien.nama_lengkap AS nama_lengkap, 
-        to_char( tbl_kunjungan.waktu_mulai, 'DD Month YYYY - HH24:MI' ) AS waktu_mulai,
-        to_char( tbl_kunjungan.waktu_selesai, 'DD Month YYYY - HH24:MI' ) AS waktu_selesai,
+          tbl_kunjungan.waktu_mulai,
+          tbl_kunjungan.waktu_selesai,
         tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
         tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang,  tbl_kunjungan.keluhan, 
-        to_char( tbl_kunjungan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_kunjungan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_kunjungan.created_at,
+          tbl_kunjungan.updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
       WHERE tbl_kunjungan.id = '${id}'`,
@@ -117,12 +117,12 @@ const getKunjunganByIdPasien = ({ id_pasien }) => {
       `SELECT tbl_kunjungan.id, tbl_kunjungan.id_jaga, id_vs, 
         tbl_kunjungan.id_pasien, 
           tbl_pasien.nama_lengkap AS nama_lengkap, 
-        to_char( tbl_kunjungan.waktu_mulai, 'DD Month YYYY - HH24:MI' ) AS waktu_mulai,
-        to_char( tbl_kunjungan.waktu_selesai, 'DD Month YYYY - HH24:MI' ) AS waktu_selesai,
+          tbl_kunjungan.waktu_mulai,
+          tbl_kunjungan.waktu_selesai,
         tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
         tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang,  tbl_kunjungan.keluhan, 
-        to_char( tbl_kunjungan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_kunjungan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_kunjungan.created_at,
+          tbl_kunjungan.updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
       WHERE tbl_kunjungan.id_pasien = '${id_pasien}' ORDER BY created_at DESC`,
