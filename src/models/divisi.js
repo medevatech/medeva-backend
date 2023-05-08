@@ -46,10 +46,13 @@ const getDivisi = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, divisi.is_active, klinik.nama_klinik as nama_klinik
+      `SELECT divisi.id, divisi.id_klinik, divisi.id_jaga, jaga.id_karyawan, jaga.id_shift, divisi.tipe as nama_divisi, klinik.nama_klinik as nama_klinik, kry.nama as nama_karyawan, shift.waktu_mulai, shift.waktu_selesai, divisi.is_active
         FROM tbl_divisi as divisi 
-        INNER JOIN tbl_klinik as klinik 
+        INNER JOIN tbl_klinik as klinik
         ON divisi.id_klinik = klinik.id
+        INNER JOIN tbl_jaga as jaga ON divisi.id_jaga = jaga.id
+        INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id
+        INNER JOIN tbl_shift as shift ON jaga.id_shift = shift.id
         WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
