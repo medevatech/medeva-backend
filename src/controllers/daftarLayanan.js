@@ -21,7 +21,7 @@ const daftarLayananController = {
     }
     try {
       let digits = "0123456789";
-      let id = "SVC";
+      let id = "DLY";
       for (let i = 0; i < 6; i++) {
         id += digits[Math.floor(Math.random() * 10)];
       }
