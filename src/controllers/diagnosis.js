@@ -16,6 +16,8 @@ const diagnosisControllers = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
         id_penyakit: req.body.id_penyakit,
+        tipe_wd: req.body.tipe_wd,
+        tipe_dd: req.body.tipe_dd,
       };
 
       await insertDiagnosis(data);
@@ -109,6 +111,8 @@ const diagnosisControllers = {
           id,
           id_kunjungan: req.body.id_kunjungan,
           id_penyakit: req.body.id_penyakit,
+          tipe_wd: req.body.tipe_wd,
+          tipe_dd: req.body.tipe_dd,
         };
 
         await editDiagnosis(data);
