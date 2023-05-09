@@ -32,6 +32,9 @@ const jagaRouter = require('./jaga');
 const antrianRouter = require('./antrian');
 const daftarLayananRouter = require('./daftarLayanan');
 const layananRouter = require('./layanan');
+const laboratoriumRouter = require('./laboratorium');
+const layananLaboratoriumRouter = require('./layananLaboratorium');
+const jblRouter = require('./jadwalBukaLaboratorium');
 
 router.use('/pasien', pasienControllers);
 router.use('/asuransi', asuransiControllers);
@@ -65,5 +68,8 @@ router.use('/jaga', jagaRouter);
 router.use('/antrian', antrianRouter);
 router.use('/daftar-layanan', daftarLayananRouter);
 router.use('/layanan', layananRouter);
+router.use('/laboratorium', laboratoriumRouter);
+router.use('/layananLaboratorium', layananLaboratoriumRouter);
+router.use('/jbl', jblRouter);
 
 module.exports = router;
