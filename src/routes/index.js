@@ -17,6 +17,7 @@ const rekamMedisControllers = require('./rekamMedis');
 const obatControllers = require('./obat');
 const daftarTindakanControllers = require('./daftarTindakan');
 const tindakanControllers = require('./tindakan');
+const resepControllers = require('./resep');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -44,6 +45,7 @@ router.use('/rekam-medis', rekamMedisControllers);
 router.use('/obat', obatControllers);
 router.use('/daftar-tindakan', daftarTindakanControllers);
 router.use('/tindakan', tindakanControllers);
+router.use('/resep', resepControllers);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
