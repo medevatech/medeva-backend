@@ -17,6 +17,8 @@ const rekamMedisControllers = require('./rekamMedis');
 const obatControllers = require('./obat');
 const daftarTindakanControllers = require('./daftarTindakan');
 const tindakanControllers = require('./tindakan');
+const resepControllers = require('./resep');
+const rujukanControllers = require('./rujukan');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -25,6 +27,7 @@ const shiftRouter = require('./shift');
 const jagaRouter = require('./jaga');
 const antrianRouter = require('./antrian');
 const daftarLayananRouter = require('./daftarLayanan');
+const layananRouter = require('./layanan');
 
 router.use('/pasien', pasienControllers);
 router.use('/asuransi', asuransiControllers);
@@ -43,6 +46,8 @@ router.use('/rekam-medis', rekamMedisControllers);
 router.use('/obat', obatControllers);
 router.use('/daftar-tindakan', daftarTindakanControllers);
 router.use('/tindakan', tindakanControllers);
+router.use('/resep', resepControllers);
+router.use('/rujukan', rujukanControllers);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
@@ -51,5 +56,6 @@ router.use('/shift', shiftRouter);
 router.use('/jaga', jagaRouter);
 router.use('/antrian', antrianRouter);
 router.use('/daftar-layanan', daftarLayananRouter);
+router.use('/layanan', layananRouter);
 
 module.exports = router;
