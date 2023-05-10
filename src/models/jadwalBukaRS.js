@@ -29,7 +29,7 @@ const allJadwalBukaRS = ({ search, sortBy, sortOrder, limit, offset }) => {
         tbl_jadwal_buka_rs.hari, tbl_jadwal_buka_rs.jam_buka, tbl_jadwal_buka_rs.jam_tutup,
         tbl_jadwal_buka_rs.created_at, tbl_jadwal_buka_rs.updated_at
       FROM tbl_jadwal_buka_rs AS tbl_jadwal_buka_rs
-      WHERE tbl_jadwal_buka_rs.nama
+      WHERE tbl_jadwal_buka_rs.hari
       ILIKE '%${search}%' ORDER BY tbl_jadwal_buka_rs.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -84,12 +84,12 @@ const findJadwalBukaRSById = (id) => {
 };
 
 const editJadwalBukaRS = (data) => {
-  const { id, id_rs, hari, jam_buk, jam_tutup } = data;
+  const { id, id_rs, hari, jam_buka, jam_tutup } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_jadwal_buka_rs 
           SET
-            id_rs='${id_rs}', hari='${hari}', jam_buk='${jam_buk}', jam_tutup='${jam_tutup}',
+            id_rs='${id_rs}', hari='${hari}', jam_buka='${jam_buka}', jam_tutup='${jam_tutup}',
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
