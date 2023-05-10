@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertRSPoli = (data) => {
-  const { id, id_rs, hari, jam_buka, jam_tutup } = data;
+  const { id, id_rs, id_poli } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_rs_poli 
-        (id, id_rs, hari, jam_buka, jam_tutup,
+        (id, id_rs, id_poli,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_rs}', '${hari}', '${jam_buka}', '${jam_tutup}',
+        ('${id}', '${id_rs}', '${id_poli}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -25,11 +25,11 @@ const allRSPoli = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rs_poli.id, 
-            tbl_rs_poli.id_rs, 
-        tbl_rs_poli.hari, tbl_rs_poli.jam_buka, tbl_rs_poli.jam_tutup,
+          tbl_rs_poli.id_rs, 
+          tbl_rs_poli.id_poli,
         tbl_rs_poli.created_at, tbl_rs_poli.updated_at
       FROM tbl_rs_poli AS tbl_rs_poli
-      WHERE tbl_rs_poli.nama
+      WHERE tbl_rs_poli.id_rs
       ILIKE '%${search}%' ORDER BY tbl_rs_poli.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -52,8 +52,8 @@ const getRSPoliById = ({ id }) => {
     Pool.query(
       `SELECT tbl_rs_poli.id, 
           tbl_rs_poli.id_rs, 
-      tbl_rs_poli.hari, tbl_rs_poli.jam_buka, tbl_rs_poli.jam_tutup,
-      tbl_rs_poli.created_at, tbl_rs_poli.updated_at
+          tbl_rs_poli.id_poli,
+        tbl_rs_poli.created_at, tbl_rs_poli.updated_at
       FROM tbl_rs_poli AS tbl_rs_poli
       WHERE tbl_rs_poli.id = '${id}'`,
       (err, result) => {
@@ -84,12 +84,12 @@ const findRSPoliById = (id) => {
 };
 
 const editRSPoli = (data) => {
-  const { id, id_rs, hari, jam_buk, jam_tutup } = data;
+  const { id, id_rs, id_poli } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_rs_poli 
           SET
-            id_rs='${id_rs}', hari='${hari}', jam_buk='${jam_buk}', jam_tutup='${jam_tutup}',
+            id_rs='${id_rs}', id_poli='${id_poli}',
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {

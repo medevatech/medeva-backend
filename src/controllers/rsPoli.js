@@ -9,12 +9,13 @@ const {
 } = require(`../models/rsPoli`);
 const { v4: uuidv4 } = require('uuid');
 
-const rSPoliControllers = {
+const rsPoliControllers = {
   add: async (req, res, next) => {
     try {
       let data = {
         id: uuidv4(),
         id_rs: req.body.id_rs,
+        id_poli: req.body.id_poli,
       };
 
       await insertRSPoli(data);
@@ -54,14 +55,7 @@ const rSPoliControllers = {
         totalPage,
       };
 
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        'get rs poli success',
-        pagination
-      );
+      response(res, 200, true, result.rows, 'get rs poli success', pagination);
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get rs poli failed');
@@ -107,6 +101,7 @@ const rSPoliControllers = {
         let data = {
           id,
           id_rs: req.body.id_rs,
+          id_poli: req.body.id_poli,
         };
 
         await editRSPoli(data);
@@ -127,4 +122,4 @@ const rSPoliControllers = {
   },
 };
 
-exports.rSPoliControllers = rSPoliControllers;
+exports.rsPoliControllers = rsPoliControllers;
