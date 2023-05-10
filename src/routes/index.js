@@ -57,7 +57,7 @@ router.use("/antrian", antrianRouter);
 router.use("/daftar-layanan", daftarLayananRouter);
 router.use("/layanan", layananRouter);
 router.use("/laboratorium", laboratoriumRouter);
-router.use("/layananLaboratorium", layananLaboratoriumRouter);
+router.use("/layanan-laboratorium", layananLaboratoriumRouter);
 router.use("/jbl", jblRouter);
 
 module.exports = router;

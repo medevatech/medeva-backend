@@ -33,9 +33,9 @@ const getJBL = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jbl.id, jbl.id_laboratorium, jbl.hari, jbl.jam_buka, jbl.jam_tutup, jbl.is_active, jbl.created_at, jbl.updated_at FROM tbl_jadwal_buka_layanan as jbl 
+      `SELECT jbl.id, jbl.id_laboratorium, jbl.hari, jbl.jam_buka, jbl.jam_tutup, jbl.is_active, jbl.created_at, jbl.updated_at FROM tbl_jadwal_buka_laboratorium as jbl 
       INNER JOIN tbl_laboratorium as lab ON jbl.id_laboratorium = lab.id
-      WHERE jbl.hari ILIKE ('%${searchHari}%') AND jbl.id_laboratorium ILIKE ('%${searchLaboratorium}%') AND lab.is_active ILIKE '%${searchStatus}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+      WHERE jbl.hari ILIKE ('%${searchHari}%') AND jbl.id_laboratorium ILIKE ('%${searchLaboratorium}%') AND lab.is_active ILIKE '%${searchStatus}%' ORDER BY jbl.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
@@ -51,7 +51,7 @@ const getJBL = ({
 const getJBLById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT SELECT jbl.id, jbl.id_laboratorium, jbl.hari, jbl.jam_buka, jbl.jam_tutup, jbl.is_active, jbl.created_at, jbl.updated_at FROM tbl_jadwal_buka_layanan as jbl 
+      `SELECT jbl.id, jbl.id_laboratorium, jbl.hari, jbl.jam_buka, jbl.jam_tutup, jbl.is_active, jbl.created_at, jbl.updated_at FROM tbl_jadwal_buka_laboratorium as jbl 
       INNER JOIN tbl_laboratorium as lab ON jbl.id_laboratorium = lab.id
       WHERE jbl.id = '${id}'`,
       (err, res) => {
@@ -69,7 +69,7 @@ const updateJBL = (data) => {
   const { id, id_laboratorium, hari, jam_buka, jam_tutup } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `UPDATE tbl_jadwal_buka_layanan
+      `UPDATE tbl_jadwal_buka_laboratorium
                 SET id_laboratorium = '${id_laboratorium}', hari = '${hari}', jam_buka = '${jam_buka}', jam_tutup = '${jam_tutup}'
                 WHERE id = '${id}'`,
       (err, res) => {
@@ -86,7 +86,7 @@ const updateJBL = (data) => {
 const archiveJBL = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `UPDATE tbl_jadwal_buka_layanan SET is_active = 0 WHERE id = '${id}'`,
+      `UPDATE tbl_jadwal_buka_laboratorium SET is_active = 0 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -101,7 +101,7 @@ const archiveJBL = (id) => {
 const activateJBL = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `UPDATE tbl_jadwal_buka_layanan SET is_active = 1 WHERE id = '${id}'`,
+      `UPDATE tbl_jadwal_buka_laboratorium SET is_active = 1 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -116,7 +116,7 @@ const activateJBL = (id) => {
 const deleteJBL = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `DELETE FROM tbl_jadwal_buka_layanan
+      `DELETE FROM tbl_jadwal_buka_laboratorium
                 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {

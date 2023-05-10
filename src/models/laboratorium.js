@@ -46,7 +46,7 @@ const getLaboratorium = ({
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT lab.id, lab.nama, lab.no_telepon, lab.alamat, lab.is_active FROM tbl_laboratorium as lab
-        WHERE lab.nama ILIKE ('%${searchName}%') AND lab.is_active ILIKE '%${searchStatus}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE lab.nama ILIKE ('%${searchName}%') AND lab.is_active ILIKE '%${searchStatus}%' ORDER BY lab.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
