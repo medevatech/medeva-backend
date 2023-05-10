@@ -25,7 +25,7 @@ const allRujukan = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
-        tbl_rujukan.is_rs, tbl_rujukan.id_poli,
+        tbl_rujukan.id_rs, tbl_rujukan.id_poli,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       WHERE tbl_rujukan.id_rs
@@ -50,7 +50,7 @@ const getRujukanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
-        tbl_rujukan.is_rs, tbl_rujukan.id_poli,
+        tbl_rujukan.id_rs, tbl_rujukan.id_poli,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       WHERE tbl_rujukan.id = '${id}'`,
