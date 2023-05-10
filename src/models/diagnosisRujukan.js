@@ -25,11 +25,11 @@ const allDiagnosisRujukan = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_diagnosis_rujukan.id, 
-            tbl_diagnosis_rujukan.id_penyakit, 
+          tbl_diagnosis_rujukan.id_rujukan, tbl_diagnosis_rujukan.id_penyakit, 
         tbl_diagnosis_rujukan.tipe_wd, tbl_diagnosis_rujukan.tipe_dd, 
         tbl_diagnosis_rujukan.created_at, tbl_diagnosis_rujukan.updated_at
       FROM tbl_diagnosis_rujukan AS tbl_diagnosis_rujukan
-      WHERE tbl_diagnosis_rujukan.nama
+      WHERE tbl_diagnosis_rujukan.id_penyakit
       ILIKE '%${search}%' ORDER BY tbl_diagnosis_rujukan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -51,10 +51,10 @@ const getDiagnosisRujukanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_diagnosis_rujukan.id, 
-      tbl_diagnosis_rujukan.id_penyakit, 
-  tbl_diagnosis_rujukan.tipe_wd, tbl_diagnosis_rujukan.tipe_dd, 
-  tbl_diagnosis_rujukan.created_at, tbl_diagnosis_rujukan.updated_at
-FROM tbl_diagnosis_rujukan AS tbl_diagnosis_rujukan
+          tbl_diagnosis_rujukan.id_rujukan, tbl_diagnosis_rujukan.id_penyakit, 
+        tbl_diagnosis_rujukan.tipe_wd, tbl_diagnosis_rujukan.tipe_dd, 
+        tbl_diagnosis_rujukan.created_at, tbl_diagnosis_rujukan.updated_at
+      FROM tbl_diagnosis_rujukan AS tbl_diagnosis_rujukan
       WHERE tbl_diagnosis_rujukan.id = '${id}'`,
       (err, result) => {
         if (!err) {
