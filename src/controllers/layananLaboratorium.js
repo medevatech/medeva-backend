@@ -35,12 +35,12 @@ const layananLaboratoriumController = {
       const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
-      const searchLabboratorium = req.query.searchLabboratorium || "";
+      const searchLaboratorium = req.query.searchLaboratorium || "";
       const searchPemeriksaan = req.query.searchPemeriksaan || "";
       const searchKategori = req.query.searchKategori || "";
       const offset = (page - 1) * limit;
       const result = await getLayananLaboratorium({
-        searchLabboratorium,
+        searchLaboratorium,
         searchPemeriksaan,
         searchKategori,
         sortBy,
@@ -92,7 +92,7 @@ const layananLaboratoriumController = {
       const id = req.params.id;
       const id_laboratorium = req.body.id_laboratorium;
       const id_pemeriksaan = req.body.id_pemeriksaan;
-      const kategori = req.body.alamat;
+      const kategori = req.body.kategori;
       const data = {
         id,
         id_laboratorium,

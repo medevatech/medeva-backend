@@ -8,7 +8,7 @@ const createLayananLaboratorium = (data) => {
   const { id, id_laboratorium, id_pemeriksaan, kategori } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_laboratorium (id, id_laboratorium, id_pemeriksaan, kategori, created_at, updated_at) VALUES('${id}', '${id_laboratorium}', '${id_pemeriksaan}', '${kategori}', NOW(), NOW())`,
+      `INSERT INTO tbl_layanan_laboratorium (id, id_laboratorium, id_pemeriksaan, kategori, created_at, updated_at) VALUES('${id}', '${id_laboratorium}', '${id_pemeriksaan}', '${kategori}', NOW(), NOW())`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -31,9 +31,9 @@ const getLayananLaboratorium = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT ll.id, ll.id_laboratorium, ll.pemeriksaan, ll.kategori, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
+      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, pemeriksaan.nama, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
       INNER JOIN tbl_laboratorium as lab ON ll.id_laboratorium = lab.id
-      INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = tbl_pemeriksaan.id
+      INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = pemeriksaan.id
       WHERE ll.kategori ILIKE ('%${searchKategori}%') AND ll.id_laboratorium ILIKE ('%${searchLaboratorium}%') AND ll.id_pemeriksaan ILIKE ('%${searchPemeriksaan}%') ORDER BY ll.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
@@ -50,9 +50,9 @@ const getLayananLaboratorium = ({
 const getLayananLaboratoriumById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT ll.id, ll.id_laboratorium, ll.pemeriksaan, ll.kategori, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
+      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
       INNER JOIN tbl_laboratorium as lab ON ll.id_laboratorium = lab.id
-      INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = tbl_pemeriksaan.id
+      INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = pemeriksaan.id
       WHERE ll.id = '${id}'`,
       (err, res) => {
         if (!err) {
