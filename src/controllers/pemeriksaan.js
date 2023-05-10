@@ -149,7 +149,7 @@ const pemeriksaanControllers = {
           404,
           false,
           null,
-          `id pemeriksaan not found, check again`
+          `id layanan lab not found, check again`
         );
       }
     } catch (error) {
