@@ -160,19 +160,33 @@ const updateKaryawan = (data) => {
     status_menikah,
     tipe,
     spesialis,
+    hashPassword,
   } = data;
   console.log(data);
   return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_karyawan SET nama = '${nama}', username = '${username}', email = '${email}', is_dev = 0, is_manager = 0, is_admin = '${is_admin}', is_resepsionis = '${is_resepsionis}', is_perawat = '${is_perawat}', is_dokter = '${is_dokter}', is_manajemen = '${is_manajemen}', jenis_kelamin = '${jenis_kelamin}', nomor_kitas = '${nomor_kitas}', tipe_izin = '${tipe_izin}', nomor_izin = '${nomor_izin}', kadaluarsa_izin = '${kadaluarsa_izin}', nomor_hp = '${nomor_hp}', tempat_lahir = '${tempat_lahir}', tanggal_lahir = '${tanggal_lahir}', alamat = '${alamat}', provinsi = '${provinsi}', kota = '${kota}', kecamatan = '${kecamatan}', kelurahan = '${kelurahan}', kode_pos = '${kode_pos}', status_menikah = '${status_menikah}', tipe = '${tipe}', spesialis = '${spesialis}' WHERE id = '${id}'`,
-      (err, res) => {
-        if (!err) {
-          resolve(res);
-        } else {
-          reject(err);
+    if (hashPassword) {
+      pool.query(
+        `UPDATE tbl_karyawan SET nama = '${nama}', username = '${username}', password = '${hashPassword}', email = '${email}', is_dev = 0, is_manager = 0, is_admin = '${is_admin}', is_resepsionis = '${is_resepsionis}', is_perawat = '${is_perawat}', is_dokter = '${is_dokter}', is_manajemen = '${is_manajemen}', jenis_kelamin = '${jenis_kelamin}', nomor_kitas = '${nomor_kitas}', tipe_izin = '${tipe_izin}', nomor_izin = '${nomor_izin}', kadaluarsa_izin = '${kadaluarsa_izin}', nomor_hp = '${nomor_hp}', tempat_lahir = '${tempat_lahir}', tanggal_lahir = '${tanggal_lahir}', alamat = '${alamat}', provinsi = '${provinsi}', kota = '${kota}', kecamatan = '${kecamatan}', kelurahan = '${kelurahan}', kode_pos = '${kode_pos}', status_menikah = '${status_menikah}', tipe = '${tipe}', spesialis = '${spesialis}' WHERE id = '${id}'`,
+        (err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
         }
-      }
-    );
+      );
+    } else {
+      pool.query(
+        `UPDATE tbl_karyawan SET nama = '${nama}', username = '${username}', email = '${email}', is_dev = 0, is_manager = 0, is_admin = '${is_admin}', is_resepsionis = '${is_resepsionis}', is_perawat = '${is_perawat}', is_dokter = '${is_dokter}', is_manajemen = '${is_manajemen}', jenis_kelamin = '${jenis_kelamin}', nomor_kitas = '${nomor_kitas}', tipe_izin = '${tipe_izin}', nomor_izin = '${nomor_izin}', kadaluarsa_izin = '${kadaluarsa_izin}', nomor_hp = '${nomor_hp}', tempat_lahir = '${tempat_lahir}', tanggal_lahir = '${tanggal_lahir}', alamat = '${alamat}', provinsi = '${provinsi}', kota = '${kota}', kecamatan = '${kecamatan}', kelurahan = '${kelurahan}', kode_pos = '${kode_pos}', status_menikah = '${status_menikah}', tipe = '${tipe}', spesialis = '${spesialis}' WHERE id = '${id}'`,
+        (err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
+        }
+      );
+    }
   });
 };
 

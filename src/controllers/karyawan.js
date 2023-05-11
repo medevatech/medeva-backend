@@ -183,6 +183,11 @@ const karyawanController = {
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
+      const password = req.body.password;
+      if (password) {
+        const hash = await argon2.hash(password);
+        var hashPassword = `${hash}`;
+      }
       const data = {
         id: id,
         nama: req.body.nama,
@@ -210,6 +215,7 @@ const karyawanController = {
         status_menikah: req.body.status_menikah,
         tipe: req.body.tipe,
         spesialis: req.body.spesialis,
+        hashPassword,
       };
       await updateKaryawan(data);
       return response(res, 200, true, data, "Update karyawan success");
