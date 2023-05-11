@@ -17,6 +17,9 @@ const rujukanjControllers = {
         id_kunjungan: req.body.id_kunjungan,
         id_rs: req.body.id_rs,
         id_poli: req.body.id_poli,
+        anamnesis: req.body.anamnesis,
+        terapi: req.body.terapi,
+        catatan: req.body.catatan,
       };
 
       await insertRujukan(data);
@@ -56,14 +59,7 @@ const rujukanjControllers = {
         totalPage,
       };
 
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        'get rujukan success',
-        pagination
-      );
+      response(res, 200, true, result.rows, 'get rujukan success', pagination);
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get rujukan failed');
@@ -110,7 +106,10 @@ const rujukanjControllers = {
           id,
           id_kunjungan: req.body.id_kunjungan,
           id_rs: req.body.id_rs,
-          id_poli: req.body.id_poli
+          id_poli: req.body.id_poli,
+          anamnesis: req.body.anamnesis,
+          terapi: req.body.terapi,
+          catatan: req.body.catatan,
         };
 
         await editRujukan(data);

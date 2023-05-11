@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertRujukan = (data) => {
-  const { id, id_kunjungan, id_rs, id_poli } = data;
+  const { id, id_kunjungan, id_rs, id_poli, anamnesis, terapi, catatan } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_rujukan 
-        (id, id_kunjungan, id_rs, id_poli,
+        (id, id_kunjungan, id_rs, id_poli, anamnesis, terapi, catatan,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_kunjungan}', '${id_rs}', '${id_poli}',
+        ('${id}', '${id_kunjungan}', '${id_rs}', '${id_poli}', '${anamnesis}', '${terapi}', '${catatan}',
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -26,6 +26,7 @@ const allRujukan = ({ search, sortBy, sortOrder, limit, offset }) => {
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, tbl_rujukan.id_poli,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       WHERE tbl_rujukan.id_rs
@@ -51,6 +52,7 @@ const getRujukanById = ({ id }) => {
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, tbl_rujukan.id_poli,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       WHERE tbl_rujukan.id = '${id}'`,
@@ -82,12 +84,13 @@ const findRujukanById = (id) => {
 };
 
 const editRujukan = (data) => {
-  const { id, id_kunjungan, id_rs, id_poli } = data;
+  const { id, id_kunjungan, id_rs, id_poli, anamnesis, terapi, catatan } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_rujukan 
           SET
-            id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}',
+            id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}', 
+            anamnesis='${anamnesis}', terapi='${terapi}', catatan='${catatan}',
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {

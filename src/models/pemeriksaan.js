@@ -49,9 +49,9 @@ const countAllPemeriksaan = () => {
 const getPemeriksaanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama,
-        to_char( tbl_pemeriksaan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_pemeriksaan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, 
+          to_char( tbl_pemeriksaan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+          to_char( tbl_pemeriksaan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
       FROM tbl_pemeriksaan AS tbl_pemeriksaan
       WHERE tbl_pemeriksaan.id = '${id}'`,
       (err, result) => {
@@ -87,8 +87,7 @@ const editPemeriksaan = (data) => {
     Pool.query(
       `UPDATE tbl_pemeriksaan 
           SET
-            nama='${nama}', 
-            updated_at=NOW()
+            nama='${nama}'
           WHERE id='${id}'`,
       (err, result) => {
         if (!err) {

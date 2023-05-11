@@ -6,6 +6,8 @@ const {
   getPemeriksaanById,
   findPemeriksaanById,
   editPemeriksaan,
+  getPemeriksaanByIdLayananLab,
+  findPemeriksaanByIdLayananLab,
 } = require(`../models/pemeriksaan`);
 const { v4: uuidv4 } = require('uuid');
 
