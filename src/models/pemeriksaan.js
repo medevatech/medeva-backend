@@ -87,7 +87,7 @@ const editPemeriksaan = (data) => {
     Pool.query(
       `UPDATE tbl_pemeriksaan 
           SET
-            nama='${nama}', 
+            nama='${nama}'
           WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
