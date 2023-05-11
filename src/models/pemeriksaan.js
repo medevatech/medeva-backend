@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertPemeriksaan = (data) => {
-  const { id, nama, id_layanan_lab } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_pemeriksaan 
-        (id, nama, id_layanan_lab,
+        (id, nama,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${nama}', '${id_layanan_lab}', 
+        ('${id}', '${nama}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -24,7 +24,7 @@ const insertPemeriksaan = (data) => {
 const allPemeriksaan = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, tbl_pemeriksaan.id_layanan_lab, 
+      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, 
             to_char( tbl_pemeriksaan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
             to_char( tbl_pemeriksaan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
         FROM tbl_pemeriksaan AS tbl_pemeriksaan
@@ -49,7 +49,7 @@ const countAllPemeriksaan = () => {
 const getPemeriksaanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, tbl_pemeriksaan.id_layanan_lab, 
+      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, 
           to_char( tbl_pemeriksaan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
           to_char( tbl_pemeriksaan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
       FROM tbl_pemeriksaan AS tbl_pemeriksaan
@@ -82,49 +82,13 @@ const findPemeriksaanById = (id) => {
 };
 
 const editPemeriksaan = (data) => {
-  const { id, nama, id_layanan_lab } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_pemeriksaan 
           SET
-            nama='${nama}', id_layanan_lab='${id_layanan_lab}', 
-            updated_at=NOW()
+            nama='${nama}', 
           WHERE id='${id}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
-const getPemeriksaanByIdLayananLab = ({ id_layanan_lab }) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT tbl_pemeriksaan.id, tbl_pemeriksaan.nama, tbl_pemeriksaan.id_layanan_lab, 
-          to_char( tbl_pemeriksaan.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_pemeriksaan.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-      FROM tbl_pemeriksaan AS tbl_pemeriksaan
-      WHERE tbl_pemeriksaan.id_layanan_lab = '${id_layanan_lab}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
-const findPemeriksaanByIdLayananLab = (id_layanan_lab) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT * FROM tbl_pemeriksaan WHERE id_layanan_lab = '${id_layanan_lab}'
-           `,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -143,6 +107,4 @@ module.exports = {
   findPemeriksaanById,
   getPemeriksaanById,
   editPemeriksaan,
-  getPemeriksaanByIdLayananLab,
-  findPemeriksaanByIdLayananLab,
 };

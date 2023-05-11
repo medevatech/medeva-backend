@@ -17,7 +17,6 @@ const pemeriksaanControllers = {
       let data = {
         id: uuidv4(),
         nama: req.body.nama,
-        id_layanan_lab: req.body.id_layanan_lab,
       };
 
       await insertPemeriksaan(data);
@@ -110,7 +109,6 @@ const pemeriksaanControllers = {
         let data = {
           id,
           nama: req.body.nama,
-          id_layanan_lab: req.body.id_layanan_lab,
         };
 
         await editPemeriksaan(data);
@@ -127,34 +125,6 @@ const pemeriksaanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit pemeriksaan failed');
-    }
-  },
-  getByIdLayananLab: async (req, res) => {
-    try {
-      const id_layanan_lab = req.params.id_layanan_lab;
-
-      const result = await getPemeriksaanByIdLayananLab({
-        id_layanan_lab,
-      });
-
-      const {
-        rows: [findPemeriksaan],
-      } = await findPemeriksaanByIdLayananLab(id_layanan_lab);
-
-      if (findPemeriksaan) {
-        response(res, 200, true, result.rows, 'get pemeriksaan success');
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id layanan lab not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get pemeriksaan failed');
     }
   },
 };
