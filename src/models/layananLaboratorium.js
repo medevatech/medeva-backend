@@ -31,7 +31,7 @@ const getLayananLaboratorium = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, pemeriksaan.nama, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
+      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, lab.nama as nama_laboratorium, pemeriksaan.nama as nama_pemeriksaan, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
       INNER JOIN tbl_laboratorium as lab ON ll.id_laboratorium = lab.id
       INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = pemeriksaan.id
       WHERE ll.kategori ILIKE ('%${searchKategori}%') AND ll.id_laboratorium ILIKE ('%${searchLaboratorium}%') AND ll.id_pemeriksaan ILIKE ('%${searchPemeriksaan}%') ORDER BY ll.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
@@ -47,10 +47,36 @@ const getLayananLaboratorium = ({
   });
 };
 
+const getDistinctLayananLaboratorium = ({
+  searchLaboratorium,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT DISTINCT ON(ll.id_laboratorium, ll.kategori) ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, lab.nama as nama_laboratorium, pemeriksaan.nama as nama_pemeriksaan, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
+      INNER JOIN tbl_laboratorium as lab ON ll.id_laboratorium = lab.id
+      INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = pemeriksaan.id
+      WHERE ll.id_laboratorium ILIKE '%${searchLaboratorium}%'
+      ORDER BY ll.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+      `,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getLayananLaboratoriumById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
+      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, lab.nama as nama_laboratorium, pemeriksaan.nama as nama_pemeriksaan, ll.created_at, ll.updated_at FROM tbl_layanan_laboratorium as ll
       INNER JOIN tbl_laboratorium as lab ON ll.id_laboratorium = lab.id
       INNER JOIN tbl_pemeriksaan as pemeriksaan ON ll.id_pemeriksaan = pemeriksaan.id
       WHERE ll.id = '${id}'`,
@@ -103,6 +129,7 @@ module.exports = {
   createLayananLaboratorium,
   countLayananLaboratorium,
   getLayananLaboratorium,
+  getDistinctLayananLaboratorium,
   getLayananLaboratoriumById,
   updateLayananLaboratorium,
   deleteLayananLaboratorium,

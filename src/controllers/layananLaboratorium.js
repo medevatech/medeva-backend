@@ -2,6 +2,7 @@ const { response } = require("../middleware/common");
 const {
   createLayananLaboratorium,
   getLayananLaboratorium,
+  getDistinctLayananLaboratorium,
   countLayananLaboratorium,
   getLayananLaboratoriumById,
   updateLayananLaboratorium,
@@ -40,6 +41,49 @@ const layananLaboratoriumController = {
       const searchKategori = req.query.searchKategori || "";
       const offset = (page - 1) * limit;
       const result = await getLayananLaboratorium({
+        searchLaboratorium,
+        searchPemeriksaan,
+        searchKategori,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countLayananLaboratorium();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get layanan lab data success",
+        pagination
+      );
+    } catch (err) {
+      console.log("Get layanan lab data error", err);
+      response(res, 400, false, null, "Get layanan lab data failed");
+    }
+  },
+  getDistinct: async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const sortBy = req.query.sortBy || "kategori";
+      const sortOrder = req.query.sortOrder || "desc";
+      const searchLaboratorium = req.query.searchLaboratorium || "";
+      const searchPemeriksaan = req.query.searchPemeriksaan || "";
+      const searchKategori = req.query.searchKategori || "";
+      const offset = (page - 1) * limit;
+      const result = await getDistinctLayananLaboratorium({
         searchLaboratorium,
         searchPemeriksaan,
         searchKategori,
