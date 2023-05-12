@@ -9,5 +9,6 @@ router.post(`/`, uploaded.array(), tindakanControllers.add);
 router.get(`/`, tindakanControllers.getAll);
 router.get(`/:id`, tindakanControllers.getById);
 router.put(`/:id`, uploaded.array(), tindakanControllers.edit);
+router.get(`/kunjungan/:id_kunjungan`, tindakanControllers.getByIdKunjungan);
 
 module.exports = router;

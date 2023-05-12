@@ -6,6 +6,8 @@ const {
   getRujukanById,
   findRujukanById,
   editRujukan,
+  getRujukanByIdKunjungan,
+  findRujukanByIdKunjungan,
 } = require(`../models/rujukan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -126,6 +128,34 @@ const rujukanjControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit rujukan failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getRujukanByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findRujukanKunjungan],
+      } = await findRujukanByIdKunjungan(id_kunjungan);
+
+      if (findRujukanKunjungan) {
+        response(res, 200, true, result.rows, 'get rujukan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get rujukan failed');
     }
   },
 };

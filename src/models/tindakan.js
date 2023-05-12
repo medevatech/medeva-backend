@@ -99,6 +99,40 @@ const editTindakan = (data) => {
   );
 };
 
+const getTindakanByIdKunjungan = ({ id_kunjungan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan, tbl_tindakan.catatan, 
+      tbl_tindakan.created_at, tbl_tindakan.updated_at
+    FROM tbl_tindakan AS tbl_tindakan
+      WHERE tbl_tindakan.id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findTindakanByIdKunjungan = (id_kunjungan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_tindakan WHERE id_kunjungan = '${id_kunjungan}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertTindakan,
   allTindakan,
@@ -106,4 +140,6 @@ module.exports = {
   findTindakanById,
   getTindakanById,
   editTindakan,
+  getTindakanByIdKunjungan,
+  findTindakanByIdKunjungan,
 };

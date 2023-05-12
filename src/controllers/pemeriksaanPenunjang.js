@@ -6,6 +6,8 @@ const {
   getPemeriksaanPenunjangById,
   findPemeriksaanPenunjangById,
   editPemeriksaanPenunjang,
+  getPemeriksaanPenunjangByIdKunjungan,
+  findPemeriksaanPenunjangByIdKunjungan,
 } = require(`../models/pemeriksaanPenunjang`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -96,6 +98,40 @@ const pemeriksaanPenunjangControllers = {
           false,
           null,
           `id pemeriksaan penunjang not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get pemeriksaan penunjang failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getPemeriksaanPenunjangByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findPemeriksaanPenunjangKunjungan],
+      } = await findPemeriksaanPenunjangByIdKunjungan(id_kunjungan);
+
+      if (findPemeriksaanPenunjangKunjungan) {
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'get pemeriksaan penunjang success'
+        );
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan penunjang not found, check again`
         );
       }
     } catch (error) {

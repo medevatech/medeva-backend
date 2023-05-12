@@ -107,6 +107,44 @@ const editDiagnosis = (data) => {
   );
 };
 
+const getDiagnosisByIdKunjungan = ({ id_kunjungan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_diagnosis.id, tbl_diagnosis.id_kunjungan, 
+        tbl_diagnosis.id_penyakit,
+            tbl_penyakit.nama_penyakit AS nama_penyakit,
+            tbl_diagnosis.tipe_wd, tbl_diagnosis.tipe_dd, 
+        tbl_diagnosis.created_at, tbl_diagnosis.updated_at
+      FROM tbl_diagnosis AS tbl_diagnosis
+      INNER JOIN tbl_penyakit AS tbl_penyakit ON tbl_diagnosis.id_penyakit = tbl_penyakit.id
+      WHERE tbl_diagnosis.id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findDiagnosisByIdKunjungan = (id_kunjungan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_diagnosis WHERE id_kunjungan = '${id_kunjungan}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertDiagnosis,
   allDiagnosis,
@@ -114,4 +152,6 @@ module.exports = {
   findDiagnosisById,
   getDiagnosisById,
   editDiagnosis,
+  getDiagnosisByIdKunjungan,
+  findDiagnosisByIdKunjungan,
 };
