@@ -47,6 +47,7 @@ const antrianController = {
     }
   },
   get: async (req, res, next) => {
+    var dateDefault = new Date().toISOString().slice(0, 10);
     try {
       const page = req.query.page || 1;
       const limit = req.query.limit || 10;
@@ -58,7 +59,7 @@ const antrianController = {
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
       // const dateNow = new Date().toISOString().slice(0, 10);
-      // const date = req.query.date;
+      const date = req.query.date || dateDefault;
       const result = await getAntrian({
         searchName,
         searchDivisi,
@@ -68,7 +69,7 @@ const antrianController = {
         sortOrder,
         limit,
         offset,
-        // date,
+        date,
       });
       const {
         rows: [countAll],
