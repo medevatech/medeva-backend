@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require("../config/db");
 
 const createJaga = (data) => {
   const { id, id_klinik, id_divisi, id_shift, id_karyawan } = data;
@@ -23,6 +23,7 @@ const countJaga = () => {
 const getJaga = ({
   searchName,
   searchStatus,
+  searchDivisi,
   sortBy,
   sortOrder,
   limit,
@@ -31,7 +32,7 @@ const getJaga = ({
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT tbl_jaga.id, tbl_jaga.id_klinik, tbl_jaga.id_divisi, tbl_jaga.id_shift, tbl_jaga.id_karyawan, tbl_jaga.is_active, tbl_klinik.nama_klinik, tbl_divisi.tipe, tbl_shift.hari, tbl_karyawan.nama as nama_karyawan FROM tbl_jaga as tbl_jaga INNER JOIN tbl_klinik AS tbl_klinik ON tbl_jaga.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi AS tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id INNER JOIN tbl_shift AS tbl_shift ON tbl_jaga.id_shift = tbl_shift.id INNER JOIN tbl_karyawan AS tbl_karyawan ON tbl_jaga.id_karyawan = tbl_karyawan.id
-          WHERE tbl_karyawan.nama ILIKE '%${searchName}%' AND tbl_jaga.is_active ILIKE '%${searchStatus}%' ORDER BY tbl_jaga.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+          WHERE tbl_karyawan.nama ILIKE '%${searchName}%' AND tbljaga._divisi ILIKE '%${searchDivisi}%' AND tbl_jaga.is_active ILIKE '%${searchStatus}%' ORDER BY tbl_jaga.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
         `,
       (err, res) => {
         if (!err) {
