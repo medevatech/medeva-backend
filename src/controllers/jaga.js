@@ -40,10 +40,12 @@ const jagaController = {
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
       const searchStatus = req.query.searchStatus || "";
+      const searchDivisi = req.query.searchDivisi || "";
       const offset = (page - 1) * limit;
       const result = await getJaga({
         searchName,
         searchStatus,
+        searchDivisi,
         sortBy,
         sortOrder,
         limit,
