@@ -31,6 +31,7 @@ const getJaga = ({
   offset,
 }) => {
   return new Promise((resolve, reject) => {
+    // AND divisi.tipe ILIKE '%${searchNameD}%'
     pool.query(
       `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.waktu_mulai as waktu_mulai, shift.waktu_selesai as waktu_selesai, kry.nama AS nama_karyawan
         FROM tbl_jaga AS jaga
@@ -40,7 +41,7 @@ const getJaga = ({
         INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
         WHERE kry.nama ILIKE '%${searchName}%'
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
-        AND divisi.tipe ILIKE '%${searchNameD}%'
+        
         AND jaga.is_active ILIKE '%${searchStatus}%'
         ORDER BY jaga.${sortBy} ${sortOrder}
         LIMIT ${limit}
