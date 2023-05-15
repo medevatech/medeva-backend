@@ -15,7 +15,11 @@ jobs:
       
     - name: 🔨 Build Project
       run: |
+        whoami
+        ls -al
+        cd /home/sandbox/repositories/medeva-backend/
         git pull origin main
+        git status
         npm install
         pm2 restart 0
     
