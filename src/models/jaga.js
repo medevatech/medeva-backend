@@ -32,7 +32,7 @@ const getJaga = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.jam_mulai as jam_mulai, shift.jam_selesai as jam_selesai, kry.nama AS nama_karyawan
+      `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.waktu_mulai as waktu_mulai, shift.waktu_selesai as waktu_selesai, kry.nama AS nama_karyawan
         FROM tbl_jaga AS jaga
         INNER JOIN tbl_klinik AS klinik ON jaga.id_klinik = klinik.id
         INNER JOIN tbl_divisi AS divisi ON jaga.id_divisi = divisi.id
