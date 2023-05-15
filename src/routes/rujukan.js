@@ -9,5 +9,6 @@ router.post(`/`, uploaded.array(), rujukanjControllers.add);
 router.get(`/`, rujukanjControllers.getAll);
 router.get(`/:id`, rujukanjControllers.getById);
 router.put(`/:id`, uploaded.array(), rujukanjControllers.edit);
+router.get(`/kunjungan/:id_kunjungan`, rujukanjControllers.getByIdKunjungan);
 
 module.exports = router;

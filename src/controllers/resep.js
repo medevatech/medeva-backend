@@ -6,6 +6,8 @@ const {
   getResepById,
   findResepById,
   editResep,
+  getResepByIdKunjungan,
+  findResepByIdKunjungan,
 } = require(`../models/resep`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -130,6 +132,34 @@ const resepControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit resep failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getResepByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findResepKunjungan],
+      } = await findResepByIdKunjungan(id_kunjungan);
+
+      if (findResepKunjungan) {
+        response(res, 200, true, result.rows, 'get resep success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get resep failed');
     }
   },
 };

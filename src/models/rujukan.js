@@ -104,6 +104,42 @@ const editRujukan = (data) => {
   );
 };
 
+const getRujukanByIdKunjungan = ({ id_kunjungan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
+        tbl_rujukan.id_rs, tbl_rujukan.id_poli,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
+        tbl_rujukan.created_at, tbl_rujukan.updated_at
+      FROM tbl_rujukan AS tbl_rujukan
+      WHERE tbl_rujukan.id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findRujukanByIdKunjungan = (id_kunjungan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_rujukan WHERE id_kunjungan = '${id_kunjungan}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertRujukan,
   allRujukan,
@@ -111,4 +147,6 @@ module.exports = {
   findRujukanById,
   getRujukanById,
   editRujukan,
+  getRujukanByIdKunjungan,
+  findRujukanByIdKunjungan,
 };

@@ -11,5 +11,9 @@ router.post(`/`, uploaded.array(), pemeriksaanPenunjangControllers.add);
 router.get(`/`, pemeriksaanPenunjangControllers.getAll);
 router.get(`/:id`, pemeriksaanPenunjangControllers.getById);
 router.put(`/:id`, uploaded.array(), pemeriksaanPenunjangControllers.edit);
+router.get(
+  `/kunjungan/:id_kunjungan`,
+  pemeriksaanPenunjangControllers.getByIdKunjungan
+);
 
 module.exports = router;

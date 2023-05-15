@@ -115,6 +115,45 @@ const editPemeriksaanPenunjang = (data) => {
   );
 };
 
+const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_pemeriksaan_penunjang.id, 
+        tbl_pemeriksaan_penunjang.id_pemeriksaan, 
+            tbl_pemeriksaan.nama AS nama,
+        tbl_pemeriksaan_penunjang.id_lab, id_kunjungan,
+        to_char( tbl_pemeriksaan_penunjang.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
+        to_char( tbl_pemeriksaan_penunjang.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+      FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
+      INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
+      WHERE tbl_pemeriksaan_penunjang.id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findPemeriksaanPenunjangByIdKunjungan = (id_kunjungan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_pemeriksaan_penunjang WHERE id_kunjungan = '${id_kunjungan}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertPemeriksaanPenunjang,
   allPemeriksaanPenunjang,
@@ -122,4 +161,6 @@ module.exports = {
   findPemeriksaanPenunjangById,
   getPemeriksaanPenunjangById,
   editPemeriksaanPenunjang,
+  getPemeriksaanPenunjangByIdKunjungan,
+  findPemeriksaanPenunjangByIdKunjungan,
 };

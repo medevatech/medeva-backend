@@ -1,7 +1,17 @@
 const Pool = require('../config/db');
 
 const insertResep = (data) => {
-  const { id, id_kunjungan, id_obat, jumlah, satuan, frekuensi, periode, metode_konsumsi, aturan_pakai, } = data;
+  const {
+    id,
+    id_kunjungan,
+    id_obat,
+    jumlah,
+    satuan,
+    frekuensi,
+    periode,
+    metode_konsumsi,
+    aturan_pakai,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_resep 
@@ -114,11 +124,48 @@ const editResep = (data) => {
   );
 };
 
+const getResepByIdKunjungan = ({ id_kunjungan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_resep.id, tbl_resep.id_kunjungan, tbl_resep.id_obat, tbl_resep.jumlah, tbl_resep.satuan, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, 
+        tbl_resep.created_at, tbl_resep.updated_at
+      FROM tbl_resep AS tbl_resep
+      WHERE tbl_resep.id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findResepByIdKunjungan = (id_kunjungan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_resep WHERE id_kunjungan = '${id_kunjungan}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertResep,
   allResep,
   countAllResep,
-  findResepById,
   getResepById,
+  findResepById,
   editResep,
+  getResepByIdKunjungan,
+  findResepByIdKunjungan,
 };

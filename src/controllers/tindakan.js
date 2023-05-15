@@ -6,6 +6,8 @@ const {
   getTindakanById,
   findTindakanById,
   editTindakan,
+  getTindakanByIdKunjungan,
+  findTindakanByIdKunjungan,
 } = require(`../models/tindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -118,6 +120,34 @@ const tindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit tindakan failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getTindakanByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findTindakanKunjungan],
+      } = await findTindakanByIdKunjungan(id_kunjungan);
+
+      if (findTindakanKunjungan) {
+        response(res, 200, true, result.rows, 'get tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get tindakan failed');
     }
   },
 };

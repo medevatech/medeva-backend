@@ -6,6 +6,8 @@ const {
   getDiagnosisById,
   findDiagnosisById,
   editDiagnosis,
+  getDiagnosisByIdKunjungan,
+  findDiagnosisByIdKunjungan,
 } = require(`../models/diagnosis`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -129,6 +131,34 @@ const diagnosisControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit diagnosis failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getDiagnosisByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findDiagnosisKunjungan],
+      } = await findDiagnosisByIdKunjungan(id_kunjungan);
+
+      if (findDiagnosisKunjungan) {
+        response(res, 200, true, result.rows, 'get diagnosis success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get diagnosis failed');
     }
   },
 };

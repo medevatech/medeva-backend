@@ -9,5 +9,6 @@ router.post(`/`, uploaded.array(), diagnosisControllers.add);
 router.get(`/`, diagnosisControllers.getAll);
 router.get(`/:id`, diagnosisControllers.getById);
 router.put(`/:id`, uploaded.array(), diagnosisControllers.edit);
+router.get(`/kunjungan/:id_kunjungan`, diagnosisControllers.getByIdKunjungan);
 
 module.exports = router;
