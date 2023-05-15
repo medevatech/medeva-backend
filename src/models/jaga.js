@@ -4,7 +4,7 @@ const createJaga = (data) => {
   const { id, id_klinik, id_divisi, id_shift, id_karyawan } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_shift, id_karyawan) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_shift}', '${id_karyawan}' )`,
+      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_shift, id_karyawan, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_shift}', '${id_karyawan}', "1", NOW(), NOW() )`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -32,7 +32,7 @@ const getJaga = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.waktu_mulai as waktu_mulai, shift.waktu_selesai as waktu_selesai, kry.nama AS nama_karyawan
+      `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, jaga.created_at, jaga.updated_at, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.waktu_mulai as waktu_mulai, shift.waktu_selesai as waktu_selesai, kry.nama AS nama_karyawan
         FROM tbl_jaga AS jaga
         INNER JOIN tbl_klinik AS klinik ON jaga.id_klinik = klinik.id
         INNER JOIN tbl_divisi AS divisi ON jaga.id_divisi = divisi.id
