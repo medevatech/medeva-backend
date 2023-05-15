@@ -32,9 +32,19 @@ const getJaga = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT tbl_jaga.id, tbl_jaga.id_klinik, tbl_jaga.id_divisi, tbl_jaga.id_shift, tbl_jaga.id_karyawan, tbl_jaga.is_active, tbl_klinik.nama_klinik, tbl_divisi.tipe, tbl_shift.hari, tbl_karyawan.nama as nama_karyawan FROM tbl_jaga as tbl_jaga INNER JOIN tbl_klinik AS tbl_klinik ON tbl_jaga.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi AS tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id INNER JOIN tbl_shift AS tbl_shift ON tbl_jaga.id_shift = tbl_shift.id INNER JOIN tbl_karyawan AS tbl_karyawan ON tbl_jaga.id_karyawan = tbl_karyawan.id
-          WHERE tbl_karyawan.nama ILIKE '%${searchName}%' AND tbl_jaga.id_divisi ILIKE '%${searchDivisi}%' AND tbl_divisi.tipe ILIKE '%${searchNameD}%' AND tbl_jaga.is_active ILIKE '%${searchStatus}%' ORDER BY tbl_jaga.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
-        `,
+      `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_shift, jaga.id_karyawan, jaga.is_active, klinik.nama_klinik AS nama_klinik, divisi.tipe AS divisi, shift.hari AS hari, shift.jam_mulai as jam_mulai, shift.jam_selesai as jam_selesai, kry.nama AS nama_karyawan
+        FROM tbl_jaga AS jaga
+        INNER JOIN tbl_klinik AS klinik ON jaga.id_klinik = klinik.id
+        INNER JOIN tbl_divisi AS divisi ON jaga.id_divisi = divisi.id
+        INNER JOIN tbl_shift AS shift ON jaga.id_shift = shift.id
+        INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
+        WHERE kry.nama ILIKE '%${searchName}%'
+        AND jaga.id_divisi ILIKE '%${searchDivisi}%'
+        AND divisi.tipe ILIKE '%${searchNameD}%'
+        AND jaga.is_active ILIKE '%${searchStatus}%'
+        ORDER BY jaga.${sortBy} ${sortOrder}
+        LIMIT ${limit}
+        OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
