@@ -15,7 +15,10 @@ jobs:
       
     - name: 🔨 Build Project
       run: |
+        whoami
+        exec bash
         git pull origin main
+        git status
         npm install
         pm2 restart 0
     
