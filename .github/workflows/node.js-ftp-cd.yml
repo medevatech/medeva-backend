@@ -16,6 +16,7 @@ jobs:
     - name: 🔨 Build Project
       run: |
         whoami
+        exec bash
         git pull origin main
         git status
         npm install
