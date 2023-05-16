@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertDaftarTindakan = (data) => {
-  const { id, id_kunjungan, nama } = data;
+  const { id, id_tindakan, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_daftar_tindakan 
-        (id, id_kunjungan, nama,
+        (id, id_tindakan, nama,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_kunjungan}', '${nama}', 
+        ('${id}', '${id_tindakan}', '${nama}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -24,7 +24,7 @@ const insertDaftarTindakan = (data) => {
 const allDaftarTindakan = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_kunjungan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
       WHERE tbl_daftar_tindakan.nama
@@ -48,7 +48,7 @@ const countAllDaftarTindakan = () => {
 const getDaftarTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_kunjungan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
       tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
     FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
       WHERE tbl_daftar_tindakan.id = '${id}'`,
@@ -80,12 +80,12 @@ const findDaftarTindakanById = (id) => {
 };
 
 const editDaftarTindakan = (data) => {
-  const { id, id_kunjungan, nama } = data;
+  const { id, id_tindakan, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_daftar_tindakan 
           SET
-            id_kunjungan='${id_kunjungan}', nama='${nama}', 
+            id_tindakan='${id_tindakan}', nama='${nama}', 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {

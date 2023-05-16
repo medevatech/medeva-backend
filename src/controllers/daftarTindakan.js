@@ -14,7 +14,7 @@ const daftarTindakanControllers = {
     try {
       let data = {
         id: uuidv4(),
-        id_kunjungan: req.body.id_kunjungan,
+        id_tindakan: req.body.id_tindakan,
         nama: req.body.nama,
       };
 
@@ -107,7 +107,7 @@ const daftarTindakanControllers = {
       if (findDaftarTindakan) {
         let data = {
           id,
-          id_kunjungan: req.body.id_kunjungan,
+          id_tindakan: req.body.id_tindakan,
           nama: req.body.nama,
         };
 
