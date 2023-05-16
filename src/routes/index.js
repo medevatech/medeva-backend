@@ -23,6 +23,7 @@ const rsControllers = require('./rs');
 const jadwalBukaRSControllers = require('./jadwalBukaRS');
 const rsPoliControllers = require('./rsPoli');
 const diagnosisRujukanControllers = require('./diagnosisRujukan');
+const hargaTindakanControllers = require('./hargaTindakan');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -59,6 +60,7 @@ router.use('/rs', rsControllers);
 router.use('/jadwal-buka-rs', jadwalBukaRSControllers);
 router.use('/rs-poli', rsPoliControllers);
 router.use('/diagnosis-rujukan', diagnosisRujukanControllers);
+router.use('/harga-tindakan', hargaTindakanControllers);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
