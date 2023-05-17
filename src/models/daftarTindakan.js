@@ -23,7 +23,7 @@ const insertDaftarTindakan = (data) => {
 
 const allDaftarTindakan = ({
   search,
-  searchKlinik,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
@@ -37,6 +37,8 @@ const allDaftarTindakan = ({
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
       WHERE
         tbl_daftar_tindakan.nama ILIKE '%${search}%' 
+      AND
+        tbl_daftar_tindakan.is_active ILIKE '%${searchStatus}%'
       ORDER BY tbl_daftar_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
