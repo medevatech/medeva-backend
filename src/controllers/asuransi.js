@@ -5,8 +5,6 @@ const {
   countAllAsuransi,
   getAsuransiById,
   findAsuransiById,
-  getAsuransiByIdPasien,
-  findAsuransiByIdPasien,
   editAsuransi,
 } = require(`../models/asuransi`);
 const { v4: uuidv4 } = require('uuid');
@@ -14,13 +12,11 @@ const { v4: uuidv4 } = require('uuid');
 const asuransiControllers = {
   add: async (req, res, next) => {
     try {
-      const { id_pasien, tipe_asuransi, nomor_asuransi } = req.body;
+      const { nama } = req.body;
 
       let data = {
         id: uuidv4(),
-        id_pasien,
-        tipe_asuransi,
-        nomor_asuransi,
+        nama,
       };
 
       await insertAsuransi(data);
@@ -94,35 +90,7 @@ const asuransiControllers = {
       response(res, 404, false, error, 'get asuransi failed');
     }
   },
-  getByIdPasien: async (req, res) => {
-    try {
-      const id_pasien = req.params.id_pasien;
-
-      const result = await getAsuransiByIdPasien({
-        id_pasien,
-      });
-
-      const {
-        rows: [findAsuransi],
-      } = await findAsuransiByIdPasien(id_pasien);
-
-      if (findAsuransi) {
-        response(res, 200, true, result.rows, 'get asuransi success');
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id pasien not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get asuransi failed');
-    }
-  },
-  editByIdAsuransi: async (req, res, next) => {
+  edit: async (req, res, next) => {
     try {
       const id = req.params.id;
 
@@ -132,11 +100,10 @@ const asuransiControllers = {
 
       if (findAsuransi) {
         let data = {
-          id: req.body.id,
-          id_pasien: req.body.id_pasien,
-          tipe_asuransi: req.body.tipe_asuransi,
-          nomor_asuransi: req.body.nomor_asuransi,
+          nama: req.body.nama,
         };
+
+        console.log(data);
 
         await editAsuransi(data);
         response(res, 200, true, data, 'edit asuransi success');
@@ -149,22 +116,6 @@ const asuransiControllers = {
           `id asuransi not found, check again`
         );
       }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'edit asuransi failed');
-    }
-  },
-  editWithoutIdAsuransi: async (req, res, next) => {
-    try {
-      let data = {
-        id: req.body.id,
-        id_pasien: req.body.id_pasien,
-        tipe_asuransi: req.body.tipe_asuransi,
-        nomor_asuransi: req.body.nomor_asuransi,
-      };
-
-      await editAsuransi(data);
-      response(res, 200, true, data, 'edit asuransi success');
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit asuransi failed');
