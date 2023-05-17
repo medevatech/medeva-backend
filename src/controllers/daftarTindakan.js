@@ -14,7 +14,7 @@ const daftarTindakanControllers = {
     try {
       let data = {
         id: uuidv4(),
-        id_kunjungan: req.body.id_kunjungan,
+        id_tindakan: req.body.id_tindakan,
         nama: req.body.nama,
       };
 
@@ -32,10 +32,12 @@ const daftarTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
       const offset = (page - 1) * limit;
 
       const result = await allDaftarTindakan({
         search,
+        searchKlinik,
         sortBy,
         sortOrder,
         limit,
@@ -107,7 +109,7 @@ const daftarTindakanControllers = {
       if (findDaftarTindakan) {
         let data = {
           id,
-          id_kunjungan: req.body.id_kunjungan,
+          id_tindakan: req.body.id_tindakan,
           nama: req.body.nama,
         };
 

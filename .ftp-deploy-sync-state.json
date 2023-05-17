@@ -1,0 +1,749 @@
+{
+    "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
+    "version": "1.0.0",
+    "generatedTime": 1684290537055,
+    "data": [
+        {
+            "type": "file",
+            "name": ".cpanel.yml",
+            "size": 116,
+            "hash": "e8dd5f39d25c942f4cd505a5dc1043769ee08070f21a6e7fea92e1ce0930d5dc"
+        },
+        {
+            "type": "file",
+            "name": ".env.example",
+            "size": 142,
+            "hash": "dde49a719cfab8eb9e3d075808b05a15b6eb943a48d36a21d393fb5fd1ccadf0"
+        },
+        {
+            "type": "file",
+            "name": "index.js",
+            "size": 1014,
+            "hash": "73f71871e8e5edac688810f9d5f21536d4dbbc3a45f564498d2b9a7f2d9b003a"
+        },
+        {
+            "type": "file",
+            "name": "package.json",
+            "size": 676,
+            "hash": "9b602913c5a1cb7e553fc177a3003e81be92eed96559e3a5348a15379a8a32b9"
+        },
+        {
+            "type": "folder",
+            "name": "src"
+        },
+        {
+            "type": "folder",
+            "name": "src/config"
+        },
+        {
+            "type": "folder",
+            "name": "src/controllers"
+        },
+        {
+            "type": "folder",
+            "name": "src/helpers"
+        },
+        {
+            "type": "folder",
+            "name": "src/middleware"
+        },
+        {
+            "type": "folder",
+            "name": "src/models"
+        },
+        {
+            "type": "folder",
+            "name": "src/routes"
+        },
+        {
+            "type": "file",
+            "name": "src/config/cloud.js",
+            "size": 212,
+            "hash": "b5d7393001dc635a30faa6c74fd21d86e0492ffd730d6c77568f2dd6f2ca6886"
+        },
+        {
+            "type": "file",
+            "name": "src/config/db.js",
+            "size": 530,
+            "hash": "59637232acde598382d3a43aefdaba8663eb8adb5c952efa05edac94e1204164"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/alergi.js",
+            "size": 2936,
+            "hash": "f1fdcd959b25cf7033ad99af76d994a1a424a1184ef040d872f53f26f90794be"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/alergiPasien.js",
+            "size": 4232,
+            "hash": "22204e2aa2cd7d95b96b4e7fd7535085935fc40dce1ee6f24922a9bf66579596"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/antrian.js",
+            "size": 4549,
+            "hash": "b9ea0b8c9b93000f3380105c738edd6f6ee976fc501e3e76c088b0bb3eee0370"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/asuransi.js",
+            "size": 4352,
+            "hash": "f3433ac32f85e80fdebf00a522c032729b7ade06ab539a719726b2ca99792a1b"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/daftarLayanan.js",
+            "size": 4207,
+            "hash": "eb647a160d47c5aa55bcbdf3bfdb96ac21990761bf45f88d1dc9c2fc423fe9d5"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/daftarTindakan.js",
+            "size": 3341,
+            "hash": "77c73b2bed22049404c0a1ec0a503fb24aa6ba0b038fc28e80422c8bbc832df4"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/diagnosis.js",
+            "size": 4039,
+            "hash": "6b0ed2c37fe70fd734386cde879e5c90df63238fea86a06bc3fd503539f26706"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/diagnosisRujukan.js",
+            "size": 3486,
+            "hash": "f5e6eb231a200763650454197fd0b79b3e2a4525ea51e01de11f01159ec49692"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/divisi.js",
+            "size": 3886,
+            "hash": "994c9ceff2093b2cebb1f3e39daf6b7d36292b758f16eec08b5a6f1a5ab03d7a"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/hargaLayanan.js",
+            "size": 3308,
+            "hash": "452ee94d1140131716a9e5f8f3d65bb6f9897ba82c73e5cf25b239ae8a97cdb6"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/hargaTindakan.js",
+            "size": 4180,
+            "hash": "f6f403c8611f943ff3828387fd4953e8db9b6bf7778caa8fe8af9be963c404e5"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/jadwalBukaLaboratorium.js",
+            "size": 4586,
+            "hash": "d6b780991278fc868d026e30acdd9a6127723395cdc9d5b15515e9de8b9ba687"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/jadwalBukaRS.js",
+            "size": 3342,
+            "hash": "fa2dce7ed699a8567e4b60db50c64a8ea74a19d5a35854873cafc21240f54367"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/jaga.js",
+            "size": 3903,
+            "hash": "5150a837b4e0a06fad03fe9ff5e160b463be824b9589b82f340d9db215bb76df"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/karyawan.js",
+            "size": 9092,
+            "hash": "88fb89a43484ce6d9619e1876958e92c18ea9cd4b7ece79c1b2154264047e09d"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/klinik.js",
+            "size": 3366,
+            "hash": "db4ac423a08154da0ff57165c7a90c6ed425d91aa0af79d422b5a9d0a383186d"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/kunjungan.js",
+            "size": 5532,
+            "hash": "296a9001598c0a12a8c0551590ee21099407726722e45d40569e50510423ec26"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/laboratorium.js",
+            "size": 3900,
+            "hash": "e5978d72497c2069fb2fa50f23935309675d1400dc35303bcf4e2c090f76d42d"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/layanan.js",
+            "size": 3201,
+            "hash": "22e020d4991af35e02b0b787e02ffa0fb596451deb0df3cf6aff8e864a8b3070"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/layananLaboratorium.js",
+            "size": 5010,
+            "hash": "8e480f1f1930fc37b27c26669f608dbe132a267ed6dfe1a1f07c39ec7d953db4"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/obat.js",
+            "size": 3482,
+            "hash": "8f3d6900dc5e449fac06d72348f6c40b34f8763a1404f1aca22aeecc71055e40"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/pasien.js",
+            "size": 6590,
+            "hash": "44dbf8fa051474b7aafea74ebe619bde125aca27d3c7cc2ebe207fe7afbc3f8d"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/pemeriksaan.js",
+            "size": 3136,
+            "hash": "f0855fa05ac517b43e73a325e8a14e4a370cea158da856360db68cfa480c9355"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/pemeriksaanPenunjang.js",
+            "size": 4545,
+            "hash": "cfa654cf09fd6dfb09daf9284308bab3c39207d035e5f812c4b3109a727f4e4c"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/penyakit.js",
+            "size": 3110,
+            "hash": "7e95e69de2b768332690e0d4c9dc7e9d6dbcbe6f5405d4794aa8063c11b45b55"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/poli.js",
+            "size": 2798,
+            "hash": "81a2c8b8fe1fe810d2a2c0af6ddeddae0e24e8ca8a227ed6b31923b81ca4ad5e"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/rekamMedis.js",
+            "size": 3582,
+            "hash": "b3f2814cc51d8ec117cebc984e4c7055835da9178fd0c692ae63cccd46037bf2"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/resep.js",
+            "size": 4151,
+            "hash": "78fe4b1c7c1d55aa37a05653a2d7428971fac3fc4ec9f1a629b76edc55f053c0"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/rs.js",
+            "size": 3016,
+            "hash": "42bd706e4ecae5438e1bc3bf877c90c1344dfde39fdb1bfe99eae2f637c9563a"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/rsPoli.js",
+            "size": 2946,
+            "hash": "dd065352a196233ffb675bd3cda2e06272b5129ee5a4800578e341468bf3bd13"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/rujukan.js",
+            "size": 4032,
+            "hash": "4e7f90db8d6cc2df09d0ffd39e153ca0c0df720db5bd4315d6fcb13a499ed113"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/shift.js",
+            "size": 3982,
+            "hash": "77802aca4dc1630aee98de866d231440122aa4fb035805f598a31501fa8761d6"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/skrining.js",
+            "size": 2942,
+            "hash": "f140f94b5170b8f7748abcbab4991935cfe2ac4ae06d9ee15adc94caf1b16bc6"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/tempKunjungan.js",
+            "size": 3239,
+            "hash": "ac95dd818ca1923a4ebeeff2e40f71b1c5836d51afc2e3b8d683e85f80cb7c51"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/tindakan.js",
+            "size": 3784,
+            "hash": "28a4769b12fe3989796377332052fdcbe87a816be2a583e8fcd8ece89bd1e60b"
+        },
+        {
+            "type": "file",
+            "name": "src/controllers/vitalSigns.js",
+            "size": 4701,
+            "hash": "97c0dc0205b70d8b34da24e5007a979cb42031f69033ca55249d2ed5c3ae459c"
+        },
+        {
+            "type": "file",
+            "name": "src/helpers/auth.js",
+            "size": 559,
+            "hash": "1034ba19ab693274bb0433eb7fedebac66b6f82fc4b35cbec66814f397b32881"
+        },
+        {
+            "type": "file",
+            "name": "src/middleware/auth.js",
+            "size": 1264,
+            "hash": "6aff954ea33b150e30eb3c9262cfaa35ae95ff60a80b6dd1ff73f2a6f625d571"
+        },
+        {
+            "type": "file",
+            "name": "src/middleware/common.js",
+            "size": 386,
+            "hash": "773a97fe39d365856d6459f9e527d15a3eff8ad32cd01062861205eef325419d"
+        },
+        {
+            "type": "file",
+            "name": "src/middleware/upload.js",
+            "size": 669,
+            "hash": "51c5bc34bd37d1bbd129bddea1413d80f50110567d4a6875357ddc7df937dbaf"
+        },
+        {
+            "type": "file",
+            "name": "src/models/alergi.js",
+            "size": 2691,
+            "hash": "c18503cd449dc93ee00a489bd593c15a9042f19e3a5212eebee4d40148a312cd"
+        },
+        {
+            "type": "file",
+            "name": "src/models/alergiPasien.js",
+            "size": 4873,
+            "hash": "7cddf832f8bf5cba7c2b925e52be3a5eea9dc9294970470ef0af34d5bb56949c"
+        },
+        {
+            "type": "file",
+            "name": "src/models/antrian.js",
+            "size": 4805,
+            "hash": "ae583930ec6ea5e328a630d7238df9c64e04a62397209fd4c92a557d71379c74"
+        },
+        {
+            "type": "file",
+            "name": "src/models/asuransi.js",
+            "size": 4446,
+            "hash": "6d50887fd09f8044b4c14177867791d883e27b50188804d4b4169200ee3a03b9"
+        },
+        {
+            "type": "file",
+            "name": "src/models/daftarLayanan.js",
+            "size": 3867,
+            "hash": "ced5b8b92d553820a64877106c470e83f956f73d43a4bb6549a76fa6f451c8cb"
+        },
+        {
+            "type": "file",
+            "name": "src/models/daftarTindakan.js",
+            "size": 3022,
+            "hash": "cea5482d59dd010f908cf3fddce6ce79d74700f447e6ecac0b74fd6821ae8ec6"
+        },
+        {
+            "type": "file",
+            "name": "src/models/diagnosis.js",
+            "size": 4327,
+            "hash": "5e59e0db3b6e53cfcfd7061cc74a6ab7bbd174446afed1b0e8911dfeeda9a4a5"
+        },
+        {
+            "type": "file",
+            "name": "src/models/diagnosisRujukan.js",
+            "size": 3162,
+            "hash": "4cb4c39bc3c9f2387aedcf4e4b479895ca7599b76c955fcb5541a988982376e3"
+        },
+        {
+            "type": "file",
+            "name": "src/models/divisi.js",
+            "size": 3890,
+            "hash": "65a06fbc12857f24b2f074781698890524e61e130948226a392f488290fe74fb"
+        },
+        {
+            "type": "file",
+            "name": "src/models/hargaLayanan.js",
+            "size": 2875,
+            "hash": "837299d8a66c2414a973c2e3c8a60f0447dd9d6e380c608612d3a33453cd94ba"
+        },
+        {
+            "type": "file",
+            "name": "src/models/hargaTindakan.js",
+            "size": 4005,
+            "hash": "3514698dd6d44056a44f778c0aa504764aeedd0e46bf1390d57f4a409f31236d"
+        },
+        {
+            "type": "file",
+            "name": "src/models/jadwalBukaLaboratorium.js",
+            "size": 3557,
+            "hash": "8aae639a14e2f6b7c80756f5b4d7ff78c75df55306746f47fedf6911bc7115ca"
+        },
+        {
+            "type": "file",
+            "name": "src/models/jadwalBukaRS.js",
+            "size": 2956,
+            "hash": "8cc166add134bd6dc52fe2397594164261502b12a9f41043101ae67b9e2b88a5"
+        },
+        {
+            "type": "file",
+            "name": "src/models/jaga.js",
+            "size": 4231,
+            "hash": "927411abae797b6cba069cd0eff686b1b057f1c96347dd378202fbfea46c135a"
+        },
+        {
+            "type": "file",
+            "name": "src/models/karyawan.js",
+            "size": 9137,
+            "hash": "395604d2836c17a6e5f4275ed8007f22436502138f091ae019daeb3e93fc2de1"
+        },
+        {
+            "type": "file",
+            "name": "src/models/klinik.js",
+            "size": 2607,
+            "hash": "3138c523dcb3ea5f9da486e3758e6be54b2f29b5398eda5819ad8033b587e1d4"
+        },
+        {
+            "type": "file",
+            "name": "src/models/kunjungan.js",
+            "size": 5925,
+            "hash": "48fcdf304e5e85be285830ea6f289d4131558ec04e21dea2144397b0c9036afd"
+        },
+        {
+            "type": "file",
+            "name": "src/models/laboratorium.js",
+            "size": 3466,
+            "hash": "8fed8f4e8bb73af4451e70913ac99bd4c029c1a85af8975427fa1ec99654ced6"
+        },
+        {
+            "type": "file",
+            "name": "src/models/layanan.js",
+            "size": 3111,
+            "hash": "16a606a5a892c33195e8ffdfc4dd1fdf9a1001100aee3718dd601bd9322fdc2d"
+        },
+        {
+            "type": "file",
+            "name": "src/models/layananLaboratorium.js",
+            "size": 4211,
+            "hash": "46ed9209d37aed8394439e10cc56b6f24deb3e81de41484e0b3533b33aae10b2"
+        },
+        {
+            "type": "file",
+            "name": "src/models/obat.js",
+            "size": 3374,
+            "hash": "9fcfed2857f3d85f87e491871e01e23b8874031748e901805e5be720feb0a2b1"
+        },
+        {
+            "type": "file",
+            "name": "src/models/pasien.js",
+            "size": 5893,
+            "hash": "9fd6df85b38199bbee27fd39093a5463cca259262d29bf3b2df7860e1ed44217"
+        },
+        {
+            "type": "file",
+            "name": "src/models/pemeriksaan.js",
+            "size": 2701,
+            "hash": "5c8cbcda1c143f2b873f78149c27f4b7c3e606df894624646085b4d656eecac5"
+        },
+        {
+            "type": "file",
+            "name": "src/models/pemeriksaanPenunjang.js",
+            "size": 5040,
+            "hash": "48dc92d8ecbd2256fddcb4e17597ceb357eb29ddb641dd0d94064df49410333f"
+        },
+        {
+            "type": "file",
+            "name": "src/models/penyakit.js",
+            "size": 2974,
+            "hash": "7fdfd24818480437e98de2d8a63c5105483a9a5451c8e08d84e7ceb833cc5990"
+        },
+        {
+            "type": "file",
+            "name": "src/models/poli.js",
+            "size": 2511,
+            "hash": "d2284180517d1056b1a3dc708723715e1ef01ca0ed8b3b085f39199f0ee22ebd"
+        },
+        {
+            "type": "file",
+            "name": "src/models/rekamMedis.js",
+            "size": 3754,
+            "hash": "46544365c7b8ca1e5de258bac32bdb5c536de9ce8cf335864bdc2f22de5eaedf"
+        },
+        {
+            "type": "file",
+            "name": "src/models/resep.js",
+            "size": 4308,
+            "hash": "9e87f7cbb83db27863903e8dc8675f9a795466a71c230b0dc85872f26b9a5b95"
+        },
+        {
+            "type": "file",
+            "name": "src/models/rs.js",
+            "size": 2506,
+            "hash": "5937374d7813b2d85e4d74e2d6b3c2da1315c74ef083578bd93af3364a9f7112"
+        },
+        {
+            "type": "file",
+            "name": "src/models/rsPoli.js",
+            "size": 2507,
+            "hash": "e690dd9b826d0c272f7390e382c63bbdd11e7c70ec6b449a36cc54903f2e7ce6"
+        },
+        {
+            "type": "file",
+            "name": "src/models/rujukan.js",
+            "size": 3974,
+            "hash": "b007149bf61f818cb56d9c19a91e591fd139938a2d9d0e6d4f734d2ec2cfd6ae"
+        },
+        {
+            "type": "file",
+            "name": "src/models/shift.js",
+            "size": 3947,
+            "hash": "3a65bd1a1b82f8a1e0a8360b84e5946bc54b06bd2dc9d9928729364f0a20cf3b"
+        },
+        {
+            "type": "file",
+            "name": "src/models/skrining.js",
+            "size": 3190,
+            "hash": "31637e855c0cffc78c0c10b64e8529632085b8911b98a3c521766b85ceb306c6"
+        },
+        {
+            "type": "file",
+            "name": "src/models/tempKunjungan.js",
+            "size": 3310,
+            "hash": "1a5d341924c007213d13c5efe1df919b5e58a2e4d3cdd3c00a111f1c4b01e13f"
+        },
+        {
+            "type": "file",
+            "name": "src/models/tindakan.js",
+            "size": 3460,
+            "hash": "021f3cc2d09f1095bc4bad681590623f027b27ca04a34ec8538eebd7f64536b8"
+        },
+        {
+            "type": "file",
+            "name": "src/models/vitalSigns.js",
+            "size": 6022,
+            "hash": "2d7b9ad96812400b031c39b80a3a577d8269471222482fc8afee78f1be375adf"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/alergi.js",
+            "size": 479,
+            "hash": "dda9233ee619d95c06c4e272f12d895c0086caf7029ca32cbedf3c08c3ee5fd8"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/alergiPasien.js",
+            "size": 588,
+            "hash": "89a1ed9e1241852d6b9f18943891c92550df6571e51b1793188ea19b005e9471"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/antrian.js",
+            "size": 532,
+            "hash": "839983ee27eb2b6bb890de486f80c2ee48f687cd36eb4614357b6423b0b03097"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/asuransi.js",
+            "size": 673,
+            "hash": "953173e49f6d3ce391bea4c056f510dd8bb2fe025a5c2b95d2d55bcf1b31ae90"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/daftarLayanan.js",
+            "size": 553,
+            "hash": "5cd153bfa1e61a24e51f947b344632a8bec20c417be1cdd3c6ba38011c54ca59"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/daftarTindakan.js",
+            "size": 527,
+            "hash": "f5f97f68b2c73d75ee9e3b81fc8547df02d69e504a37980836a9fe44fdc35ae9"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/diagnosis.js",
+            "size": 576,
+            "hash": "60e903bb0ff771a2381443db616b3e09dfacede29dcb79c5bc2cee62296a37d2"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/diagnosisRujukan.js",
+            "size": 539,
+            "hash": "b7317dce960f43fcd8c86a1253502eb8143c849a46012f29827a8bb342a339e2"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/divisi.js",
+            "size": 490,
+            "hash": "4a6c54fab59cbecdab59cfcbb00f54f7e7883d42f3819dfe3c2fdda09f3a1754"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/hargaLayanan.js",
+            "size": 515,
+            "hash": "eb150ec34cb36240425ac551a46cbfd7245a39eb55c613eeefe6774d89010cf9"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/hargaTindakan.js",
+            "size": 521,
+            "hash": "3393e1107ebc55130ff8bb5d128c5ee72ad7f48deb3294d90c11f8990c84806b"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/index.js",
+            "size": 3653,
+            "hash": "afb62c3e13b70db53641d7b5c9626ea60219ca0f9d05d9ac557dc79b93136659"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/jadwalBukaLaboratorium.js",
+            "size": 482,
+            "hash": "235042740c1e478d88c3c74495182f90f0be3c33ac6fedcae6d1542078400892"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/jadwalBukaRS.js",
+            "size": 515,
+            "hash": "62c0e188d31beca1c7578257e6a9a5e1a03f7c82bf3e12235cc56db1db529e11"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/jaga.js",
+            "size": 513,
+            "hash": "9ce43245fd001f483deee1911198c3f7b0002f521783ba156f5c289fb396285d"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/karyawan.js",
+            "size": 811,
+            "hash": "d31b3122d6ab13fcf32ec25abbd0866faed1a193e64e22661a8ed6c58cfa93db"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/klinik.js",
+            "size": 380,
+            "hash": "aa46356bffd81d838571b42d5e31904dfc23cd676500566ff38769b01f368a9a"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/kunjungan.js",
+            "size": 576,
+            "hash": "5044ae3331bda09703311aa4541d82df6678d9e1609d292ef8e6fc7c1ba002d3"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/laboratorium.js",
+            "size": 544,
+            "hash": "e35dae8e0517026a61004b10cb31e6b0204860ab141b99388f9050da944daf8d"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/layanan.js",
+            "size": 341,
+            "hash": "5a54f97de1b440187b28f7db5ef5028d458fa794b724441c34c64be6289d24f4"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/layananLaboratorium.js",
+            "size": 542,
+            "hash": "06cad0906a310449a7cf9d1a03a720a075bee6760152e1e22e76d8f6d14673de"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/obat.js",
+            "size": 467,
+            "hash": "64f336b2b68b79394931c97f8338ff273aaff8a82f8ef4bbe9900b40f20bc76e"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/pasien.js",
+            "size": 702,
+            "hash": "db338a698fb5629319274f99e871331333235e956b52b1a9652980528d500f9a"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/pemeriksaan.js",
+            "size": 509,
+            "hash": "02bb412a8bfb388d1497be850e63ca841f9b8ad15abffe443ec235d2946e7d18"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/pemeriksaanPenunjang.js",
+            "size": 662,
+            "hash": "8cc64ca639369cf4d7d53244157014714bddda82ad17d84b4437054864113a07"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/penyakit.js",
+            "size": 491,
+            "hash": "16ac0998b7aeef8cb38b6e3a0ee9dccfd3649e1dda4b98ca0bc99ef50b9fdc27"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/poli.js",
+            "size": 467,
+            "hash": "bca8ec99d3c600b244164153abd29cd3c0a4286ff526564586890231bb0f3685"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/rekamMedis.js",
+            "size": 503,
+            "hash": "7a2d45f4cf3400d7b9905d08d56533840e8e88eda6a8915269434af4c619de53"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/resep.js",
+            "size": 548,
+            "hash": "4d9391610cdd2090668dc31f43fd3c1217132cb2449da9140d5efc6a75f98e95"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/rs.js",
+            "size": 455,
+            "hash": "789522eb37ca2c09dffd4103c1f98decf1b43213d2122c9851023128e9bec22f"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/rsPoli.js",
+            "size": 479,
+            "hash": "bba39c588434ba5f667ff81c6413114564a759784163392192fbfb35b4cc6b16"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/rujukan.js",
+            "size": 568,
+            "hash": "0c0b7c54e86d1f4334e035f32ed9b681cca8bc4445716f91b49f3312f3b284f4"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/shift.js",
+            "size": 523,
+            "hash": "081fdba9ceff85098b38129e93502310b24dab5b164a6b109754e497ecc6417b"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/skrining.js",
+            "size": 491,
+            "hash": "b570958762b073ba7875fbd62a81d34b0917a466388f8ab54b497e018e3f932c"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/tempKunjungan.js",
+            "size": 521,
+            "hash": "96d27fe94fe9593446a77bcace1d0b13991ed1e03eb58737513a5018031beba2"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/tindakan.js",
+            "size": 569,
+            "hash": "d9af8b9c80102d316aa3a238830ccb02aa498cf755e2e13fb915255f45a0acbd"
+        },
+        {
+            "type": "file",
+            "name": "src/routes/vitalSigns.js",
+            "size": 576,
+            "hash": "e29002a7341c934a9d2fd6e6005f62ac5c8f16f2ba4ca41154ff53f2ef4a28ac"
+        }
+    ]
+}
