@@ -36,12 +36,14 @@ const hargaTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchKlinik = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allHargaTindakan({
         search,
         searchKlinik,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -145,7 +147,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: 1,
+          is_active: '1',
         };
 
         await editHargaTindakanActivate(data);
@@ -175,7 +177,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: 0,
+          is_active: '0',
         };
 
         await editHargaTindakanArchive(data);
