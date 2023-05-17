@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertTindakan = (data) => {
-  const { id, id_kunjungan, catatan } = data;
+  const { id, id_kunjungan } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_tindakan 
-        (id, id_kunjungan, catatan,
+        (id, id_kunjungan, 
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_kunjungan}', '${catatan}', 
+        ('${id}', '${id_kunjungan}',
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -24,7 +24,7 @@ const insertTindakan = (data) => {
 const allTindakan = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan, tbl_tindakan.catatan, 
+      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan, 
         tbl_tindakan.created_at, tbl_tindakan.updated_at
       FROM tbl_tindakan AS tbl_tindakan
       WHERE tbl_tindakan.catatan
@@ -48,7 +48,7 @@ const countAllTindakan = () => {
 const getTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan, tbl_tindakan.catatan, 
+      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan,
       tbl_tindakan.created_at, tbl_tindakan.updated_at
     FROM tbl_tindakan AS tbl_tindakan
       WHERE tbl_tindakan.id = '${id}'`,
@@ -80,12 +80,12 @@ const findTindakanById = (id) => {
 };
 
 const editTindakan = (data) => {
-  const { id, id_kunjungan, catatan } = data;
+  const { id, id_kunjungan } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_tindakan 
           SET
-            id_kunjungan='${id_kunjungan}', catatan='${catatan}', 
+            id_kunjungan='${id_kunjungan}', 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -102,7 +102,7 @@ const editTindakan = (data) => {
 const getTindakanByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan, tbl_tindakan.catatan, 
+      `SELECT tbl_tindakan.id, tbl_tindakan.id_kunjungan,
       tbl_tindakan.created_at, tbl_tindakan.updated_at
     FROM tbl_tindakan AS tbl_tindakan
       WHERE tbl_tindakan.id_kunjungan = '${id_kunjungan}'`,
