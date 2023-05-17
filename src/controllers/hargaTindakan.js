@@ -6,8 +6,8 @@ const {
   getHargaTindakanById,
   findHargaTindakanById,
   editHargaTindakan,
-  getHargaTindakanByIdKlinik,
-  findHargaTindakanByIdKlinik,
+  editHargaTindakanActivate,
+  editHargaTindakanArchive,
 } = require(`../models/hargaTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -19,6 +19,7 @@ const hargaTindakanControllers = {
         id_klinik: req.body.id_klinik,
         id_daftar_tindakan: req.body.id_daftar_tindakan,
         harga: req.body.harga,
+        is_active: '1',
       };
 
       await insertHargaTindakan(data);
@@ -133,32 +134,64 @@ const hargaTindakanControllers = {
       response(res, 404, false, error, 'edit harga tindakan failed');
     }
   },
-  getByIdKlinik: async (req, res) => {
+  editActivate: async (req, res, next) => {
     try {
-      const id_klinik = req.params.id_klinik;
-
-      const result = await getHargaTindakanByIdKlinik({
-        id_klinik,
-      });
+      const id = req.params.id;
 
       const {
-        rows: [findHargaTindakanKlinik],
-      } = await findHargaTindakanByIdKlinik(id_klinik);
+        rows: [findHargaTindakan],
+      } = await findHargaTindakanById(id);
 
-      if (findHargaTindakanKlinik) {
-        response(res, 200, true, result.rows, 'get harga tindakan success');
+      if (findHargaTindakan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editHargaTindakanActivate(data);
+        response(res, 200, true, data, 'activate harga tindakan success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik not found, check again`
+          `id harga tindakan not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get harga tindakan failed');
+      response(res, 404, false, error, 'activate harga tindakan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findHargaTindakan],
+      } = await findHargaTindakanById(id);
+
+      if (findHargaTindakan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editHargaTindakanArchive(data);
+        response(res, 200, true, data, 'archive harga tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id harga tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive harga tindakan failed');
     }
   },
 };
