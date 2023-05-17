@@ -35,10 +35,12 @@ const hargaTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchKlinik = req.query.search || '';
       const offset = (page - 1) * limit;
 
       const result = await allHargaTindakan({
         search,
+        searchKlinik,
         sortBy,
         sortOrder,
         limit,

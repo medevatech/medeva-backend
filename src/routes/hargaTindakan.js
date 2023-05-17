@@ -9,6 +9,5 @@ router.post(`/`, uploaded.array(), hargaTindakanControllers.add);
 router.get(`/`, hargaTindakanControllers.getAll);
 router.get(`/:id`, hargaTindakanControllers.getById);
 router.put(`/:id`, uploaded.array(), hargaTindakanControllers.edit);
-router.get(`/klinik/:id_klinik`, hargaTindakanControllers.getByIdKlinik);
 
 module.exports = router;

@@ -21,14 +21,24 @@ const insertHargaTindakan = (data) => {
   );
 };
 
-const allHargaTindakan = ({ search, sortBy, sortOrder, limit, offset }) => {
+const allHargaTindakan = ({
+  search,
+  searchKlinik,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
-      WHERE tbl_harga_tindakan.harga
-      ILIKE '%${search}%' ORDER BY tbl_harga_tindakan.${sortBy} ${sortOrder} 
+      WHERE 
+        tbl_harga_tindakan.harga ILIKE '%${search}%' 
+      AND
+        tbl_harga_tindakan.id_klinik ILIKE '%${searchKlinik}%' 
+      ORDER BY tbl_harga_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
