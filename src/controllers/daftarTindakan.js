@@ -8,6 +8,7 @@ const {
   editDaftarTindakan,
   editDaftarTindakanActivate,
   editDaftarTindakanArchive,
+  deleteDaftarTindakan,
 } = require(`../models/daftarTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -188,6 +189,35 @@ const daftarTindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'archive daftar tindakan failed');
+    }
+  },
+  delete: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarTindakan],
+      } = await findDaftarTindakanById(id);
+
+      if (findDaftarTindakan) {
+        let data = {
+          id,
+        };
+
+        await deleteDaftarTindakan(data);
+        response(res, 200, true, data, 'delete daftar tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete daftar tindakan failed');
     }
   },
 };

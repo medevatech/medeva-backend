@@ -151,6 +151,22 @@ const editDaftarTindakanArchive = (data) => {
   );
 };
 
+const deleteDaftarTindakan = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_daftar_tindakan WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertDaftarTindakan,
   allDaftarTindakan,
@@ -160,4 +176,5 @@ module.exports = {
   editDaftarTindakan,
   editDaftarTindakanActivate,
   editDaftarTindakanArchive,
+  deleteDaftarTindakan,
 };
