@@ -25,6 +25,7 @@ const rsPoliControllers = require('./rsPoli');
 const diagnosisRujukanControllers = require('./diagnosisRujukan');
 const hargaTindakanControllers = require('./hargaTindakan');
 const hargaLayananControllers = require('./hargaLayanan');
+const asuransiKelasControllers = require('./asuransiKelas');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -63,6 +64,7 @@ router.use('/rs-poli', rsPoliControllers);
 router.use('/diagnosis-rujukan', diagnosisRujukanControllers);
 router.use('/harga-tindakan', hargaTindakanControllers);
 router.use('/harga-layanan', hargaLayananControllers);
+router.use('/asuransi-kelas', asuransiKelasControllers);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
