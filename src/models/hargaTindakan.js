@@ -8,7 +8,7 @@ const insertHargaTindakan = (data) => {
         (id, id_klinik, id_daftar_tindakan, harga, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', '${harga}', '${is_active}',
+        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', ${harga}, '${is_active}',
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -41,7 +41,7 @@ const allHargaTindakan = ({
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
       INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE 
-        tbl_harga_tindakan.harga ILIKE '%${search}%' 
+        tbl_harga_tindakan.id_klinik ILIKE '%${search}%' 
       AND
         tbl_harga_tindakan.id_klinik ILIKE '%${searchKlinik}%' 
       AND
