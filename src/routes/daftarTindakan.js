@@ -19,5 +19,6 @@ router.put(
   uploaded.array(),
   daftarTindakanControllers.editArchive
 );
+router.delete('/:id', daftarTindakanControllers.delete);
 
 module.exports = router;
