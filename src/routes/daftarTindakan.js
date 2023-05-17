@@ -9,5 +9,15 @@ router.post(`/`, uploaded.array(), daftarTindakanControllers.add);
 router.get(`/`, daftarTindakanControllers.getAll);
 router.get(`/:id`, daftarTindakanControllers.getById);
 router.put(`/:id`, uploaded.array(), daftarTindakanControllers.edit);
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  daftarTindakanControllers.editActivate
+);
+router.put(
+  `/archive/:id`,
+  uploaded.array(),
+  daftarTindakanControllers.editArchive
+);
 
 module.exports = router;

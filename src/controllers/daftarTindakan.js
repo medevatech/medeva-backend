@@ -6,6 +6,8 @@ const {
   getDaftarTindakanById,
   findDaftarTindakanById,
   editDaftarTindakan,
+  editDaftarTindakanActivate,
+  editDaftarTindakanArchive,
 } = require(`../models/daftarTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,6 +18,7 @@ const daftarTindakanControllers = {
         id: uuidv4(),
         id_tindakan: req.body.id_tindakan,
         nama: req.body.nama,
+        is_active: '1',
       };
 
       await insertDaftarTindakan(data);
@@ -127,6 +130,66 @@ const daftarTindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit daftar tindakan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarTindakan],
+      } = await findDaftarTindakanById(id);
+
+      if (findDaftarTindakan) {
+        let data = {
+          id,
+          is_active: '1',
+        };
+
+        await editDaftarTindakanActivate(data);
+        response(res, 200, true, data, 'activate daftar tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'activate daftar tindakan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarTindakan],
+      } = await findDaftarTindakanById(id);
+
+      if (findDaftarTindakan) {
+        let data = {
+          id,
+          is_active: '0',
+        };
+
+        await editDaftarTindakanArchive(data);
+        response(res, 200, true, data, 'archive daftar tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive daftar tindakan failed');
     }
   },
 };

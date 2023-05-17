@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertDaftarTindakan = (data) => {
-  const { id, id_tindakan, nama } = data;
+  const { id, id_tindakan, nama, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_daftar_tindakan 
-        (id, id_tindakan, nama,
+        (id, id_tindakan, nama, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_tindakan}', '${nama}', 
+        ('${id}', '${id_tindakan}', '${nama}', '${is_active}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -111,6 +111,46 @@ const editDaftarTindakan = (data) => {
   );
 };
 
+const editDaftarTindakanActivate = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_daftar_tindakan 
+          SET
+            is_active='${is_active}', 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const editDaftarTindakanArchive = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_daftar_tindakan 
+          SET
+            is_active='${is_active}', 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertDaftarTindakan,
   allDaftarTindakan,
@@ -118,4 +158,6 @@ module.exports = {
   findDaftarTindakanById,
   getDaftarTindakanById,
   editDaftarTindakan,
+  editDaftarTindakanActivate,
+  editDaftarTindakanArchive,
 };
