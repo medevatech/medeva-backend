@@ -163,6 +163,22 @@ const editHargaTindakanArchive = (data) => {
   );
 };
 
+const deleteHargaTindakan = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_harga_tindakan WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertHargaTindakan,
   allHargaTindakan,
@@ -172,4 +188,5 @@ module.exports = {
   editHargaTindakan,
   editHargaTindakanActivate,
   editHargaTindakanArchive,
+  deleteHargaTindakan,
 };

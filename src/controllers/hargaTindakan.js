@@ -8,6 +8,7 @@ const {
   editHargaTindakan,
   editHargaTindakanActivate,
   editHargaTindakanArchive,
+  deleteHargaTindakan,
 } = require(`../models/hargaTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -194,6 +195,35 @@ const hargaTindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'archive harga tindakan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findHargaTindakan],
+      } = await findHargaTindakanById(id);
+
+      if (findHargaTindakan) {
+        let data = {
+          id,
+        };
+
+        await deleteHargaTindakan(data);
+        response(res, 200, true, data, 'delete harga tindakan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id harga tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete harga tindakan failed');
     }
   },
 };
