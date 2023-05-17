@@ -17,7 +17,6 @@ const tindakanControllers = {
       let data = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
-        catatan: req.body.catatan,
       };
 
       await insertTindakan(data);
@@ -103,7 +102,6 @@ const tindakanControllers = {
         let data = {
           id,
           id_kunjungan: req.body.id_kunjungan,
-          catatan: req.body.catatan,
         };
 
         await editTindakan(data);
