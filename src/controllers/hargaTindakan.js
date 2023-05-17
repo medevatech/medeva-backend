@@ -197,7 +197,7 @@ const hargaTindakanControllers = {
       response(res, 404, false, error, 'archive harga tindakan failed');
     }
   },
-  delete: async (req, res, next) => {
+  deleted: async (req, res, next) => {
     try {
       let id = req.params.id;
 
