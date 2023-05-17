@@ -104,12 +104,12 @@ const findHargaTindakanById = (id) => {
 };
 
 const editHargaTindakan = (data) => {
-  const { id, id_klinik, id_daftar_tindakan, harga } = data;
+  const { id, id_klinik, id_daftar_tindakan, harga, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_harga_tindakan 
           SET
-            id_klinik='${id_klinik}', id_daftar_tindakan='${id_daftar_tindakan}', harga=${harga}, 
+            id_klinik='${id_klinik}', id_daftar_tindakan='${id_daftar_tindakan}', harga=${harga}, is_active=1, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
