@@ -32,9 +32,14 @@ const allHargaTindakan = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
+      `SELECT tbl_harga_tindakan.id, 
+          tbl_harga_tindakan.id_klinik, tbl_klinik.nama_klinik,
+          tbl_harga_tindakan.id_daftar_tindakan, tbl_daftar_tindakan.nama,
+        tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
+      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE 
         tbl_harga_tindakan.harga ILIKE '%${search}%' 
       AND
@@ -62,9 +67,14 @@ const countAllHargaTindakan = () => {
 const getHargaTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
+      `SELECT tbl_harga_tindakan.id, 
+          tbl_harga_tindakan.id_klinik, tbl_klinik.nama_klinik,
+          tbl_harga_tindakan.id_daftar_tindakan, tbl_daftar_tindakan.nama,
+        tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
+      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE tbl_harga_tindakan.id = '${id}'`,
       (err, result) => {
         if (!err) {
