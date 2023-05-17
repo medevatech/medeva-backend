@@ -41,11 +41,8 @@ const allHargaTindakan = ({
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
       INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE 
-        tbl_harga_tindakan.id_klinik ILIKE '%${search}%' 
-      AND
-        tbl_harga_tindakan.id_klinik ILIKE '%${searchKlinik}%' 
-      AND
-        tbl_harga_tindakan.is_active ILIKE '%${searchStatus}%' 
+        tbl_harga_tindakan.id ILIKE '%${search}%' 
+     
       
       ORDER BY tbl_harga_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
