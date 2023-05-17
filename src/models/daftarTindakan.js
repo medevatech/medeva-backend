@@ -33,6 +33,7 @@ const allDaftarTindakan = ({
     Pool.query(
       `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
           tbl_harga_tindakan.id_klinik,
+        tbl_daftar_tindakan.is_active, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
       INNER JOIN tbl_harga_tindakan as tbl_harga_tindakan ON tbl_daftar_tindakan.id = tbl_harga_tindakan.id_daftar_tindakan
@@ -61,8 +62,11 @@ const getDaftarTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
-      tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
-    FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
+          tbl_harga_tindakan.id_klinik,
+        tbl_daftar_tindakan.is_active, 
+        tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
+      FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
+      INNER JOIN tbl_harga_tindakan as tbl_harga_tindakan ON tbl_daftar_tindakan.id = tbl_harga_tindakan.id_daftar_tindakan
       WHERE tbl_daftar_tindakan.id = '${id}'`,
       (err, result) => {
         if (!err) {

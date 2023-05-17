@@ -31,7 +31,7 @@ const allHargaTindakan = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
+      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active,
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
       WHERE 
@@ -58,7 +58,7 @@ const countAllHargaTindakan = () => {
 const getHargaTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
+      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active,
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
       WHERE tbl_harga_tindakan.id = '${id}'`,
