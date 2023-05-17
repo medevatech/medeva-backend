@@ -32,10 +32,12 @@ const daftarTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
       const offset = (page - 1) * limit;
 
       const result = await allDaftarTindakan({
         search,
+        searchKlinik,
         sortBy,
         sortOrder,
         limit,
