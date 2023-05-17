@@ -99,40 +99,6 @@ const editHargaLayanan = (data) => {
   );
 };
 
-const getHargaLayananByIdKlinik = ({ id_klinik }) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT tbl_harga_layanan.id, tbl_harga_layanan.id_klinik, tbl_harga_layanan.id_daftar_layanan, tbl_harga_layanan.harga,
-        tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
-      FROM tbl_harga_layanan AS tbl_harga_layanan
-      WHERE tbl_harga_layanan.id_klinik = '${id_klinik}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
-const findHargaLayananByIdKlinik = (id_klinik) => {
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT * FROM tbl_harga_layanan WHERE id_klinik = '${id_klinik}'
-           `,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
 module.exports = {
   insertHargaLayanan,
   allHargaLayanan,
@@ -140,6 +106,4 @@ module.exports = {
   getHargaLayananById,
   findHargaLayananById,
   editHargaLayanan,
-  getHargaLayananByIdKlinik,
-  findHargaLayananByIdKlinik,
 };

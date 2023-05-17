@@ -6,8 +6,6 @@ const {
   getHargaLayananById,
   findHargaLayananById,
   editHargaLayanan,
-  getHargaLayananByIdKlinik,
-  findHargaLayananByIdKlinik,
 } = require(`../models/hargaLayanan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -129,34 +127,6 @@ const hargaLayananControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit harga layanan failed');
-    }
-  },
-  getByIdKlinik: async (req, res) => {
-    try {
-      const id_klinik = req.params.id_klinik;
-
-      const result = await getHargaLayananByIdKlinik({
-        id_klinik,
-      });
-
-      const {
-        rows: [findHargaLayananKlinik],
-      } = await findHargaLayananByIdKlinik(id_klinik);
-
-      if (findHargaLayananKlinik) {
-        response(res, 200, true, result.rows, 'get harga layanan success');
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id klinik not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get harga layanan failed');
     }
   },
 };
