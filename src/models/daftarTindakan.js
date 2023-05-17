@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertDaftarTindakan = (data) => {
-  const { id, id_tindakan, nama, is_active } = data;
+  const { id, nama, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_daftar_tindakan 
-        (id, id_tindakan, nama, is_active,
+        (id,  nama, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_tindakan}', '${nama}', '${is_active}', 
+        ('${id}', '${nama}', '${is_active}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -31,7 +31,7 @@ const allDaftarTindakan = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.nama, 
         tbl_daftar_tindakan.is_active, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
@@ -59,7 +59,7 @@ const countAllDaftarTindakan = () => {
 const getDaftarTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.nama, 
         tbl_daftar_tindakan.is_active, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
@@ -92,12 +92,12 @@ const findDaftarTindakanById = (id) => {
 };
 
 const editDaftarTindakan = (data) => {
-  const { id, id_tindakan, nama } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_daftar_tindakan 
           SET
-            id_tindakan='${id_tindakan}', nama='${nama}', 
+            nama='${nama}', 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
