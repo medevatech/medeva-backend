@@ -39,6 +39,7 @@ const createAntrian = (data) => {
 const getAntrian = ({
   searchName,
   searchDivisi,
+  searchDivisiName,
   searchJaga,
   searchStatus,
   sortBy,
@@ -49,7 +50,7 @@ const getAntrian = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id WHERE tanggal = '${date}' AND antrian.status = '${searchStatus}' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at FROM tbl_antrian as antrian INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id WHERE tanggal = '${date}' AND antrian.status = '${searchStatus}' AND divisi.id ILIKE '%${searchDivisi}%' AND divisi.tipe ILIKE '%${searchDivisiName}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
