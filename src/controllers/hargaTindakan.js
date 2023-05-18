@@ -8,6 +8,7 @@ const {
   editHargaTindakan,
   editHargaTindakanActivate,
   editHargaTindakanArchive,
+  deleteHargaTindakan,
 } = require(`../models/hargaTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -36,12 +37,14 @@ const hargaTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchKlinik = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allHargaTindakan({
         search,
         searchKlinik,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -145,7 +148,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: 1,
+          is_active: '1',
         };
 
         await editHargaTindakanActivate(data);
@@ -175,7 +178,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: 0,
+          is_active: '0',
         };
 
         await editHargaTindakanArchive(data);
@@ -192,6 +195,35 @@ const hargaTindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'archive harga tindakan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findHargaTindakan],
+      } = await findHargaTindakanById(id);
+
+      if (findHargaTindakan) {
+        let data = {
+          id,
+        };
+
+        await deleteHargaTindakan(data);
+        response(res, 200, true, data, 'delete harga tindakan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id harga tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete harga tindakan failed');
     }
   },
 };

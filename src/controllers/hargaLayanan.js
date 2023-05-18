@@ -129,6 +129,34 @@ const hargaLayananControllers = {
       response(res, 404, false, error, 'edit harga layanan failed');
     }
   },
+  delete: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const result = await getHargaLayananById({
+        id,
+      });
+
+      const {
+        rows: [findHargaLayanan],
+      } = await findHargaLayananById(id);
+
+      if (findHargaLayanan) {
+        response(res, 200, true, result.rows, 'get harga layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id harga layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get harga layanan failed');
+    }
+  },
 };
 
 exports.hargaLayananControllers = hargaLayananControllers;

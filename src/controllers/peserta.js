@@ -1,29 +1,28 @@
 const { response } = require(`../middleware/common`);
 const {
-  insertAsuransi,
-  allAsuransi,
-  countAllAsuransi,
-  getAsuransiById,
-  findAsuransiById,
-  editAsuransi,
-} = require(`../models/asuransi`);
+  insertPeserta,
+  allPeserta,
+  countAllPeserta,
+  getPesertaById,
+  findPesertaById,
+  editPeserta,
+} = require(`../models/peserta`);
 const { v4: uuidv4 } = require('uuid');
 
-const asuransiControllers = {
+const pesertaControllers = {
   add: async (req, res, next) => {
     try {
-      const { nama } = req.body;
-
       let data = {
         id: uuidv4(),
-        nama,
+        id_pasien: req.body.id_pasien,
+        id_asuransi: req.body.id_asuransi,
       };
 
-      await insertAsuransi(data);
-      response(res, 200, true, data, 'insert asuransi success');
+      await insertPeserta(data);
+      response(res, 200, true, data, 'insert peserta success');
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'insert asuransi failed');
+      response(res, 404, false, error, 'insert peserta failed');
     }
   },
   getAll: async (req, res) => {
@@ -35,7 +34,7 @@ const asuransiControllers = {
       const search = req.query.search || '';
       const offset = (page - 1) * limit;
 
-      const result = await allAsuransi({
+      const result = await allPeserta({
         search,
         sortBy,
         sortOrder,
@@ -45,7 +44,7 @@ const asuransiControllers = {
 
       const {
         rows: [count],
-      } = await countAllAsuransi();
+      } = await countAllPeserta();
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -56,38 +55,38 @@ const asuransiControllers = {
         totalPage,
       };
 
-      response(res, 200, true, result.rows, 'get asuransi success', pagination);
+      response(res, 200, true, result.rows, 'get peserta success', pagination);
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get asuransi failed');
+      response(res, 404, false, error, 'get peserta failed');
     }
   },
-  getByIdAsuransi: async (req, res) => {
+  getById: async (req, res) => {
     try {
       const id = req.params.id;
 
-      const result = await getAsuransiById({
+      const result = await getPesertaById({
         id,
       });
 
       const {
-        rows: [findAsuransi],
-      } = await findAsuransiById(id);
+        rows: [findPeserta],
+      } = await findPesertaById(id);
 
-      if (findAsuransi) {
-        response(res, 200, true, result.rows, 'get asuransi success');
+      if (findPeserta) {
+        response(res, 200, true, result.rows, 'get peserta success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id asuransi not found, check again`
+          `id peserta not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get asuransi failed');
+      response(res, 404, false, error, 'get peserta failed');
     }
   },
   edit: async (req, res, next) => {
@@ -95,32 +94,32 @@ const asuransiControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findAsuransi],
-      } = await findAsuransiById(id);
+        rows: [findPeserta],
+      } = await findPesertaById(id);
 
-      if (findAsuransi) {
+      if (findPeserta) {
         let data = {
-          nama: req.body.nama,
+          id,
+          id_pasien: req.body.id_pasien,
+          id_asuransi: req.body.id_asuransi,
         };
 
-        console.log(data);
-
-        await editAsuransi(data);
-        response(res, 200, true, data, 'edit asuransi success');
+        await editPeserta(data);
+        response(res, 200, true, data, 'edit peserta success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id asuransi not found, check again`
+          `id peserta not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit asuransi failed');
+      response(res, 404, false, error, 'edit peserta failed');
     }
   },
 };
 
-exports.asuransiControllers = asuransiControllers;
+exports.pesertaControllers = pesertaControllers;

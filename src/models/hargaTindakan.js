@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertHargaTindakan = (data) => {
-  const { id, id_klinik, id_daftar_tindakan, harga } = data;
+  const { id, id_klinik, id_daftar_tindakan, harga, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_harga_tindakan 
-        (id, id_klinik, id_daftar_tindakan, harga,
+        (id, id_klinik, id_daftar_tindakan, harga, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', '${harga}', 
+        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', ${harga}, '${is_active}',
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -24,6 +24,7 @@ const insertHargaTindakan = (data) => {
 const allHargaTindakan = ({
   search,
   searchKlinik,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
@@ -31,13 +32,18 @@ const allHargaTindakan = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
+      `SELECT tbl_harga_tindakan.id, 
+          tbl_harga_tindakan.id_klinik, tbl_klinik.nama_klinik,
+          tbl_harga_tindakan.id_daftar_tindakan, tbl_daftar_tindakan.nama,
+        tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
+      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE 
-        tbl_harga_tindakan.harga ILIKE '%${search}%' 
-      AND
-        tbl_harga_tindakan.id_klinik ILIKE '%${searchKlinik}%' 
+        tbl_harga_tindakan.id ILIKE '%${search}%' 
+     
+      
       ORDER BY tbl_harga_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -58,9 +64,14 @@ const countAllHargaTindakan = () => {
 const getHargaTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
+      `SELECT tbl_harga_tindakan.id, 
+          tbl_harga_tindakan.id_klinik, tbl_klinik.nama_klinik,
+          tbl_harga_tindakan.id_daftar_tindakan, tbl_daftar_tindakan.nama,
+        tbl_harga_tindakan.harga, tbl_harga_tindakan.is_active, 
         tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
       FROM tbl_harga_tindakan AS tbl_harga_tindakan
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
+      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE tbl_harga_tindakan.id = '${id}'`,
       (err, result) => {
         if (!err) {
@@ -90,12 +101,12 @@ const findHargaTindakanById = (id) => {
 };
 
 const editHargaTindakan = (data) => {
-  const { id, id_klinik, id_daftar_tindakan, harga } = data;
+  const { id, id_klinik, id_daftar_tindakan, harga, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_harga_tindakan 
           SET
-            id_klinik='${id_klinik}', id_daftar_tindakan='${id_daftar_tindakan}', harga='${harga}', 
+            id_klinik='${id_klinik}', id_daftar_tindakan='${id_daftar_tindakan}', harga=${harga}, is_active=1, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -109,13 +120,15 @@ const editHargaTindakan = (data) => {
   );
 };
 
-const getHargaTindakanByIdKlinik = ({ id_klinik }) => {
+const editHargaTindakanActivate = (data) => {
+  const { id, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_tindakan.id, tbl_harga_tindakan.id_klinik, tbl_harga_tindakan.id_daftar_tindakan, tbl_harga_tindakan.harga,
-        tbl_harga_tindakan.created_at, tbl_harga_tindakan.updated_at
-      FROM tbl_harga_tindakan AS tbl_harga_tindakan
-      WHERE tbl_harga_tindakan.id_klinik = '${id_klinik}'`,
+      `UPDATE tbl_harga_tindakan 
+          SET
+            is_active='${is_active}', 
+            updated_at=NOW()
+          WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -127,11 +140,31 @@ const getHargaTindakanByIdKlinik = ({ id_klinik }) => {
   );
 };
 
-const findHargaTindakanByIdKlinik = (id_klinik) => {
+const editHargaTindakanArchive = (data) => {
+  const { id, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_harga_tindakan WHERE id_klinik = '${id_klinik}'
-           `,
+      `UPDATE tbl_harga_tindakan 
+          SET
+            is_active='${is_active}', 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const deleteHargaTindakan = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_harga_tindakan WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -150,6 +183,7 @@ module.exports = {
   getHargaTindakanById,
   findHargaTindakanById,
   editHargaTindakan,
-  getHargaTindakanByIdKlinik,
-  findHargaTindakanByIdKlinik,
+  editHargaTindakanActivate,
+  editHargaTindakanArchive,
+  deleteHargaTindakan,
 };

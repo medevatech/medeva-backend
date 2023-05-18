@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertDaftarTindakan = (data) => {
-  const { id, id_tindakan, nama, is_active } = data;
+  const { id, nama, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_daftar_tindakan 
-        (id, id_tindakan, nama, is_active,
+        (id,  nama, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_tindakan}', '${nama}', '${is_active}', 
+        ('${id}', '${nama}', '${is_active}', 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -23,7 +23,7 @@ const insertDaftarTindakan = (data) => {
 
 const allDaftarTindakan = ({
   search,
-  searchKlinik,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
@@ -31,12 +31,14 @@ const allDaftarTindakan = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.nama, 
         tbl_daftar_tindakan.is_active, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
       WHERE
         tbl_daftar_tindakan.nama ILIKE '%${search}%' 
+      AND
+        tbl_daftar_tindakan.is_active ILIKE '%${searchStatus}%'
       ORDER BY tbl_daftar_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -57,7 +59,7 @@ const countAllDaftarTindakan = () => {
 const getDaftarTindakanById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.id_tindakan, tbl_daftar_tindakan.nama, 
+      `SELECT tbl_daftar_tindakan.id, tbl_daftar_tindakan.nama, 
         tbl_daftar_tindakan.is_active, 
         tbl_daftar_tindakan.created_at, tbl_daftar_tindakan.updated_at
       FROM tbl_daftar_tindakan AS tbl_daftar_tindakan
@@ -90,12 +92,12 @@ const findDaftarTindakanById = (id) => {
 };
 
 const editDaftarTindakan = (data) => {
-  const { id, id_tindakan, nama } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_daftar_tindakan 
           SET
-            id_tindakan='${id_tindakan}', nama='${nama}', 
+            nama='${nama}', 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -149,6 +151,22 @@ const editDaftarTindakanArchive = (data) => {
   );
 };
 
+const deleteDaftarTindakan = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_daftar_tindakan WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertDaftarTindakan,
   allDaftarTindakan,
@@ -158,4 +176,5 @@ module.exports = {
   editDaftarTindakan,
   editDaftarTindakanActivate,
   editDaftarTindakanArchive,
+  deleteDaftarTindakan,
 };

@@ -8,6 +8,7 @@ const {
   editDaftarTindakan,
   editDaftarTindakanActivate,
   editDaftarTindakanArchive,
+  deleteDaftarTindakan,
 } = require(`../models/daftarTindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,7 +17,6 @@ const daftarTindakanControllers = {
     try {
       let data = {
         id: uuidv4(),
-        id_tindakan: req.body.id_tindakan,
         nama: req.body.nama,
         is_active: '1',
       };
@@ -35,12 +35,12 @@ const daftarTindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchKlinik = req.query.searchKlinik || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allDaftarTindakan({
         search,
-        searchKlinik,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -112,7 +112,6 @@ const daftarTindakanControllers = {
       if (findDaftarTindakan) {
         let data = {
           id,
-          id_tindakan: req.body.id_tindakan,
           nama: req.body.nama,
         };
 
@@ -190,6 +189,35 @@ const daftarTindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'archive daftar tindakan failed');
+    }
+  },
+  delete: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarTindakan],
+      } = await findDaftarTindakanById(id);
+
+      if (findDaftarTindakan) {
+        let data = {
+          id,
+        };
+
+        await deleteDaftarTindakan(data);
+        response(res, 200, true, data, 'delete daftar tindakan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete daftar tindakan failed');
     }
   },
 };
