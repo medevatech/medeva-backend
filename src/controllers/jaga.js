@@ -41,11 +41,13 @@ const jagaController = {
       const searchName = req.query.searchName || "";
       const searchStatus = req.query.searchStatus || "";
       const searchDivisi = req.query.searchDivisi || "";
+      const searchDivisiName = req.query.searchDivisiName || "";
       const offset = (page - 1) * limit;
       const result = await getJaga({
         searchName,
         searchStatus,
         searchDivisi,
+        searchDivisiName,
         sortBy,
         sortOrder,
         limit,

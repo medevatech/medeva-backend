@@ -24,6 +24,7 @@ const getJaga = ({
   searchName,
   searchStatus,
   searchDivisi,
+  searchDivisiName,
   sortBy,
   sortOrder,
   limit,
@@ -40,6 +41,7 @@ const getJaga = ({
         WHERE kry.nama ILIKE '%${searchName}%'
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
         AND jaga.is_active ILIKE '%${searchStatus}%'
+        AND divisi.tipe ILIKE '%${searchDivisiName}%'
         ORDER BY jaga.${sortBy} ${sortOrder}
         LIMIT ${limit}
         OFFSET ${offset}`,

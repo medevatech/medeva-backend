@@ -54,7 +54,6 @@ const antrianController = {
       const limit = req.query.limit || 10;
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
-      const searchDivisiName = req.query.searchDivisiName || "";
       const searchJaga = req.query.searchJaga || "";
       const searchStatus = req.query.searchStatus || "1";
       const sortBy = req.query.sortBy || "prioritas";
@@ -65,7 +64,6 @@ const antrianController = {
       const result = await getAntrian({
         searchName,
         searchDivisi,
-        searchDivisiName,
         searchJaga,
         searchStatus,
         sortBy,
