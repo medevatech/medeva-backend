@@ -22,7 +22,6 @@ const countJaga = () => {
 
 const getJaga = ({
   searchName,
-  searchNameD,
   searchStatus,
   searchDivisi,
   sortBy,
@@ -40,7 +39,6 @@ const getJaga = ({
         INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
         WHERE kry.nama ILIKE '%${searchName}%'
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
-        AND divisi.tipe ILIKE '%${searchNameD}%'
         AND jaga.is_active ILIKE '%${searchStatus}%'
         ORDER BY jaga.${sortBy} ${sortOrder}
         LIMIT ${limit}
