@@ -6,6 +6,9 @@ const {
   getHargaLayananById,
   findHargaLayananById,
   editHargaLayanan,
+  editHargaLayananActivate,
+  editHargaLayananArchive,
+  deleteHargaLayanan,
 } = require(`../models/hargaLayanan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -17,6 +20,7 @@ const hargaLayananControllers = {
         id_klinik: req.body.id_klinik,
         id_daftar_layanan: req.body.id_daftar_layanan,
         harga: req.body.harga,
+        is_active: '1',
       };
 
       await insertHargaLayanan(data);
@@ -33,10 +37,16 @@ const hargaLayananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
+      const searchStatus = req.query.searchStatus || '';
+      const searchDaftarLayanan = req.query.searchDaftarLayanan || '';
       const offset = (page - 1) * limit;
 
       const result = await allHargaLayanan({
         search,
+        searchKlinik,
+        searchStatus,
+        searchDaftarLayanan,
         sortBy,
         sortOrder,
         limit,
@@ -129,20 +139,22 @@ const hargaLayananControllers = {
       response(res, 404, false, error, 'edit harga layanan failed');
     }
   },
-  delete: async (req, res) => {
+  editActivate: async (req, res, next) => {
     try {
       const id = req.params.id;
-
-      const result = await getHargaLayananById({
-        id,
-      });
 
       const {
         rows: [findHargaLayanan],
       } = await findHargaLayananById(id);
 
       if (findHargaLayanan) {
-        response(res, 200, true, result.rows, 'get harga layanan success');
+        let data = {
+          id,
+          is_active: '1',
+        };
+
+        await editHargaLayananActivate(data);
+        response(res, 200, true, data, 'activate harga layanan success');
       } else {
         return response(
           res,
@@ -154,7 +166,66 @@ const hargaLayananControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get harga layanan failed');
+      response(res, 404, false, error, 'activate harga layanan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findHargaLayanan],
+      } = await findHargaLayananById(id);
+
+      if (findHargaLayanan) {
+        let data = {
+          id,
+          is_active: '0',
+        };
+
+        await editHargaLayananArchive(data);
+        response(res, 200, true, data, 'archive harga layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id harga layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive harga layanan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findHargaLayanan],
+      } = await findHargaLayananById(id);
+
+      if (findHargaLayanan) {
+        let data = {
+          id,
+        };
+
+        await deleteHargaLayanan(data);
+        response(res, 200, true, data, 'delete harga layanan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id harga layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete harga layanan failed');
     }
   },
 };
