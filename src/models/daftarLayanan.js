@@ -45,7 +45,7 @@ const getDaftarLayanan = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT dl.id, dl.nama
+      `SELECT dl.id, dl.nama, dl.is_active, dl.created_at, dl.updated_at
         FROM tbl_daftar_layanan as dl 
         WHERE dl.nama ILIKE ('%${searchName}%') AND CAST(dl.is_active AS TEXT)  ILIKE '%${searchStatus}%'  ORDER BY dl.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
@@ -63,7 +63,7 @@ const getDaftarLayanan = ({
 const getDaftarLayananById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT dl.id,  dl.nama,
+      `SELECT dl.id, dl.nama, dl.is_active, dl.created_at, dl.updated_at
       FROM tbl_daftar_layanan as dl 
       WHERE dl.id = '${id}'`,
       (err, res) => {
