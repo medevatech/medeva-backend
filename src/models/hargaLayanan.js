@@ -26,7 +26,7 @@ const allHargaLayanan = ({ search, sortBy, sortOrder, limit, offset }) => {
     Pool.query(
       `SELECT tbl_harga_layanan.id, 
         tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
-        tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama_layanan,
+        tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
         tbl_harga_layanan.harga,
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
@@ -55,7 +55,7 @@ const getHargaLayananById = ({ id }) => {
     Pool.query(
       `SELECT tbl_harga_layanan.id, 
         tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
-        tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama_layanan,
+        tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
         tbl_harga_layanan.harga,
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
