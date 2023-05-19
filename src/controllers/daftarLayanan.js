@@ -1,4 +1,4 @@
-const { response } = require("../middleware/common");
+const { response } = require('../middleware/common');
 const {
   createDaftarLayanan,
   findDaftarLayanan,
@@ -9,49 +9,45 @@ const {
   archiveDaftarLayanan,
   activateDaftarLayanan,
   deleteDaftarLayanan,
-} = require("../models/daftarLayanan");
+} = require('../models/daftarLayanan');
 
 const daftarLayananController = {
   create: async (req, res, next) => {
     let {
       rows: [divisi],
-    } = await findDaftarLayanan(req.body.nama_layanan);
+    } = await findDaftarLayanan(req.body.nama);
     if (divisi) {
-      response(res, 400, false, null, "Name of service is already used");
+      response(res, 400, false, null, 'Name of service is already used');
     }
     try {
-      let digits = "0123456789";
-      let id = "DLY";
+      let digits = '0123456789';
+      let id = 'DLY';
       for (let i = 0; i < 6; i++) {
         id += digits[Math.floor(Math.random() * 10)];
       }
       const data = {
         id,
-        id_klinik: req.body.id_klinik,
-        nama_layanan: req.body.nama_layanan,
-        harga_layanan: req.body.harga_layanan,
+        nama: req.body.nama,
       };
       await createDaftarLayanan(data);
-      response(res, 200, true, data, "Create service success");
+      response(res, 200, true, data, 'Create service success');
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Create service failed");
+      response(res, 400, false, err, 'Create service failed');
     }
   },
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "nama_layanan";
-      const sortOrder = req.query.sortOrder || "desc";
-      const searchName = req.query.searchName || "";
-      const searchStatus = req.query.searchStatus || "";
-      const searchKlinik = req.query.searchKlinik || "";
+      const sortBy = req.query.sortBy || 'nama';
+      const sortOrder = req.query.sortOrder || 'desc';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
       const result = await getDaftarLayanan({
         searchName,
         searchStatus,
-        searchKlinik,
         sortBy,
         sortOrder,
         limit,
@@ -73,65 +69,61 @@ const daftarLayananController = {
         200,
         true,
         result.rows,
-        "Get service data success",
+        'Get service data success',
         pagination
       );
     } catch (err) {
-      console.log("Get service data error", err);
-      response(res, 400, false, null, "Get service data failed");
+      console.log('Get service data error', err);
+      response(res, 400, false, null, 'Get service data failed');
     }
   },
   getById: async (req, res, next) => {
     try {
       const result = await getDaftarLayananById(req.params.id);
-      response(res, 200, true, result.rows, "Get service data by ID success");
+      response(res, 200, true, result.rows, 'Get service data by ID success');
     } catch (err) {
-      console.log("Get service data by ID error", err);
-      response(res, 400, false, err, "Get service data by ID failed");
+      console.log('Get service data by ID error', err);
+      response(res, 400, false, err, 'Get service data by ID failed');
     }
   },
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const id_klinik = req.body.id_klinik;
-      const nama_layanan = req.body.nama_layanan;
-      const harga_layanan = req.body.harga_layanan;
+      const nama = req.body.nama;
       const data = {
         id,
-        id_klinik,
-        nama_layanan,
-        harga_layanan,
+        nama,
       };
       await updateDaftarLayanan(data);
-      response(res, 200, true, data, "Update service data success");
+      response(res, 200, true, data, 'Update service data success');
     } catch (err) {
-      console.log("Update service data error", err);
-      response(res, 400, false, "Update service data failed");
+      console.log('Update service data error', err);
+      response(res, 400, false, 'Update service data failed');
     }
   },
   archive: async (req, res, next) => {
     try {
       await archiveDaftarLayanan(req.params.id);
-      return response(res, 200, true, null, "Archive service success");
+      return response(res, 200, true, null, 'Archive service success');
     } catch (err) {
-      return response(res, 400, false, err, "Archive service failed");
+      return response(res, 400, false, err, 'Archive service failed');
     }
   },
   activate: async (req, res, next) => {
     try {
       await activateDaftarLayanan(req.params.id);
-      return response(res, 200, true, null, "Activate service success");
+      return response(res, 200, true, null, 'Activate service success');
     } catch (err) {
-      return response(res, 400, false, err, "Activate service failed");
+      return response(res, 400, false, err, 'Activate service failed');
     }
   },
   delete: async (req, res, next) => {
     try {
       await deleteDaftarLayanan(req.params.id);
-      response(res, 200, true, null, "Delete service success");
+      response(res, 200, true, null, 'Delete service success');
     } catch (err) {
-      console.log("Delete service error", err);
-      response(res, 400, false, err, "Delete service failed");
+      console.log('Delete service error', err);
+      response(res, 400, false, err, 'Delete service failed');
     }
   },
 };

@@ -1,9 +1,9 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
 
-const findDaftarLayanan = (nama_layanan) => {
+const findDaftarLayanan = (nama) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * FROM tbl_daftar_layanan WHERE nama_layanan = '${nama_layanan}'`,
+      `SELECT * FROM tbl_daftar_layanan WHERE nama = '${nama}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -20,10 +20,10 @@ const countDaftarLayanan = () => {
 };
 
 const createDaftarLayanan = (data) => {
-  const { id, id_klinik, nama_layanan, harga_layanan } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_daftar_layanan (id, id_klinik, nama_layanan, harga_layanan, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${nama_layanan}', '${harga_layanan}', '1', NOW(), NOW())`,
+      `INSERT INTO tbl_daftar_layanan (id,  nama, is_active, created_at, updated_at) VALUES('${id}',  '${nama}', 1, NOW(), NOW())`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -38,7 +38,6 @@ const createDaftarLayanan = (data) => {
 const getDaftarLayanan = ({
   searchName,
   searchStatus,
-  searchKlinik,
   sortBy,
   sortOrder,
   limit,
@@ -46,11 +45,9 @@ const getDaftarLayanan = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT dl.id, dl.id_klinik, dl.nama_layanan, dl.harga_layanan, klinik.nama_klinik
+      `SELECT dl.id, dl.nama
         FROM tbl_daftar_layanan as dl 
-        INNER JOIN tbl_klinik as klinik 
-        ON dl.id_klinik = klinik.id
-        WHERE dl.nama_layanan ILIKE ('%${searchName}%') AND dl.is_active ILIKE '%${searchStatus}%' AND dl.id_klinik ILIKE '%${searchKlinik}%' ORDER BY dl.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE dl.nama ILIKE ('%${searchName}%') AND CAST(dl.is_active AS TEXT)  ILIKE '%${searchStatus}%'  ORDER BY dl.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
@@ -66,10 +63,8 @@ const getDaftarLayanan = ({
 const getDaftarLayananById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT dl.id, dl.id_klinik, dl.nama_layanan, dl.harga_layanan, klinik.nama_klinik
+      `SELECT dl.id,  dl.nama,
       FROM tbl_daftar_layanan as dl 
-      INNER JOIN tbl_klinik as klinik 
-      ON dl.id_klinik = klinik.id
       WHERE dl.id = '${id}'`,
       (err, res) => {
         if (!err) {
@@ -83,11 +78,11 @@ const getDaftarLayananById = (id) => {
 };
 
 const updateDaftarLayanan = (data) => {
-  const { id, id_klinik, nama_layanan, harga_layanan } = data;
+  const { id, nama } = data;
   return new Promise((resolve, reject) => {
     pool.query(
       `UPDATE tbl_daftar_layanan
-                SET id_klinik = '${id_klinik}', nama_layanan = '${nama_layanan}', harga_layanan = '${harga_layanan}'
+                SET nama = '${nama}',
                 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {
