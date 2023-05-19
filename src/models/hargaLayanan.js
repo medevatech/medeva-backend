@@ -35,12 +35,12 @@ const allHargaLayanan = ({
     Pool.query(
       `SELECT tbl_harga_layanan.id, 
           tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
-          tbl_harga_layanan.id_daftar_layanan, tbl_daftar_tindakan.nama,
+          tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
         tbl_harga_layanan.harga, tbl_harga_layanan.is_active, 
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
-      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_tindakan.id
+      INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_layanan.id
       WHERE 
         tbl_harga_layanan.id ILIKE '%${search}%' 
       AND
@@ -48,7 +48,7 @@ const allHargaLayanan = ({
       AND
         CAST(tbl_harga_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND
-        tbl_daftar_tindakan.nama ILIKE '%${searchDaftarLayanan}%' 
+        tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%' 
       ORDER BY tbl_harga_layanan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -71,12 +71,12 @@ const getHargaLayananById = ({ id }) => {
     Pool.query(
       `SELECT tbl_harga_layanan.id, 
           tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
-          tbl_harga_layanan.id_daftar_layanan, tbl_daftar_tindakan.nama,
+          tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
         tbl_harga_layanan.harga, tbl_harga_layanan.is_active, 
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
-      INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_tindakan.id
+      INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_layanan.id
       WHERE tbl_harga_layanan.id = '${id}'`,
       (err, result) => {
         if (!err) {
