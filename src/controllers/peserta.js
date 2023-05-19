@@ -32,10 +32,14 @@ const pesertaControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchAsuransi = req.query.searchAsuransi || '';
       const offset = (page - 1) * limit;
 
       const result = await allPeserta({
         search,
+        searchPasien,
+        searchAsuransi,
         sortBy,
         sortOrder,
         limit,
