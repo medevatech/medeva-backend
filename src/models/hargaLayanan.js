@@ -131,7 +131,7 @@ const editHargaLayananActivate = (data) => {
     Pool.query(
       `UPDATE tbl_harga_layanan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -151,7 +151,7 @@ const editHargaLayananArchive = (data) => {
     Pool.query(
       `UPDATE tbl_harga_layanan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {

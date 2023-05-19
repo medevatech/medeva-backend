@@ -150,7 +150,7 @@ const hargaLayananControllers = {
       if (findHargaLayanan) {
         let data = {
           id,
-          is_active: '1',
+          is_active: 1,
         };
 
         await editHargaLayananActivate(data);
@@ -180,7 +180,7 @@ const hargaLayananControllers = {
       if (findHargaLayanan) {
         let data = {
           id,
-          is_active: '0',
+          is_active: 0,
         };
 
         await editHargaLayananArchive(data);
