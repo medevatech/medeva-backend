@@ -24,15 +24,15 @@ const insertSkrining = (data) => {
 const allSkrining = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_skrining.id, tbl_skrining.id_pasien, 
-              tbl_pasien.nama_lengkap AS nama_lengkap, tbl_pasien.jenis_kelamin AS jenis_kelamin, tbl_pasien.nomor_kitas AS nomor_kitas, tbl_pasien.nomor_hp AS nomor_hp,
-          to_char( tbl_skrining.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_skrining.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_skrining AS tbl_skrining
-        INNER JOIN tbl_pasien AS tbl_pasien ON tbl_skrining.id_pasien = tbl_pasien.id
-        WHERE tbl_pasien.nama_lengkap
-        ILIKE '%${search}%' ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
-        LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT tbl_skrining.id, 
+        tbl_skrining.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap,
+        tbl_skrining.created_at ,
+        tbl_skrining.updated_at 
+      FROM tbl_skrining AS tbl_skrining
+      INNER JOIN tbl_pasien AS tbl_pasien ON tbl_skrining.id_pasien = tbl_pasien.id
+      WHERE tbl_pasien.nama_lengkap
+      ILIKE '%${search}%' ORDER BY tbl_skrining.${sortBy} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
           resolve(result);
