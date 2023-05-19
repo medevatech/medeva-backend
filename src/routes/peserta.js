@@ -9,5 +9,6 @@ router.post(`/`, uploaded.array(), pesertaControllers.add);
 router.get(`/`, pesertaControllers.getAll);
 router.get(`/:id`, pesertaControllers.getById);
 router.put(`/:id`, uploaded.array(), pesertaControllers.edit);
+router.get(`/pasien/:id_pasien`, pesertaControllers.getByIdPasien);
 
 module.exports = router;

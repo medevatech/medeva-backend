@@ -39,12 +39,14 @@ const hargaTindakanControllers = {
       const search = req.query.search || '';
       const searchKlinik = req.query.searchKlinik || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchDaftarTindakan = req.query.searchDaftarTindakan || '';
       const offset = (page - 1) * limit;
 
       const result = await allHargaTindakan({
         search,
         searchKlinik,
         searchStatus,
+        searchDaftarTindakan,
         sortBy,
         sortOrder,
         limit,

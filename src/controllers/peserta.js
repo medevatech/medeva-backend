@@ -6,6 +6,8 @@ const {
   getPesertaById,
   findPesertaById,
   editPeserta,
+  getPesertaByIdPasien,
+  findPesertaByIdPasien,
 } = require(`../models/peserta`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -32,10 +34,14 @@ const pesertaControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchAsuransi = req.query.searchAsuransi || '';
       const offset = (page - 1) * limit;
 
       const result = await allPeserta({
         search,
+        searchPasien,
+        searchAsuransi,
         sortBy,
         sortOrder,
         limit,
@@ -118,6 +124,34 @@ const pesertaControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit peserta failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getPesertaByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findPasien],
+      } = await findPesertaByIdPasien(id_pasien);
+
+      if (findPasien) {
+        response(res, 200, true, result.rows, 'get peserta success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get peserta failed');
     }
   },
 };
