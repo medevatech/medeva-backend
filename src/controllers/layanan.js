@@ -1,51 +1,53 @@
-const { response } = require("../middleware/common");
+const { response } = require(`../middleware/common`);
 const {
-  createLayanan,
-  findLayanan,
-  countLayanan,
-  getLayanan,
+  insertLayanan,
+  allLayanan,
+  countAllLayanan,
   getLayananById,
-  deleteLayanan,
-} = require("../models/layanan");
+  findLayananById,
+  editLayanan,
+  getLayananByIdKunjungan,
+  findLayananByIdKunjungan,
+} = require(`../models/layanan`);
+const { v4: uuidv4 } = require('uuid');
 
-const layananController = {
-  create: async (req, res, next) => {
+const layananControllers = {
+  add: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "LYN";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
-      const data = {
-        id,
+      let data = {
+        id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
-        id_daftar_layanan: req.body.id_daftar_layanan,
+        catatan: req.body.catatan,
       };
-      await createLayanan(data);
-      response(res, 200, true, data, "Create layanan success");
-    } catch (err) {
-      console.log(err);
-      response(res, 400, false, err, "Create layanan failed");
+
+      await insertLayanan(data);
+      response(res, 200, true, data, 'insert layanan success');
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'insert layanan failed');
     }
   },
-  get: async (req, res, next) => {
+  getAll: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "id";
-      const sortOrder = req.query.sortOrder || "desc";
-      const searchId = req.query.searchId || "";
+      const limit = parseInt(req.query.limit) || 5;
+      const sortBy = req.query.sortBy || 'created_at';
+      const sortOrder = req.query.sortOrder || 'DESC';
+      const search = req.query.search || '';
       const offset = (page - 1) * limit;
-      const result = await getLayanan({
-        searchId,
+
+      const result = await allLayanan({
+        search,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
+
       const {
         rows: [count],
-      } = await countLayanan();
+      } = await countAllLayanan();
+
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -54,56 +56,100 @@ const layananController = {
         totalData,
         totalPage,
       };
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        "Get layanan data success",
-        pagination
-      );
-    } catch (err) {
-      console.log("Get layanan data error", err);
-      response(res, 400, false, null, "Get layanan data failed");
+
+      response(res, 200, true, result.rows, 'get layanan success', pagination);
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get layanan failed');
     }
   },
-  getById: async (req, res, next) => {
+  getById: async (req, res) => {
     try {
-      const result = await getLayananById(req.params.id);
-      response(res, 200, true, result.rows, "Get layanan data by ID success");
-    } catch (err) {
-      console.log("Get layanan data by ID error", err);
-      response(res, 400, false, err, "Get layanan data by ID failed");
+      const id = req.params.id;
+
+      const result = await getLayananById({
+        id,
+      });
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananById(id);
+
+      if (findLayanan) {
+        response(res, 200, true, result.rows, 'get layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get layanan failed');
     }
   },
-  //   update: async (req, res, next) => {
-  //     try {
-  //       const id = req.params.id;
-  //       const id_klinik = req.body.id_klinik;
-  //       const nama_layanan = req.body.nama_layanan;
-  //       const harga_layanan = req.body.harga_layanan;
-  //       const data = {
-  //         id,
-  //         id_klinik,
-  //         nama_layanan,
-  //         harga_layanan,
-  //       };
-  //       await updateDaftarLayanan(data);
-  //       response(res, 200, true, data, "Update service data success");
-  //     } catch (err) {
-  //       console.log("Update service data error", err);
-  //       response(res, 400, false, "Update service data failed");
-  //     }
-  //   },
-  delete: async (req, res, next) => {
+  edit: async (req, res, next) => {
     try {
-      await deleteLayanan(req.params.id);
-      response(res, 200, true, null, "Delete layanan success");
-    } catch (err) {
-      console.log("Delete layanan error", err);
-      response(res, 400, false, err, "Delete layanan failed");
+      const id = req.params.id;
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananById(id);
+
+      if (findLayanan) {
+        let data = {
+          id,
+          id_kunjungan: req.body.id_kunjungan,
+          catatan: req.body.catatan,
+        };
+
+        await editLayanan(data);
+        response(res, 200, true, data, 'edit layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'edit layanan failed');
+    }
+  },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getLayananByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findLayananKunjungan],
+      } = await findLayananByIdKunjungan(id_kunjungan);
+
+      if (findLayananKunjungan) {
+        response(res, 200, true, result.rows, 'get layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get layanan failed');
     }
   },
 };
 
-exports.layananController = layananController;
+exports.layananControllers = layananControllers;
