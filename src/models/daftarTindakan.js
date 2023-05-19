@@ -8,7 +8,7 @@ const insertDaftarTindakan = (data) => {
         (id,  nama, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${nama}', '${is_active}', 
+        ('${id}', '${nama}', ${is_active}, 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -38,7 +38,7 @@ const allDaftarTindakan = ({
       WHERE
         tbl_daftar_tindakan.nama ILIKE '%${search}%' 
       AND
-        tbl_daftar_tindakan.is_active ILIKE '%${searchStatus}%'
+        CAST(tbl_daftar_tindakan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_daftar_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -117,7 +117,7 @@ const editDaftarTindakanActivate = (data) => {
     Pool.query(
       `UPDATE tbl_daftar_tindakan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -137,7 +137,7 @@ const editDaftarTindakanArchive = (data) => {
     Pool.query(
       `UPDATE tbl_daftar_tindakan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {

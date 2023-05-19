@@ -18,7 +18,7 @@ const daftarTindakanControllers = {
       let data = {
         id: uuidv4(),
         nama: req.body.nama,
-        is_active: '1',
+        is_active: 1,
       };
 
       await insertDaftarTindakan(data);
@@ -142,7 +142,7 @@ const daftarTindakanControllers = {
       if (findDaftarTindakan) {
         let data = {
           id,
-          is_active: '1',
+          is_active: 1,
         };
 
         await editDaftarTindakanActivate(data);
@@ -172,7 +172,7 @@ const daftarTindakanControllers = {
       if (findDaftarTindakan) {
         let data = {
           id,
-          is_active: '0',
+          is_active: 0,
         };
 
         await editDaftarTindakanArchive(data);
