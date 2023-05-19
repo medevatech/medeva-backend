@@ -1,61 +1,56 @@
-const { response } = require('../middleware/common');
+const { response } = require(`../middleware/common`);
 const {
-  createDaftarLayanan,
-  findDaftarLayanan,
-  countDaftarLayanan,
-  getDaftarLayanan,
+  insertDaftarLayanan,
+  allDaftarLayanan,
+  countAllDaftarLayanan,
   getDaftarLayananById,
-  updateDaftarLayanan,
-  archiveDaftarLayanan,
-  activateDaftarLayanan,
+  findDaftarLayananById,
+  editDaftarLayanan,
+  editDaftarLayananActivate,
+  editDaftarLayananArchive,
   deleteDaftarLayanan,
-} = require('../models/daftarLayanan');
+} = require(`../models/daftarLayanan`);
+const { v4: uuidv4 } = require('uuid');
 
-const daftarLayananController = {
-  create: async (req, res, next) => {
-    let {
-      rows: [divisi],
-    } = await findDaftarLayanan(req.body.nama);
-    if (divisi) {
-      response(res, 400, false, null, 'Name of service is already used');
-    }
+const daftarLayananControllers = {
+  add: async (req, res, next) => {
     try {
-      let digits = '0123456789';
-      let id = 'DLY';
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
-      const data = {
-        id,
+      let data = {
+        id: uuidv4(),
         nama: req.body.nama,
+        is_active: 1,
       };
-      await createDaftarLayanan(data);
-      response(res, 200, true, data, 'Create service success');
-    } catch (err) {
-      console.log(err);
-      response(res, 400, false, err, 'Create service failed');
+
+      await insertDaftarLayanan(data);
+      response(res, 200, true, data, 'insert daftar layanan success');
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'insert daftar layanan failed');
     }
   },
-  get: async (req, res, next) => {
+  getAll: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || 'nama';
-      const sortOrder = req.query.sortOrder || 'desc';
-      const searchName = req.query.searchName || '';
+      const limit = parseInt(req.query.limit) || 5;
+      const sortBy = req.query.sortBy || 'created_at';
+      const sortOrder = req.query.sortOrder || 'DESC';
+      const search = req.query.search || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
-      const result = await getDaftarLayanan({
-        searchName,
+
+      const result = await allDaftarLayanan({
+        search,
         searchStatus,
         sortBy,
         sortOrder,
         limit,
         offset,
       });
+
       const {
         rows: [count],
-      } = await countDaftarLayanan();
+      } = await countAllDaftarLayanan();
+
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -64,68 +59,167 @@ const daftarLayananController = {
         totalData,
         totalPage,
       };
+
       response(
         res,
         200,
         true,
         result.rows,
-        'Get service data success',
+        'get daftar layanan success',
         pagination
       );
-    } catch (err) {
-      console.log('Get service data error', err);
-      response(res, 400, false, null, 'Get service data failed');
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get daftar layanan failed');
     }
   },
-  getById: async (req, res, next) => {
-    try {
-      const result = await getDaftarLayananById(req.params.id);
-      response(res, 200, true, result.rows, 'Get service data by ID success');
-    } catch (err) {
-      console.log('Get service data by ID error', err);
-      response(res, 400, false, err, 'Get service data by ID failed');
-    }
-  },
-  update: async (req, res, next) => {
+  getById: async (req, res) => {
     try {
       const id = req.params.id;
-      const nama = req.body.nama;
-      const data = {
+
+      const result = await getDaftarLayananById({
         id,
-        nama,
-      };
-      await updateDaftarLayanan(data);
-      response(res, 200, true, data, 'Update service data success');
-    } catch (err) {
-      console.log('Update service data error', err);
-      response(res, 400, false, 'Update service data failed');
+      });
+
+      const {
+        rows: [findDaftarLayanan],
+      } = await findDaftarLayananById(id);
+
+      if (findDaftarLayanan) {
+        response(res, 200, true, result.rows, 'get daftar layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get daftar layanan failed');
     }
   },
-  archive: async (req, res, next) => {
+  edit: async (req, res, next) => {
     try {
-      await archiveDaftarLayanan(req.params.id);
-      return response(res, 200, true, null, 'Archive service success');
-    } catch (err) {
-      return response(res, 400, false, err, 'Archive service failed');
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarLayanan],
+      } = await findDaftarLayananById(id);
+
+      if (findDaftarLayanan) {
+        let data = {
+          id,
+          nama: req.body.nama,
+        };
+
+        await editDaftarLayanan(data);
+        response(res, 200, true, data, 'edit daftar layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'edit daftar layanan failed');
     }
   },
-  activate: async (req, res, next) => {
+  editActivate: async (req, res, next) => {
     try {
-      await activateDaftarLayanan(req.params.id);
-      return response(res, 200, true, null, 'Activate service success');
-    } catch (err) {
-      return response(res, 400, false, err, 'Activate service failed');
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarLayanan],
+      } = await findDaftarLayananById(id);
+
+      if (findDaftarLayanan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editDaftarLayananActivate(data);
+        response(res, 200, true, data, 'activate daftar layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'activate daftar layanan failed');
     }
   },
-  delete: async (req, res, next) => {
+  editArchive: async (req, res, next) => {
     try {
-      await deleteDaftarLayanan(req.params.id);
-      response(res, 200, true, null, 'Delete service success');
-    } catch (err) {
-      console.log('Delete service error', err);
-      response(res, 400, false, err, 'Delete service failed');
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarLayanan],
+      } = await findDaftarLayananById(id);
+
+      if (findDaftarLayanan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editDaftarLayananArchive(data);
+        response(res, 200, true, data, 'archive daftar layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive daftar layanan failed');
+    }
+  },
+  delete: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDaftarLayanan],
+      } = await findDaftarLayananById(id);
+
+      if (findDaftarLayanan) {
+        let data = {
+          id,
+        };
+
+        await deleteDaftarLayanan(data);
+        response(res, 200, true, data, 'delete daftar layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id daftar layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete daftar layanan failed');
     }
   },
 };
 
-exports.daftarLayananController = daftarLayananController;
+exports.daftarLayananControllers = daftarLayananControllers;

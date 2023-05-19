@@ -1,13 +1,24 @@
-const express = require("express");
+const express = require(`express`);
 const router = express.Router();
-const { daftarLayananController } = require("../controllers/daftarLayanan");
+const { daftarLayananControllers } = require(`../controllers/daftarLayanan`);
+const { protect } = require('../middleware/auth');
+let multer = require('multer');
+let uploaded = multer();
 
-router.post("/", daftarLayananController.create);
-router.get("/", daftarLayananController.get);
-router.get("/:id", daftarLayananController.getById);
-router.put("/:id", daftarLayananController.update);
-router.put("/archive/:id", daftarLayananController.archive);
-router.put("/activate/:id", daftarLayananController.activate);
-router.delete("/:id", daftarLayananController.delete);
+router.post(`/`, uploaded.array(), daftarLayananControllers.add);
+router.get(`/`, daftarLayananControllers.getAll);
+router.get(`/:id`, daftarLayananControllers.getById);
+router.put(`/:id`, uploaded.array(), daftarLayananControllers.edit);
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  daftarLayananControllers.editActivate
+);
+router.put(
+  `/archive/:id`,
+  uploaded.array(),
+  daftarLayananControllers.editArchive
+);
+router.delete('/:id', daftarLayananControllers.delete);
 
 module.exports = router;

@@ -1,154 +1,180 @@
-const pool = require('../config/db');
+const Pool = require('../config/db');
 
-const findDaftarLayanan = (nama) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `SELECT * FROM tbl_daftar_layanan WHERE nama = '${nama}'`,
-      (err, res) => {
+const insertDaftarLayanan = (data) => {
+  const { id, nama, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `INSERT INTO tbl_daftar_layanan 
+        (id,  nama, is_active,
+            created_at, updated_at) 
+        VALUES
+        ('${id}', '${nama}', ${is_active}, 
+            NOW(), NOW())`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const countDaftarLayanan = () => {
-  return pool.query(`SELECT COUNT(*) AS total FROM tbl_daftar_layanan`);
-};
-
-const createDaftarLayanan = (data) => {
-  const { id, nama } = data;
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `INSERT INTO tbl_daftar_layanan (id,  nama, is_active, created_at, updated_at) VALUES('${id}',  '${nama}', 1, NOW(), NOW())`,
-      (err, res) => {
-        if (!err) {
-          resolve(res);
-        } else {
-          reject(err);
-        }
-      }
-    );
-  });
-};
-
-const getDaftarLayanan = ({
-  searchName,
+const allDaftarLayanan = ({
+  search,
   searchStatus,
   sortBy,
   sortOrder,
   limit,
   offset,
 }) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `SELECT dl.id, dl.nama, dl.is_active, dl.created_at, dl.updated_at
-        FROM tbl_daftar_layanan as dl 
-        WHERE dl.nama ILIKE ('%${searchName}%') AND CAST(dl.is_active AS TEXT)  ILIKE '%${searchStatus}%'  ORDER BY dl.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
-      `,
-      (err, res) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_daftar_layanan.id, tbl_daftar_layanan.nama, 
+        tbl_daftar_layanan.is_active, 
+        tbl_daftar_layanan.created_at, tbl_daftar_layanan.updated_at
+      FROM tbl_daftar_layanan AS tbl_daftar_layanan
+      WHERE
+        tbl_daftar_layanan.nama ILIKE '%${search}%' 
+      AND
+        CAST(tbl_daftar_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY tbl_daftar_layanan.${sortBy} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const getDaftarLayananById = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `SELECT dl.id, dl.nama, dl.is_active, dl.created_at, dl.updated_at
-      FROM tbl_daftar_layanan as dl 
-      WHERE dl.id = '${id}'`,
-      (err, res) => {
+const countAllDaftarLayanan = () => {
+  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_daftar_layanan`);
+};
+
+const getDaftarLayananById = ({ id }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_daftar_layanan.id, tbl_daftar_layanan.nama, 
+        tbl_daftar_layanan.is_active, 
+        tbl_daftar_layanan.created_at, tbl_daftar_layanan.updated_at
+      FROM tbl_daftar_layanan AS tbl_daftar_layanan
+      WHERE tbl_daftar_layanan.id = '${id}'`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const updateDaftarLayanan = (data) => {
+const findDaftarLayananById = (id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_daftar_layanan WHERE id = '${id}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const editDaftarLayanan = (data) => {
   const { id, nama } = data;
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_daftar_layanan
-                SET nama = '${nama}',
-                WHERE id = '${id}'`,
-      (err, res) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_daftar_layanan 
+          SET
+            nama='${nama}', 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const archiveDaftarLayanan = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_daftar_layanan SET is_active = 0 WHERE id = '${id}'`,
-      (err, res) => {
+const editDaftarLayananActivate = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_daftar_layanan 
+          SET
+            is_active=${is_active}, 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const activateDaftarLayanan = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_daftar_layanan SET is_active = 1 WHERE id = '${id}'`,
-      (err, res) => {
+const editDaftarLayananArchive = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_daftar_layanan 
+          SET
+            is_active=${is_active}, 
+            updated_at=NOW()
+          WHERE id='${id}'`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
-const deleteDaftarLayanan = (id) => {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `DELETE FROM tbl_daftar_layanan
-                WHERE id = '${id}'`,
-      (err, res) => {
+const deleteDaftarLayanan = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_daftar_layanan WHERE id='${id}'`,
+      (err, result) => {
         if (!err) {
-          resolve(res);
+          resolve(result);
         } else {
           reject(err);
         }
       }
-    );
-  });
+    )
+  );
 };
 
 module.exports = {
-  createDaftarLayanan,
-  findDaftarLayanan,
-  countDaftarLayanan,
-  getDaftarLayanan,
+  insertDaftarLayanan,
+  allDaftarLayanan,
+  countAllDaftarLayanan,
+  findDaftarLayananById,
   getDaftarLayananById,
-  updateDaftarLayanan,
-  archiveDaftarLayanan,
-  activateDaftarLayanan,
+  editDaftarLayanan,
+  editDaftarLayananActivate,
+  editDaftarLayananArchive,
   deleteDaftarLayanan,
 };
