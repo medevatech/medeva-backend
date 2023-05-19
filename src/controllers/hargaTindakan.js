@@ -20,7 +20,7 @@ const hargaTindakanControllers = {
         id_klinik: req.body.id_klinik,
         id_daftar_tindakan: req.body.id_daftar_tindakan,
         harga: req.body.harga,
-        is_active: '1',
+        is_active: 1,
       };
 
       await insertHargaTindakan(data);
@@ -150,7 +150,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: '1',
+          is_active: 1,
         };
 
         await editHargaTindakanActivate(data);
@@ -180,7 +180,7 @@ const hargaTindakanControllers = {
       if (findHargaTindakan) {
         let data = {
           id,
-          is_active: '0',
+          is_active: 0,
         };
 
         await editHargaTindakanArchive(data);

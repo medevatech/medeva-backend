@@ -8,7 +8,7 @@ const insertHargaTindakan = (data) => {
         (id, id_klinik, id_daftar_tindakan, harga, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', ${harga}, '${is_active}',
+        ('${id}', '${id_klinik}', '${id_daftar_tindakan}', ${harga}, ${is_active},
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -131,7 +131,7 @@ const editHargaTindakanActivate = (data) => {
     Pool.query(
       `UPDATE tbl_harga_tindakan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -151,7 +151,7 @@ const editHargaTindakanArchive = (data) => {
     Pool.query(
       `UPDATE tbl_harga_tindakan 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
