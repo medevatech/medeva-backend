@@ -27,7 +27,7 @@ const allHargaLayanan = ({ search, sortBy, sortOrder, limit, offset }) => {
       `SELECT tbl_harga_layanan.id, 
         tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
         tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_harga_layanan.harga,
+        tbl_harga_layanan.harga, tbl_harga_layanan.is_active,
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
@@ -56,7 +56,7 @@ const getHargaLayananById = ({ id }) => {
       `SELECT tbl_harga_layanan.id, 
         tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
         tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_harga_layanan.harga,
+        tbl_harga_layanan.harga, tbl_harga_layanan.is_active,
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
