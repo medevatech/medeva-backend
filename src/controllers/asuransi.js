@@ -100,10 +100,9 @@ const asuransiControllers = {
 
       if (findAsuransi) {
         let data = {
+          id,
           nama: req.body.nama,
         };
-
-        console.log(data);
 
         await editAsuransi(data);
         response(res, 200, true, data, 'edit asuransi success');
