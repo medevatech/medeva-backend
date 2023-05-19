@@ -25,6 +25,7 @@ const allHargaTindakan = ({
   search,
   searchKlinik,
   searchStatus,
+  searchDaftarTindakan,
   sortBy,
   sortOrder,
   limit,
@@ -42,8 +43,12 @@ const allHargaTindakan = ({
       INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
       WHERE 
         tbl_harga_tindakan.id ILIKE '%${search}%' 
-     
-      
+      AND
+        tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+      AND
+        CAST(tbl_harga_tindakan.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      AND
+        tbl_daftar_tindakan.nama ILIKE '%${searchDaftarTindakan}%' 
       ORDER BY tbl_harga_tindakan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
