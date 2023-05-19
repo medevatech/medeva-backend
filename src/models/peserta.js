@@ -120,6 +120,44 @@ const editPeserta = (data) => {
   );
 };
 
+const getPesertaByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_peserta.id, 
+        tbl_peserta.id_pasien, tbl_pasien.nama_lengkap AS nama_pasien,
+        tbl_peserta.id_asuransi, tbl_asuransi.nama  AS nama_asuransi,
+        tbl_peserta.created_at, tbl_peserta.updated_at
+      FROM tbl_peserta AS tbl_peserta
+      INNER JOIN tbl_pasien as tbl_pasien ON tbl_peserta.id_pasien = tbl_pasien.id
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_peserta.id_asuransi = tbl_asuransi.id
+      WHERE tbl_peserta.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findPesertaByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_peserta WHERE id_pasien = '${id_pasien}'
+        `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertPeserta,
   allPeserta,
@@ -127,4 +165,6 @@ module.exports = {
   getPesertaById,
   findPesertaById,
   editPeserta,
+  getPesertaByIdPasien,
+  findPesertaByIdPasien,
 };
