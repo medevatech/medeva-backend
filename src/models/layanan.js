@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
 
 const findLayanan = (id) => {
   return new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ const createLayanan = (data) => {
 const getLayanan = ({ searchId, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT layanan.id, layanan.id_kunjungan, layanan.id_daftar_layanan, dl.nama_layanan, dl.harga_layanan
+      `SELECT layanan.id, layanan.id_kunjungan, layanan.id_daftar_layanan, dl.nama, layanan.is_active, layanan.created_at, layanan.updated_at
         FROM tbl_layanan as layanan 
         INNER JOIN tbl_kunjungan as kunjungan
         ON layanan.id_kunjungan = kunjungan.id INNER JOIN tbl_daftar_layanan as dl ON layanan.id_daftar_layanan = dl.id
@@ -55,7 +55,7 @@ const getLayanan = ({ searchId, sortBy, sortOrder, limit, offset }) => {
 const getLayananById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT layanan.id, layanan.id_kunjungan, layanan.id_daftar_layanan, dl.nama_layanan, dl.harga_layanan
+      `SELECT layanan.id, layanan.id_kunjungan, layanan.id_daftar_layanan, dl.nama, layanan.is_active, layanan.created_at, layanan.updated_at
       FROM tbl_layanan as layanan 
       INNER JOIN tbl_kunjungan as kunjungan
       ON layanan.id_kunjungan = kunjungan.id INNER JOIN tbl_daftar_layanan as dl ON layanan.id_daftar_kunjungan = dl.id
