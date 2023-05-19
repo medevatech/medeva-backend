@@ -44,7 +44,7 @@ const allHargaTindakan = ({
       WHERE 
         tbl_harga_tindakan.id ILIKE '%${search}%' 
       AND
-        tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+        tbl_klinik.id ILIKE '%${searchKlinik}%' 
       AND
         CAST(tbl_harga_tindakan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND
