@@ -9,6 +9,7 @@ router.get("/rest", antrianController.getRest);
 router.get("/now", antrianController.getNow);
 router.get("/next", antrianController.getNext);
 router.put("/:id", antrianController.update);
+router.put("/prioritas/:id", antrianController.updateP);
 router.delete("/:id", antrianController.delete);
 
 module.exports = router;

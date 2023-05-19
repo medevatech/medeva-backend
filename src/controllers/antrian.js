@@ -10,6 +10,7 @@ const {
   getNextAntrian,
   updateAntrian,
   deleteAntrian,
+  updatePrioritasAntrian,
 } = require("../models/antrian");
 
 const antrianController = {
@@ -141,6 +142,20 @@ const antrianController = {
     } catch (err) {
       console.log(err);
       return response(res, 400, false, null, "Update antrian failed");
+    }
+  },
+  updateP: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const prioritas = req.body.prioritas;
+      const data = {
+        prioritas: prioritas,
+      };
+      await updatePrioritasAntrian(id, data);
+      return response(res, 200, true, [], "Update prioritas antrian success");
+    } catch (err) {
+      console.log(err);
+      return response(res, 400, false, null, "Update prioritas antrian failed");
     }
   },
   delete: async (req, res, next) => {

@@ -4,7 +4,7 @@ const createJaga = (data) => {
   const { id, id_klinik, id_divisi, id_shift, id_karyawan } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_shift, id_karyawan, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_shift}', '${id_karyawan}', "1", NOW(), NOW() )`,
+      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_shift, id_karyawan, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_shift}', '${id_karyawan}', '1', NOW(), NOW() )`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -22,9 +22,9 @@ const countJaga = () => {
 
 const getJaga = ({
   searchName,
-  searchNameD,
   searchStatus,
   searchDivisi,
+  searchDivisiName,
   sortBy,
   sortOrder,
   limit,
@@ -40,8 +40,8 @@ const getJaga = ({
         INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
         WHERE kry.nama ILIKE '%${searchName}%'
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
-        AND divisi.tipe ILIKE '%${searchNameD}%'
         AND jaga.is_active ILIKE '%${searchStatus}%'
+        AND divisi.tipe ILIKE '%${searchDivisiName}%'
         ORDER BY jaga.${sortBy} ${sortOrder}
         LIMIT ${limit}
         OFFSET ${offset}`,

@@ -140,6 +140,22 @@ const updateAntrian = (id) => {
   });
 };
 
+const updatePrioritasAntrian = (id, data) => {
+  return new Promise((resolve, reject) => {
+    const { prioritas } = data;
+    pool.query(
+      `UPDATE tbl_antrian SET prioritas = ${prioritas}, updated_at = NOW() WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const deleteAntrian = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(`DELETE FROM tbl_antrian WHERE id = '${id}'`, (err, res) => {
@@ -162,5 +178,6 @@ module.exports = {
   getNowAntrian,
   getNextAntrian,
   updateAntrian,
+  updatePrioritasAntrian,
   deleteAntrian,
 };
