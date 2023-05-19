@@ -53,9 +53,14 @@ const countAllHargaLayanan = () => {
 const getHargaLayananById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_harga_layanan.id, tbl_harga_layanan.id_klinik, tbl_harga_layanan.id_daftar_layanan, tbl_harga_layanan.harga,
+      `SELECT tbl_harga_layanan.id, 
+        tbl_harga_layanan.id_klinik, tbl_klinik.nama_klinik,
+        tbl_harga_layanan.id_daftar_layanan, tbl_daftar_layanan.nama_layanan,
+        tbl_harga_layanan.harga,
         tbl_harga_layanan.created_at, tbl_harga_layanan.updated_at
       FROM tbl_harga_layanan AS tbl_harga_layanan
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
+      INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_layanan.id
       WHERE tbl_harga_layanan.id = '${id}'`,
       (err, result) => {
         if (!err) {
