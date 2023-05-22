@@ -3,20 +3,21 @@ const {
   insertAsuransi,
   allAsuransi,
   countAllAsuransi,
-  getAsuransiById,
-  findAsuransiById,
+  getAsuransiByIdAsuransi,
+  findAsuransiByIdAsuransi,
   editAsuransi,
+  editAsuransiActiveArchive,
+  deleteAsuransi,
 } = require(`../models/asuransi`);
 const { v4: uuidv4 } = require('uuid');
 
 const asuransiControllers = {
   add: async (req, res, next) => {
     try {
-      const { nama } = req.body;
-
       let data = {
         id: uuidv4(),
-        nama,
+        nama: req.body.nama,
+        is_active: 1,
       };
 
       await insertAsuransi(data);
@@ -33,10 +34,12 @@ const asuransiControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allAsuransi({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -45,7 +48,7 @@ const asuransiControllers = {
 
       const {
         rows: [count],
-      } = await countAllAsuransi();
+      } = await countAllAsuransi(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -66,13 +69,13 @@ const asuransiControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getAsuransiById({
+      const result = await getAsuransiByIdAsuransi({
         id,
       });
 
       const {
         rows: [findAsuransi],
-      } = await findAsuransiById(id);
+      } = await findAsuransiByIdAsuransi(id);
 
       if (findAsuransi) {
         response(res, 200, true, result.rows, 'get asuransi success');
@@ -96,12 +99,13 @@ const asuransiControllers = {
 
       const {
         rows: [findAsuransi],
-      } = await findAsuransiById(id);
+      } = await findAsuransiByIdAsuransi(id);
 
       if (findAsuransi) {
         let data = {
           id,
           nama: req.body.nama,
+          is_active: 1,
         };
 
         await editAsuransi(data);
@@ -118,6 +122,95 @@ const asuransiControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit asuransi failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAsuransi],
+      } = await findAsuransiByIdAsuransi(id);
+
+      if (findAsuransi) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editAsuransiActiveArchive(data);
+        response(res, 200, true, data, 'activate asuransi success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active asuransi failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAsuransi],
+      } = await findAsuransiByIdAsuransi(id);
+
+      if (findAsuransi) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editAsuransiActiveArchive(data);
+        response(res, 200, true, data, 'archive asuransi success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive asuransi failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findAsuransi],
+      } = await findAsuransiByIdAsuransi(id);
+
+      if (findAsuransi) {
+        let data = {
+          id,
+        };
+
+        await deleteAsuransi(data);
+        response(res, 200, true, data, 'delete asuransi success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete asuransi failed');
     }
   },
 };
