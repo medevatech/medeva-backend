@@ -43,7 +43,7 @@ const pasienControllers = {
 
       console.log(data);
 
-      // await insertPasien(data);
+      await insertPasien(data);
       response(res, 200, true, data, 'insert pasien success');
     } catch (error) {
       console.log(error);
