@@ -6,6 +6,8 @@ const {
   getAsuransiKelasById,
   findAsuransiKelasById,
   editAsuransiKelas,
+  getAsuransiKelasByIdAsuransi,
+  findAsuransiKelasByIdAsuransi,
 } = require(`../models/asuransiKelas`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -127,6 +129,34 @@ const asuransiKelasControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit asuransi kelas failed');
+    }
+  },
+  getByIdAsuransi: async (req, res) => {
+    try {
+      const id_asuransi = req.params.id_asuransi;
+
+      const result = await getAsuransiKelasByIdAsuransi({
+        id_asuransi,
+      });
+
+      const {
+        rows: [findPeserta],
+      } = await findAsuransiKelasByIdAsuransi(id_asuransi);
+
+      if (findPeserta) {
+        response(res, 200, true, result.rows, 'get asuransi kelas success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id asuransi not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get asuransi kelas failed');
     }
   },
 };

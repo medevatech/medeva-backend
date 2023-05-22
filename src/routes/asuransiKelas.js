@@ -9,5 +9,6 @@ router.post(`/`, uploaded.array(), asuransiKelasControllers.add);
 router.get(`/`, asuransiKelasControllers.getAll);
 router.get(`/:id`, asuransiKelasControllers.getById);
 router.put(`/:id`, uploaded.array(), asuransiKelasControllers.edit);
+router.get(`/asuransi/:id_asuransi`, asuransiKelasControllers.getByIdAsuransi);
 
 module.exports = router;

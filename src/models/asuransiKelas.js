@@ -106,6 +106,43 @@ const editAsuransiKelas = (data) => {
   );
 };
 
+const getAsuransiKelasByIdAsuransi = ({ id_asuransi }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_asuransi_kelas.id, 
+        tbl_asuransi_kelas.id_asuransi, tbl_asuransi.nama AS nama_asuransi,
+        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.sistem, 
+        tbl_asuransi_kelas.created_at, tbl_asuransi_kelas.updated_at
+      FROM tbl_asuransi_kelas AS tbl_asuransi_kelas
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_asuransi_kelas.id_asuransi = tbl_asuransi.id
+      WHERE tbl_asuransi_kelas.id_asuransi = '${id_asuransi}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findAsuransiKelasByIdAsuransi = (id_asuransi) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_asuransi_kelas WHERE id_asuransi = '${id_asuransi}'
+           `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertAsuransiKelas,
   allAsuransiKelas,
@@ -113,4 +150,6 @@ module.exports = {
   getAsuransiKelasById,
   findAsuransiKelasById,
   editAsuransiKelas,
+  getAsuransiKelasByIdAsuransi,
+  findAsuransiKelasByIdAsuransi,
 };
