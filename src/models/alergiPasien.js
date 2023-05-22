@@ -44,8 +44,7 @@ const allAlergiPasien = ({
         tbl_alergi_pasien.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap,
         tbl_alergi_pasien.id_alergi, tbl_alergi.nama AS nama_alergi,
         tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus, tbl_alergi_pasien.is_active,
-          tbl_alergi_pasien.created_at,
-          tbl_alergi_pasien.updated_at
+        tbl_alergi_pasien.created_at, tbl_alergi_pasien.updated_at
       FROM tbl_alergi_pasien AS tbl_alergi_pasien
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
       INNER JOIN tbl_alergi AS tbl_alergi ON tbl_alergi_pasien.id_alergi = tbl_alergi.id
@@ -96,8 +95,7 @@ const getAlergiPasienByIdAlergiPasien = ({ id }) => {
         tbl_alergi_pasien.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap,
         tbl_alergi_pasien.id_alergi, tbl_alergi.nama AS nama_alergi,
         tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus, tbl_alergi_pasien.is_active,
-          tbl_alergi_pasien.created_at,
-          tbl_alergi_pasien.updated_at
+        tbl_alergi_pasien.created_at, tbl_alergi_pasien.updated_at
       FROM tbl_alergi_pasien AS tbl_alergi_pasien
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
       INNER JOIN tbl_alergi AS tbl_alergi ON tbl_alergi_pasien.id_alergi = tbl_alergi.id
@@ -137,8 +135,7 @@ const getAlergiPasienByIdPasien = ({ id_pasien }) => {
         tbl_alergi_pasien.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap,
         tbl_alergi_pasien.id_alergi, tbl_alergi.nama AS nama_alergi,
         tbl_alergi_pasien.tanggal_kunjungan_dicatat, tbl_alergi_pasien.tanggal_kunjungan_dihapus, tbl_alergi_pasien.is_active,
-          tbl_alergi_pasien.created_at,
-          tbl_alergi_pasien.updated_at
+        tbl_alergi_pasien.created_at, tbl_alergi_pasien.updated_at
       FROM tbl_alergi_pasien AS tbl_alergi_pasien
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
       INNER JOIN tbl_alergi AS tbl_alergi ON tbl_alergi_pasien.id_alergi = tbl_alergi.id
