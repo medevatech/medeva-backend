@@ -8,6 +8,7 @@ const {
   getAlergiPasienByIdPasien,
   findAlergiPasienByIdPasien,
   editAlergiPasien,
+  editAlergiPasienActiveArchive,
   deleteAlergiPasien,
 } = require(`../models/alergiPasien`);
 const { v4: uuidv4 } = require('uuid');
@@ -43,11 +44,15 @@ const alergiPasienControllers = {
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchAlergi = req.query.searchAlergi || '';
       const offset = (page - 1) * limit;
 
       const result = await allAlergiPasien({
         search,
         searchStatus,
+        searchPasien,
+        searchAlergi,
         sortBy,
         sortOrder,
         limit,
@@ -56,7 +61,7 @@ const alergiPasienControllers = {
 
       const {
         rows: [count],
-      } = await countAllAlergiPasien();
+      } = await countAllAlergiPasien(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -173,6 +178,54 @@ const alergiPasienControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit alergi pasien failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAlergiPasien],
+      } = await findAlergiPasienByIdAlergiPasien(id);
+
+      if (findAlergiPasien) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editAlergiPasienActiveArchive(data);
+        response(res, 200, true, data, 'activate pasien success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active pasien failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAlergiPasien],
+      } = await findAlergiPasienByIdAlergiPasien(id);
+
+      if (findAlergiPasien) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editAlergiPasienActiveArchive(data);
+        response(res, 200, true, data, 'archive pasien success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive pasien failed');
     }
   },
   delete: async (req, res, next) => {
