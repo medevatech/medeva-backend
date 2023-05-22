@@ -51,25 +51,25 @@ const pasienControllers = {
   getAll: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
+      const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const offset = (page - 1) * limit;
       const searchStatus = req.query.searchStatus || '';
+      const offset = (page - 1) * limit;
 
       const result = await allPasien({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
         offset,
-        searchStatus,
       });
 
       const {
         rows: [count],
-      } = await countAllPasien();
+      } = await countAllPasien(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
