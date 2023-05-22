@@ -90,7 +90,7 @@ const countAllPasien = (search, searchStatus) => {
     CAST(tbl_pasien.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getPasienById = ({ id }) => {
+const getPasienByIdPasien = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
@@ -112,7 +112,7 @@ const getPasienById = ({ id }) => {
   );
 };
 
-const findPasienById = (id) => {
+const findPasienByIdPasien = (id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT * FROM tbl_pasien WHERE id = '${id}'
@@ -208,8 +208,8 @@ module.exports = {
   insertPasien,
   allPasien,
   countAllPasien,
-  getPasienById,
-  findPasienById,
+  getPasienByIdPasien,
+  findPasienByIdPasien,
   editPasien,
   editPasienActiveArchive,
   deletePasien,

@@ -3,8 +3,8 @@ const {
   insertPasien,
   allPasien,
   countAllPasien,
-  getPasienById,
-  findPasienById,
+  getPasienByIdPasien,
+  findPasienByIdPasien,
   editPasien,
   editPasienActiveArchive,
   deletePasien,
@@ -90,13 +90,13 @@ const pasienControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getPasienById({
+      const result = await getPasienByIdPasien({
         id,
       });
 
       const {
         rows: [findPasien],
-      } = await findPasienById(id);
+      } = await findPasienByIdPasien(id);
 
       if (findPasien) {
         response(res, 200, true, result.rows, 'get pasien success');
@@ -120,7 +120,7 @@ const pasienControllers = {
 
       const {
         rows: [findPasien],
-      } = await findPasienById(id);
+      } = await findPasienByIdPasien(id);
 
       if (findPasien) {
         let data = {
@@ -175,7 +175,7 @@ const pasienControllers = {
 
       const {
         rows: [findPasien],
-      } = await findPasienById(id);
+      } = await findPasienByIdPasien(id);
 
       if (findPasien) {
         let data = {
@@ -199,7 +199,7 @@ const pasienControllers = {
 
       const {
         rows: [findPasien],
-      } = await findPasienById(id);
+      } = await findPasienByIdPasien(id);
 
       if (findPasien) {
         let data = {
@@ -223,7 +223,7 @@ const pasienControllers = {
 
       const {
         rows: [findPasien],
-      } = await findPasienById(id);
+      } = await findPasienByIdPasien(id);
 
       if (findPasien) {
         let data = {
