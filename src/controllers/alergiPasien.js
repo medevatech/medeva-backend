@@ -23,8 +23,13 @@ const alergiPasienControllers = {
         tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
       };
 
-      await insertAlergiPasien(data);
-      response(res, 200, true, data, 'insert alergi pasien success');
+      if (data.alergi == '') {
+        console.log('check');
+        response(res, 200, true, data, 'insert alergi pasien null');
+      } else {
+        await insertAlergiPasien(data);
+        response(res, 200, true, data, 'insert alergi pasien success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert alergi pasien failed');
@@ -146,8 +151,14 @@ const alergiPasienControllers = {
           tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
         };
 
-        await editAlergiPasien(data);
-        response(res, 200, true, data, 'edit alergi pasien success');
+        if (data.alergi == '') {
+          console.log('check');
+          response(res, 200, true, data, 'delete alergi pasien success');
+          await deleteAlergiPasien(data);
+        } else {
+          await editAlergiPasien(data);
+          response(res, 200, true, data, 'edit alergi pasien success');
+        }
       } else {
         return response(
           res,
