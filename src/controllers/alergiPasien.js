@@ -8,6 +8,7 @@ const {
   getAlergiPasienByIdPasien,
   findAlergiPasienByIdPasien,
   editAlergiPasien,
+  deleteAlergiPasien,
 } = require(`../models/alergiPasien`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -159,6 +160,35 @@ const alergiPasienControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit alergi pasien failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findAlergiPasien],
+      } = await findAlergiPasienById(id);
+
+      if (findAlergiPasien) {
+        let data = {
+          id,
+        };
+
+        await deleteAlergiPasien(data);
+        response(res, 200, true, data, 'delete alergi pasien success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id alergi pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete alergi pasien failed');
     }
   },
 };

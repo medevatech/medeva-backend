@@ -166,6 +166,22 @@ const editAlergiPasien = (data) => {
   );
 };
 
+const deleteAlergiPasien = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_alergi_pasien WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 module.exports = {
   insertAlergiPasien,
   allAlergiPasien,
@@ -175,4 +191,5 @@ module.exports = {
   getAlergiPasienByIdPasien,
   findAlergiPasienByIdPasien,
   editAlergiPasien,
+  deleteAlergiPasien,
 };

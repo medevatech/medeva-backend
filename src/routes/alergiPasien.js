@@ -10,5 +10,6 @@ router.get(`/`, alergiPasienControllers.getAll);
 router.get(`/:id`, alergiPasienControllers.getById);
 router.get(`/pasien/:id_pasien`, alergiPasienControllers.getByIdPasien);
 router.put(`/:id`, uploaded.array(), alergiPasienControllers.edit);
+router.delete(`/:id`, uploaded.array(), alergiPasienControllers.delete);
 
 module.exports = router;
