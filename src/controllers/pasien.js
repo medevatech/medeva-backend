@@ -237,7 +237,7 @@ const pasienControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'delete failed');
+      response(res, 404, false, error, 'delete pasien failed');
     }
   },
 };
