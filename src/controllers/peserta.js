@@ -8,6 +8,7 @@ const {
   editPeserta,
   getPesertaByIdPasien,
   findPesertaByIdPasien,
+  deletePeserta,
 } = require(`../models/peserta`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -135,10 +136,10 @@ const pesertaControllers = {
       });
 
       const {
-        rows: [findPasien],
+        rows: [findPeserta],
       } = await findPesertaByIdPasien(id_pasien);
 
-      if (findPasien) {
+      if (findPeserta) {
         response(res, 200, true, result.rows, 'get peserta success');
       } else {
         return response(
@@ -152,6 +153,29 @@ const pesertaControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get peserta failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPeserta],
+      } = await findPesertaById(id);
+
+      if (findPeserta) {
+        let data = {
+          id,
+        };
+
+        await deletePeserta(data);
+        response(res, 200, true, data, 'delete peserta success');
+      } else {
+        return response(res, 200, [], null, `id pasien not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete peserta failed');
     }
   },
 };

@@ -158,6 +158,19 @@ const findPesertaByIdPasien = (id_pasien) => {
   );
 };
 
+const deletePeserta = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(`DELETE FROM tbl_peserta WHERE id='${id}'`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    })
+  );
+};
+
 module.exports = {
   insertPeserta,
   allPeserta,
@@ -167,4 +180,5 @@ module.exports = {
   editPeserta,
   getPesertaByIdPasien,
   findPesertaByIdPasien,
+  deletePeserta,
 };
