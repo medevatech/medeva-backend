@@ -3,8 +3,8 @@ const {
   insertAlergiPasien,
   allAlergiPasien,
   countAllAlergiPasien,
-  getAlergiPasienById,
-  findAlergiPasienById,
+  getAlergiPasienByIdAlergiPasien,
+  findAlergiPasienByIdAlergiPasien,
   getAlergiPasienByIdPasien,
   findAlergiPasienByIdPasien,
   editAlergiPasien,
@@ -18,13 +18,14 @@ const alergiPasienControllers = {
       let data = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
-        alergi: req.body.alergi,
+        id_alergi: req.body.id_alergi,
         tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
         tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
+        is_active: 1,
       };
 
-      if (data.alergi == '') {
-        response(res, 200, true, data, 'insert alergi pasien alergi null');
+      if (data.id_alergi == '') {
+        response(res, 200, true, data, 'insert alergi pasien id_alergi null');
       } else {
         await insertAlergiPasien(data);
         response(res, 200, true, data, 'insert alergi pasien success');
@@ -41,10 +42,12 @@ const alergiPasienControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allAlergiPasien({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -81,13 +84,13 @@ const alergiPasienControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getAlergiPasienById({
+      const result = await getAlergiPasienByIdAlergiPasien({
         id,
       });
 
       const {
         rows: [findAlergiPasien],
-      } = await findAlergiPasienById(id);
+      } = await findAlergiPasienByIdAlergiPasien(id);
 
       if (findAlergiPasien) {
         response(res, 200, true, result.rows, 'get alergi pasien success');
@@ -139,18 +142,18 @@ const alergiPasienControllers = {
 
       const {
         rows: [findAlergiPasien],
-      } = await findAlergiPasienById(id);
+      } = await findAlergiPasienByIdAlergiPasien(id);
 
       if (findAlergiPasien) {
         let data = {
           id,
           id_pasien: req.body.id_pasien,
-          alergi: req.body.alergi,
+          id_alergi: req.body.id_alergi,
           tanggal_kunjungan_dicatat: req.body.tanggal_kunjungan_dicatat,
           tanggal_kunjungan_dihapus: req.body.tanggal_kunjungan_dihapus,
         };
 
-        if (data.alergi == '') {
+        if (data.id_alergi == '') {
           console.log('check');
           response(res, 200, true, data, 'delete alergi pasien success');
           await deleteAlergiPasien(data);
@@ -178,7 +181,7 @@ const alergiPasienControllers = {
 
       const {
         rows: [findAlergiPasien],
-      } = await findAlergiPasienById(id);
+      } = await findAlergiPasienByIdAlergiPasien(id);
 
       if (findAlergiPasien) {
         let data = {
