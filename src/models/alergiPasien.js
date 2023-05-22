@@ -14,7 +14,7 @@ const insertAlergiPasien = (data) => {
         (id, id_pasien, alergi, tanggal_kunjungan_dicatat, tanggal_kunjungan_dihapus,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_pasien}', '${alergi}', '${tanggal_kunjungan_dicatat}', '${tanggal_kunjungan_dihapus}', 
+        ('${id}', '${id_pasien}', '${alergi}',  NOW(),  NOW(), 
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {

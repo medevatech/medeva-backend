@@ -24,8 +24,7 @@ const alergiPasienControllers = {
       };
 
       if (data.alergi == '') {
-        console.log('check');
-        response(res, 200, true, data, 'insert alergi pasien null');
+        response(res, 200, true, data, 'insert alergi pasien alergi null');
       } else {
         await insertAlergiPasien(data);
         response(res, 200, true, data, 'insert alergi pasien success');
