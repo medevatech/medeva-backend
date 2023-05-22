@@ -65,8 +65,9 @@ const allPasien = ({
           tbl_pasien.created_at,
           tbl_pasien.updated_at
       FROM tbl_pasien AS tbl_pasien
-      WHERE tbl_pasien.is_active ILIKE '%${searchStatus}%' 
-        AND tbl_pasien.nama_lengkap ILIKE '%${search}%' 
+      WHERE
+        CAST(tbl_pasien.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      AND tbl_pasien.nama_lengkap ILIKE '%${search}%' 
       ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -175,7 +176,7 @@ const editPasienActiveArchive = (data) => {
     Pool.query(
       `UPDATE tbl_pasien 
           SET
-            is_active='${is_active}', 
+            is_active=${is_active}, 
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
