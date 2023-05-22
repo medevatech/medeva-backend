@@ -25,12 +25,11 @@ const allAlergi = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_alergi.id, tbl_alergi.nama, tbl_alergi.kategori,
-          to_char( tbl_alergi.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_alergi.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_alergi AS tbl_alergi
-        WHERE tbl_alergi.nama
-        ILIKE '%${search}%' ORDER BY tbl_alergi.${sortBy} ${sortOrder} 
-        LIMIT ${limit} OFFSET ${offset}`,
+        tbl_alergi.created_at, tbl_alergi.updated_at
+      FROM tbl_alergi AS tbl_alergi
+      WHERE tbl_alergi.nama
+      ILIKE '%${search}%' ORDER BY tbl_alergi.${sortBy} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -50,10 +49,9 @@ const getAlergiById = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_alergi.id, tbl_alergi.nama,  tbl_alergi.kategori,
-            to_char( tbl_alergi.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-            to_char( tbl_alergi.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_alergi AS tbl_alergi
-        WHERE tbl_alergi.id = '${id}'`,
+        tbl_alergi.created_at, tbl_alergi.updated_at
+      FROM tbl_alergi AS tbl_alergi
+      WHERE tbl_alergi.id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -86,10 +84,10 @@ const editAlergi = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_alergi 
-          SET
-            nama='${nama}', kategori='${kategori}', 
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        nama='${nama}', kategori='${kategori}', 
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
