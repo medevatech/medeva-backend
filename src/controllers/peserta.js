@@ -19,6 +19,8 @@ const pesertaControllers = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
         id_asuransi: req.body.id_asuransi,
+        nomor_asuransi: req.body.nomor_asuransi,
+        is_active: 1,
       };
 
       await insertPeserta(data);
@@ -109,6 +111,8 @@ const pesertaControllers = {
           id,
           id_pasien: req.body.id_pasien,
           id_asuransi: req.body.id_asuransi,
+          nomor_asuransi: req.body.nomor_asuransi,
+          is_active: 1,
         };
 
         await editPeserta(data);
