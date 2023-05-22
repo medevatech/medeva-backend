@@ -1,14 +1,21 @@
 const Pool = require('../config/db');
 
 const insertPeserta = (data) => {
-  const { id, id_pasien, id_asuransi, nomor_asuransi, is_active } = data;
+  const {
+    id,
+    id_pasien,
+    id_asuransi,
+    nomor_asuransi,
+    id_asuransi_kelas,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_peserta 
-        (id, id_pasien, id_asuransi, nomor_asuransi, is_active,
+        (id, id_pasien, id_asuransi, nomor_asuransi, id_asuransi_kelas, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_pasien}', '${id_asuransi}', '${nomor_asuransi}', ${is_active},
+        ('${id}', '${id_pasien}', '${id_asuransi}', '${nomor_asuransi}', '${id_asuransi_kelas}', ${is_active},
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -35,7 +42,7 @@ const allPeserta = ({
       `SELECT tbl_peserta.id, 
         tbl_peserta.id_pasien, tbl_pasien.nama_lengkap AS nama_pasien,
         tbl_peserta.id_asuransi, tbl_asuransi.nama  AS nama_asuransi,
-        tbl_peserta.nomor_asuransi, tbl_peserta.is_active,
+        tbl_peserta.nomor_asuransi, tbl_peserta.id_asuransi_kelas, tbl_peserta.is_active,
         tbl_peserta.created_at, tbl_peserta.updated_at
       FROM tbl_peserta AS tbl_peserta
       INNER JOIN tbl_pasien as tbl_pasien ON tbl_peserta.id_pasien = tbl_pasien.id
@@ -69,7 +76,7 @@ const getPesertaById = ({ id }) => {
       `SELECT tbl_peserta.id, 
         tbl_peserta.id_pasien, tbl_pasien.nama_lengkap AS nama_pasien,
         tbl_peserta.id_asuransi, tbl_asuransi.nama  AS nama_asuransi,
-        tbl_peserta.nomor_asuransi, tbl_peserta.is_active,
+        tbl_peserta.nomor_asuransi, tbl_peserta.id_asuransi_kelas, tbl_peserta.is_active,
         tbl_peserta.created_at, tbl_peserta.updated_at
       FROM tbl_peserta AS tbl_peserta
       INNER JOIN tbl_pasien as tbl_pasien ON tbl_peserta.id_pasien = tbl_pasien.id
@@ -103,12 +110,19 @@ const findPesertaById = (id) => {
 };
 
 const editPeserta = (data) => {
-  const { id, id_pasien, id_asuransi, nomor_asuransi, is_active } = data;
+  const {
+    id,
+    id_pasien,
+    id_asuransi,
+    nomor_asuransi,
+    id_asuransi_kelas,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_peserta 
           SET
-            id_pasien='${id_pasien}', id_asuransi='${id_asuransi}', nomor_asuransi='${nomor_asuransi}', is_active=${is_active},
+            id_pasien='${id_pasien}', id_asuransi='${id_asuransi}', nomor_asuransi='${nomor_asuransi}', id_asuransi_kelas=${id_asuransi_kelas}, is_active=${is_active},
             updated_at=NOW()
           WHERE id='${id}'`,
       (err, result) => {
@@ -128,7 +142,7 @@ const getPesertaByIdPasien = ({ id_pasien }) => {
       `SELECT tbl_peserta.id, 
         tbl_peserta.id_pasien, tbl_pasien.nama_lengkap AS nama_pasien,
         tbl_peserta.id_asuransi, tbl_asuransi.nama  AS nama_asuransi,
-        tbl_peserta.nomor_asuransi, tbl_peserta.is_active,
+        tbl_peserta.nomor_asuransi, tbl_peserta.id_asuransi_kelas, tbl_peserta.is_active,
         tbl_peserta.created_at, tbl_peserta.updated_at
       FROM tbl_peserta AS tbl_peserta
       INNER JOIN tbl_pasien as tbl_pasien ON tbl_peserta.id_pasien = tbl_pasien.id

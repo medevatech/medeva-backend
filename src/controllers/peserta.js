@@ -20,6 +20,7 @@ const pesertaControllers = {
         id_pasien: req.body.id_pasien,
         id_asuransi: req.body.id_asuransi,
         nomor_asuransi: req.body.nomor_asuransi,
+        id_asuransi_kelas: req.body.id_asuransi_kelas,
         is_active: 1,
       };
 
@@ -112,6 +113,7 @@ const pesertaControllers = {
           id_pasien: req.body.id_pasien,
           id_asuransi: req.body.id_asuransi,
           nomor_asuransi: req.body.nomor_asuransi,
+          id_asuransi_kelas: req.body.id_asuransi_kelas,
           is_active: 1,
         };
 
