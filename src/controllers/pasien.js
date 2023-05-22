@@ -41,8 +41,6 @@ const pasienControllers = {
         data.tanggal_lahir = '1970-01-01';
       }
 
-      console.log(data);
-
       await insertPasien(data);
       response(res, 200, true, data, 'insert pasien success');
     } catch (error) {

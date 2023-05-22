@@ -21,6 +21,7 @@ const insertPasien = (data) => {
     pekerjaan,
     status_menikah,
     golongan_darah,
+    is_active,
   } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
