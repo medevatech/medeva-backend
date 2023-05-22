@@ -33,7 +33,7 @@ const insertPasien = (data) => {
         ('${id}', '${nama_lengkap}', '${jenis_kelamin}', '${tipe_kitas}', '${nomor_kitas}', '${nomor_hp}',
             '${tempat_lahir}', '${tanggal_lahir}', '${alamat}', '${kelurahan}', '${kecamatan}', 
             '${kota}', '${provinsi}', '${kode_pos}', '${agama}', '${kewarganegaraan}',
-            '${pekerjaan}', '${status_menikah}', '${golongan_darah}', NOW(), NOW(), 1)`,
+            '${pekerjaan}', '${status_menikah}', '${golongan_darah}', NOW(), NOW(), ${is_active})`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -47,11 +47,11 @@ const insertPasien = (data) => {
 
 const allPasien = ({
   search,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
   offset,
-  searchStatus,
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(

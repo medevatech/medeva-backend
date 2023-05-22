@@ -34,13 +34,16 @@ const pasienControllers = {
         pekerjaan: req.body.pekerjaan,
         status_menikah: req.body.status_menikah,
         golongan_darah: req.body.golongan_darah,
+        is_active: 1,
       };
 
       if (req.body.tanggal_lahir === '') {
         data.tanggal_lahir = '1970-01-01';
       }
 
-      await insertPasien(data);
+      console.log(data);
+
+      // await insertPasien(data);
       response(res, 200, true, data, 'insert pasien success');
     } catch (error) {
       console.log(error);
