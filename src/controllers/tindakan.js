@@ -3,11 +3,13 @@ const {
   insertTindakan,
   allTindakan,
   countAllTindakan,
-  getTindakanById,
-  findTindakanById,
+  getTindakanByIdTindakan,
+  findTindakanByIdTindakan,
   editTindakan,
   getTindakanByIdKunjungan,
   findTindakanByIdKunjungan,
+  editTindakanActiveArchive,
+  deleteTindakan,
 } = require(`../models/tindakan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -17,11 +19,23 @@ const tindakanControllers = {
       let data = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
+        id_daftar_tindakan: req.body.id_daftar_tindakan,
         catatan: req.body.catatan,
+        is_active: 1,
       };
 
-      await insertTindakan(data);
-      response(res, 200, true, data, 'insert tindakan success');
+      if (data.id_daftar_tindakan == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert tindakan but id_daftar_tindakan null'
+        );
+      } else {
+        await insertTindakan(data);
+        response(res, 200, true, data, 'insert tindakan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert tindakan failed');
@@ -34,10 +48,14 @@ const tindakanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchDaftarTindakan = req.query.searchDaftarTindakan || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allTindakan({
         search,
+        searchDaftarTindakan,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -46,7 +64,7 @@ const tindakanControllers = {
 
       const {
         rows: [count],
-      } = await countAllTindakan();
+      } = await countAllTindakan(search, searchDaftarTindakan, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -67,13 +85,13 @@ const tindakanControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getTindakanById({
+      const result = await getTindakanByIdTindakan({
         id,
       });
 
       const {
         rows: [findTindakan],
-      } = await findTindakanById(id);
+      } = await findTindakanByIdTindakan(id);
 
       if (findTindakan) {
         response(res, 200, true, result.rows, 'get tindakan success');
@@ -97,17 +115,24 @@ const tindakanControllers = {
 
       const {
         rows: [findTindakan],
-      } = await findTindakanById(id);
+      } = await findTindakanByIdTindakan(id);
 
       if (findTindakan) {
         let data = {
           id,
           id_kunjungan: req.body.id_kunjungan,
+          id_daftar_tindakan: req.body.id_daftar_tindakan,
           catatan: req.body.catatan,
+          is_active: 1,
         };
 
-        await editTindakan(data);
-        response(res, 200, true, data, 'edit tindakan success');
+        if (data.id_daftar_tindakan == '') {
+          await deleteTindakan(data);
+          response(res, 200, true, data, 'delete tindakan success');
+        } else {
+          await editTindakan(data);
+          response(res, 200, true, data, 'edit tindakan success');
+        }
       } else {
         return response(
           res,
@@ -148,6 +173,95 @@ const tindakanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get tindakan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findTindakan],
+      } = await findTindakanByIdTindakan(id);
+
+      if (findTindakan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editTindakanActiveArchive(data);
+        response(res, 200, true, data, 'activate tindakan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active tindakan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findTindakan],
+      } = await findTindakanByIdTindakan(id);
+
+      if (findTindakan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editTindakanActiveArchive(data);
+        response(res, 200, true, data, 'archive tindakan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive tindakan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findTindakan],
+      } = await findTindakanByIdTindakan(id);
+
+      if (findTindakan) {
+        let data = {
+          id,
+        };
+
+        await deleteTindakan(data);
+        response(res, 200, true, data, 'delete tindakan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id tindakan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete tindakan failed');
     }
   },
 };
