@@ -3,11 +3,13 @@ const {
   insertDiagnosis,
   allDiagnosis,
   countAllDiagnosis,
-  getDiagnosisById,
-  findDiagnosisById,
+  getDiagnosisByIdDiagnosis,
+  findDiagnosisByIdDiagnosis,
   editDiagnosis,
   getDiagnosisByIdKunjungan,
   findDiagnosisByIdKunjungan,
+  editDiagnosisActiveArchive,
+  deleteDiagnosis,
 } = require(`../models/diagnosis`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -20,10 +22,19 @@ const diagnosisControllers = {
         id_penyakit: req.body.id_penyakit,
         tipe_wd: req.body.tipe_wd,
         tipe_dd: req.body.tipe_dd,
+        is_active: 1,
       };
 
-      await insertDiagnosis(data);
-      response(res, 200, true, data, 'insert diagnosis success');
+      if (data.id_penyakit == '') {
+        response(res, 200, true, data, 'insert diagnosis but id_penyakit null');
+      } else if (data.tipe_wd == '') {
+        response(res, 200, true, data, 'insert diagnosis but tipe_wd null');
+      } else if (data.tipe_dd == '') {
+        response(res, 200, true, data, 'insert diagnosis but tipe_dd null');
+      } else {
+        await insertDiagnosis(data);
+        response(res, 200, true, data, 'insert diagnosis success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert diagnosis failed');
@@ -36,10 +47,14 @@ const diagnosisControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPenyakit = req.query.searchPenyakit || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allDiagnosis({
         search,
+        searchPenyakit,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -48,7 +63,7 @@ const diagnosisControllers = {
 
       const {
         rows: [count],
-      } = await countAllDiagnosis();
+      } = await countAllDiagnosis(search, searchPenyakit, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -76,13 +91,13 @@ const diagnosisControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getDiagnosisById({
+      const result = await getDiagnosisByIdDiagnosis({
         id,
       });
 
       const {
         rows: [findDiagnosis],
-      } = await findDiagnosisById(id);
+      } = await findDiagnosisByIdDiagnosis(id);
 
       if (findDiagnosis) {
         response(res, 200, true, result.rows, 'get diagnosis success');
@@ -106,7 +121,7 @@ const diagnosisControllers = {
 
       const {
         rows: [findDiagnosis],
-      } = await findDiagnosisById(id);
+      } = await findDiagnosisByIdDiagnosis(id);
 
       if (findDiagnosis) {
         let data = {
@@ -115,10 +130,22 @@ const diagnosisControllers = {
           id_penyakit: req.body.id_penyakit,
           tipe_wd: req.body.tipe_wd,
           tipe_dd: req.body.tipe_dd,
+          is_active: 1,
         };
 
-        await editDiagnosis(data);
-        response(res, 200, true, data, 'edit diagnosis success');
+        if (data.id_penyakit == '') {
+          await deleteDiagnosis(data);
+          response(res, 200, true, data, 'delete diagnosis success');
+        } else if (data.tipe_wd == '') {
+          await deleteDiagnosis(data);
+          response(res, 200, true, data, 'delete diagnosis success');
+        } else if (data.tipe_dd == '') {
+          await deleteDiagnosis(data);
+          response(res, 200, true, data, 'delete diagnosis success');
+        } else {
+          await editDiagnosis(data);
+          response(res, 200, true, data, 'edit diagnosis success');
+        }
       } else {
         return response(
           res,
@@ -159,6 +186,95 @@ const diagnosisControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get diagnosis failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDiagnosis],
+      } = await findDiagnosisByIdDiagnosis(id);
+
+      if (findDiagnosis) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editDiagnosisActiveArchive(data);
+        response(res, 200, true, data, 'activate diagnosis success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active diagnosis failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDiagnosis],
+      } = await findDiagnosisByIdDiagnosis(id);
+
+      if (findDiagnosis) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editDiagnosisActiveArchive(data);
+        response(res, 200, true, data, 'archive diagnosis success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive diagnosis failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findDiagnosis],
+      } = await findDiagnosisByIdDiagnosis(id);
+
+      if (findDiagnosis) {
+        let data = {
+          id,
+        };
+
+        await deleteDiagnosis(data);
+        response(res, 200, true, data, 'delete diagnosis success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete diagnosis failed');
     }
   },
 };

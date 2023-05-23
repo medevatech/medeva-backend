@@ -10,5 +10,12 @@ router.get(`/`, diagnosisControllers.getAll);
 router.get(`/:id`, diagnosisControllers.getById);
 router.put(`/:id`, uploaded.array(), diagnosisControllers.edit);
 router.get(`/kunjungan/:id_kunjungan`, diagnosisControllers.getByIdKunjungan);
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  diagnosisControllers.editActivate
+);
+router.put(`/archive/:id`, uploaded.array(), diagnosisControllers.editArchive);
+router.delete(`/:id`, uploaded.array(), diagnosisControllers.delete);
 
 module.exports = router;
