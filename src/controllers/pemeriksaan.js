@@ -148,19 +148,19 @@ const pemeriksaanControllers = {
         };
 
         await editPemeriksaanActiveArchive(data);
-        response(res, 200, true, data, 'activate diagnosis rujukan success');
+        response(res, 200, true, data, 'activate pemeriksaan success');
       } else {
         return response(
           res,
           200,
           [],
           null,
-          `id diagnosis rujukan not found, check again`
+          `id pemeriksaan not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'active diagnosis rujukan failed');
+      response(res, 404, false, error, 'active pemeriksaan failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -178,19 +178,19 @@ const pemeriksaanControllers = {
         };
 
         await editPemeriksaanActiveArchive(data);
-        response(res, 200, true, data, 'archive diagnosis rujukan success');
+        response(res, 200, true, data, 'archive pemeriksaan success');
       } else {
         return response(
           res,
           200,
           [],
           null,
-          `id diagnosis rujukan not found, check again`
+          `id pemeriksaan not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'archive diagnosis rujukan failed');
+      response(res, 404, false, error, 'archive pemeriksaan failed');
     }
   },
   delete: async (req, res, next) => {
@@ -207,19 +207,19 @@ const pemeriksaanControllers = {
         };
 
         await deletePemeriksaan(data);
-        response(res, 200, true, data, 'delete diagnosis rujukan success');
+        response(res, 200, true, data, 'delete pemeriksaan success');
       } else {
         return response(
           res,
           200,
           [],
           null,
-          `id diagnosis rujukan not found, check again`
+          `id pemeriksaan not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'delete diagnosis rujukan failed');
+      response(res, 404, false, error, 'delete pemeriksaan failed');
     }
   },
 };
