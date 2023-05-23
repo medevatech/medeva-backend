@@ -3,11 +3,13 @@ const {
   insertRujukan,
   allRujukan,
   countAllRujukan,
-  getRujukanById,
-  findRujukanById,
+  getRujukanByIdRujukan,
+  findRujukanByIdRujukan,
   editRujukan,
   getRujukanByIdKunjungan,
   findRujukanByIdKunjungan,
+  editRujukanActiveArchive,
+  deleteRujukan,
 } = require(`../models/rujukan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -22,6 +24,7 @@ const rujukanjControllers = {
         anamnesis: req.body.anamnesis,
         terapi: req.body.terapi,
         catatan: req.body.catatan,
+        is_active: 1,
       };
 
       await insertRujukan(data);
@@ -38,10 +41,16 @@ const rujukanjControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchRS = req.query.searchRS || '';
+      const searchPoli = req.query.searchPoli || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allRujukan({
         search,
+        searchRS,
+        searchPoli,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -50,7 +59,7 @@ const rujukanjControllers = {
 
       const {
         rows: [count],
-      } = await countAllRujukan();
+      } = await countAllRujukan(search, searchRS, searchPoli, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -71,13 +80,13 @@ const rujukanjControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getRujukanById({
+      const result = await getRujukanByIdRujukan({
         id,
       });
 
       const {
         rows: [findRujukan],
-      } = await findRujukanById(id);
+      } = await findRujukanByIdRujukan(id);
 
       if (findRujukan) {
         response(res, 200, true, result.rows, 'get rujukan success');
@@ -101,7 +110,7 @@ const rujukanjControllers = {
 
       const {
         rows: [findRujukan],
-      } = await findRujukanById(id);
+      } = await findRujukanByIdRujukan(id);
 
       if (findRujukan) {
         let data = {
@@ -112,6 +121,7 @@ const rujukanjControllers = {
           anamnesis: req.body.anamnesis,
           terapi: req.body.terapi,
           catatan: req.body.catatan,
+          is_active: 1,
         };
 
         await editRujukan(data);
@@ -156,6 +166,95 @@ const rujukanjControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get rujukan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findRujukan],
+      } = await findRujukanByIdRujukan(id);
+
+      if (findRujukan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editRujukanActiveArchive(data);
+        response(res, 200, true, data, 'activate rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active rujukan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findRujukan],
+      } = await findRujukanByIdRujukan(id);
+
+      if (findRujukan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editRujukanActiveArchive(data);
+        response(res, 200, true, data, 'archive rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive rujukan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findRujukan],
+      } = await findRujukanByIdRujukan(id);
+
+      if (findRujukan) {
+        let data = {
+          id,
+        };
+
+        await deleteRujukan(data);
+        response(res, 200, true, data, 'delete rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete rujukan failed');
     }
   },
 };
