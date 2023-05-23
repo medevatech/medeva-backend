@@ -77,7 +77,9 @@ const countAllAlergiPasien = (
 ) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
-  FROM tbl_alergi_pasien
+  FROM tbl_alergi_pasien AS tbl_alergi_pasien
+  INNER JOIN tbl_pasien AS tbl_pasien ON tbl_alergi_pasien.id_pasien = tbl_pasien.id
+  INNER JOIN tbl_alergi AS tbl_alergi ON tbl_alergi_pasien.id_alergi = tbl_alergi.id
   WHERE 
     tbl_alergi_pasien.id ILIKE '%${search}%' 
   AND
