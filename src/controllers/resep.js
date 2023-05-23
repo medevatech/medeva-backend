@@ -3,11 +3,13 @@ const {
   insertResep,
   allResep,
   countAllResep,
-  getResepById,
-  findResepById,
+  getResepByIdResep,
+  findResepByIdResep,
   editResep,
   getResepByIdKunjungan,
   findResepByIdKunjungan,
+  editResepActiveArchive,
+  deleteResep,
 } = require(`../models/resep`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -24,10 +26,15 @@ const resepControllers = {
         periode: req.body.periode,
         metode_konsumsi: req.body.metode_konsumsi,
         aturan_pakai: req.body.aturan_pakai,
+        is_active: 1,
       };
 
-      await insertResep(data);
-      response(res, 200, true, data, 'insert resep success');
+      if (data.id_obat == '') {
+        response(res, 200, true, data, 'insert resep but id_obat null');
+      } else {
+        await insertResep(data);
+        response(res, 200, true, data, 'insert resep success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert resep failed');
@@ -40,10 +47,14 @@ const resepControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchObat = req.query.searchObat || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allResep({
         search,
+        searchObat,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -52,7 +63,7 @@ const resepControllers = {
 
       const {
         rows: [count],
-      } = await countAllResep();
+      } = await countAllResep(search, searchObat, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -73,13 +84,13 @@ const resepControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getResepById({
+      const result = await getResepByIdResep({
         id,
       });
 
       const {
         rows: [findResep],
-      } = await findResepById(id);
+      } = await findResepByIdResep(id);
 
       if (findResep) {
         response(res, 200, true, result.rows, 'get resep success');
@@ -103,7 +114,7 @@ const resepControllers = {
 
       const {
         rows: [findResep],
-      } = await findResepById(id);
+      } = await findResepByIdResep(id);
 
       if (findResep) {
         let data = {
@@ -116,10 +127,16 @@ const resepControllers = {
           periode: req.body.periode,
           metode_konsumsi: req.body.metode_konsumsi,
           aturan_pakai: req.body.aturan_pakai,
+          is_active: 1,
         };
 
-        await editResep(data);
-        response(res, 200, true, data, 'edit resep success');
+        if (data.id_obat == '') {
+          await deleteResep(data);
+          response(res, 200, true, data, 'delete resep success');
+        } else {
+          await editResep(data);
+          response(res, 200, true, data, 'edit resep success');
+        }
       } else {
         return response(
           res,
@@ -160,6 +177,77 @@ const resepControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get resep failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findResep],
+      } = await findResepByIdResep(id);
+
+      if (findResep) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editResepActiveArchive(data);
+        response(res, 200, true, data, 'activate resep success');
+      } else {
+        return response(res, 200, [], null, `id resep not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active resep failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findResep],
+      } = await findResepByIdResep(id);
+
+      if (findResep) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editResepActiveArchive(data);
+        response(res, 200, true, data, 'archive resep success');
+      } else {
+        return response(res, 200, [], null, `id resep not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive resep failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findResep],
+      } = await findResepByIdResep(id);
+
+      if (findResep) {
+        let data = {
+          id,
+        };
+
+        await deleteResep(data);
+        response(res, 200, true, data, 'delete resep success');
+      } else {
+        return response(res, 200, [], null, `id resep not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete resep failed');
     }
   },
 };
