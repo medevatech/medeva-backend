@@ -6,6 +6,8 @@ const {
   getDiagnosisRujukanByIdDiagnosisRujukan,
   findDiagnosisRujukanByIdDiagnosisRujukan,
   editDiagnosisRujukan,
+  getDiagnosisRujukanByIdRujukan,
+  findDiagnosisRujukanByIdRujukan,
   editDiagnosisRujukanActiveArchive,
   deleteDiagnosisRujukan,
 } = require(`../models/diagnosisRujukan`);
@@ -174,6 +176,34 @@ const diagnosisRujukanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit diagnosis rujukan failed');
+    }
+  },
+  getByIdRujukan: async (req, res) => {
+    try {
+      const id_rujukan = req.params.id_rujukan;
+
+      const result = await getDiagnosisRujukanByIdRujukan({
+        id_rujukan,
+      });
+
+      const {
+        rows: [findDiagnosisRujukan],
+      } = await findDiagnosisRujukanByIdRujukan(id_rujukan);
+
+      if (findDiagnosisRujukan) {
+        response(res, 200, true, result.rows, 'get diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get diagnosis rujukan failed');
     }
   },
   editActivate: async (req, res, next) => {

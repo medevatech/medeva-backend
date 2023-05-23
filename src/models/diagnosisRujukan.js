@@ -126,6 +126,42 @@ const editDiagnosisRujukan = (data) => {
   );
 };
 
+const getDiagnosisRujukanByIdRujukan = ({ id_rujukan }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_diagnosis_rujukan.id, tbl_diagnosis_rujukan.id_rujukan, 
+        tbl_diagnosis_rujukan.id_penyakit, tbl_penyakit.nama_penyakit AS nama_penyakit,
+        tbl_diagnosis_rujukan.tipe_wd, tbl_diagnosis_rujukan.tipe_dd, tbl_diagnosis_rujukan.is_active, 
+        tbl_diagnosis_rujukan.created_at, tbl_diagnosis_rujukan.updated_at
+      FROM tbl_diagnosis_rujukan AS tbl_diagnosis_rujukan
+      INNER JOIN tbl_penyakit AS tbl_penyakit ON tbl_diagnosis_rujukan.id_penyakit = tbl_penyakit.id
+      WHERE tbl_diagnosis_rujukan.id_rujukan = '${id_rujukan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findDiagnosisRujukanByIdRujukan = (id_rujukan) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_diagnosis_rujukan WHERE id_rujukan = '${id_rujukan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editDiagnosisRujukanActiveArchive = (data) => {
   const { id, is_active } = data;
   return new Promise((resolve, reject) =>
@@ -169,6 +205,8 @@ module.exports = {
   getDiagnosisRujukanByIdDiagnosisRujukan,
   findDiagnosisRujukanByIdDiagnosisRujukan,
   editDiagnosisRujukan,
+  getDiagnosisRujukanByIdRujukan,
+  findDiagnosisRujukanByIdRujukan,
   editDiagnosisRujukanActiveArchive,
   deleteDiagnosisRujukan,
 };

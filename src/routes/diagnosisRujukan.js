@@ -11,6 +11,7 @@ router.post(`/`, uploaded.array(), diagnosisRujukanControllers.add);
 router.get(`/`, diagnosisRujukanControllers.getAll);
 router.get(`/:id`, diagnosisRujukanControllers.getById);
 router.put(`/:id`, uploaded.array(), diagnosisRujukanControllers.edit);
+router.get(`/rujukan/:id_rujukan`, diagnosisRujukanControllers.getByIdRujukan);
 router.put(
   `/activate/:id`,
   uploaded.array(),
