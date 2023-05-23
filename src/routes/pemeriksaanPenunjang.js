@@ -15,5 +15,16 @@ router.get(
   `/kunjungan/:id_kunjungan`,
   pemeriksaanPenunjangControllers.getByIdKunjungan
 );
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  pemeriksaanPenunjangControllers.editActivate
+);
+router.put(
+  `/archive/:id`,
+  uploaded.array(),
+  pemeriksaanPenunjangControllers.editArchive
+);
+router.delete(`/:id`, uploaded.array(), pemeriksaanPenunjangControllers.delete);
 
 module.exports = router;

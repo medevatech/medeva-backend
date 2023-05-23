@@ -3,11 +3,13 @@ const {
   insertPemeriksaanPenunjang,
   allPemeriksaanPenunjang,
   countAllPemeriksaanPenunjang,
-  getPemeriksaanPenunjangById,
-  findPemeriksaanPenunjangById,
+  getPemeriksaanPenunjangByIdPemeriksaanPenunjang,
+  findPemeriksaanPenunjangByIdPemeriksaanPenunjang,
   editPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdKunjungan,
   findPemeriksaanPenunjangByIdKunjungan,
+  editPemeriksaanPenunjangActiveArchive,
+  deletePemeriksaanPenunjang,
 } = require(`../models/pemeriksaanPenunjang`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -19,10 +21,23 @@ const pemeriksaanPenunjangControllers = {
         id_pemeriksaan: req.body.id_pemeriksaan,
         id_lab: req.body.id_lab,
         id_kunjungan: req.body.id_kunjungan,
+        is_active: 1,
       };
 
-      await insertPemeriksaanPenunjang(data);
-      response(res, 200, true, data, 'insert pemeriksaan penunjang success');
+      if (data.id_pemeriksaan == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert pemeriksaan but id_pemeriksaan null'
+        );
+      } else if (data.id_lab == '') {
+        response(res, 200, true, data, 'insert pemeriksaan but id_lab null');
+      } else {
+        await insertPemeriksaanPenunjang(data);
+        response(res, 200, true, data, 'insert pemeriksaan penunjang success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert pemeriksaan penunjang failed');
@@ -35,10 +50,16 @@ const pemeriksaanPenunjangControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPemeriksaan = req.query.searchPemeriksaan || '';
+      const searchLab = req.query.searchLab || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allPemeriksaanPenunjang({
         search,
+        searchPemeriksaan,
+        searchLab,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -47,7 +68,12 @@ const pemeriksaanPenunjangControllers = {
 
       const {
         rows: [count],
-      } = await countAllPemeriksaanPenunjang();
+      } = await countAllPemeriksaanPenunjang(
+        search,
+        searchPemeriksaan,
+        searchLab,
+        searchStatus
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -75,13 +101,13 @@ const pemeriksaanPenunjangControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getPemeriksaanPenunjangById({
+      const result = await getPemeriksaanPenunjangByIdPemeriksaanPenunjang({
         id,
       });
 
       const {
         rows: [findPemeriksaanPenunjang],
-      } = await findPemeriksaanPenunjangById(id);
+      } = await findPemeriksaanPenunjangByIdPemeriksaanPenunjang(id);
 
       if (findPemeriksaanPenunjang) {
         response(
@@ -145,7 +171,7 @@ const pemeriksaanPenunjangControllers = {
 
       const {
         rows: [findPemeriksaanPenunjang],
-      } = await findPemeriksaanPenunjangById(id);
+      } = await findPemeriksaanPenunjangByIdPemeriksaanPenunjang(id);
 
       if (findPemeriksaanPenunjang) {
         let data = {
@@ -153,10 +179,31 @@ const pemeriksaanPenunjangControllers = {
           id_pemeriksaan: req.body.id_pemeriksaan,
           id_lab: req.body.id_lab,
           id_kunjungan: req.body.id_kunjungan,
+          is_active: 1,
         };
 
-        await editPemeriksaanPenunjang(data);
-        response(res, 200, true, data, 'edit pemeriksaan penunjang success');
+        if (data.id_pemeriksaan == '') {
+          await deletePemeriksaanPenunjang(data);
+          response(
+            res,
+            200,
+            true,
+            data,
+            'delete pemeriksaan penunjang success'
+          );
+        } else if (data.id_lab == '') {
+          await deletePemeriksaanPenunjang(data);
+          response(
+            res,
+            200,
+            true,
+            data,
+            'delete pemeriksaan penunjang success'
+          );
+        } else {
+          await editPemeriksaanPenunjang(data);
+          response(res, 200, true, data, 'edit pemeriksaan penunjang success');
+        }
       } else {
         return response(
           res,
@@ -169,6 +216,101 @@ const pemeriksaanPenunjangControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit PemeriksaanPenunjang failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPemeriksaanPenunjang],
+      } = await findPemeriksaanPenunjangByIdPemeriksaanPenunjang(id);
+
+      if (findPemeriksaanPenunjang) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editPemeriksaanPenunjangActiveArchive(data);
+        response(
+          res,
+          200,
+          true,
+          data,
+          'activate pemeriksaan penunjang success'
+        );
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id pemeriksaan penunjang not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active pemeriksaan penunjang failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPemeriksaanPenunjang],
+      } = await findPemeriksaanPenunjangByIdPemeriksaanPenunjang(id);
+
+      if (findPemeriksaanPenunjang) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editPemeriksaanPenunjangActiveArchive(data);
+        response(res, 200, true, data, 'archive pemeriksaan penunjang success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id pemeriksaan penunjang not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive pemeriksaan penunjang failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPemeriksaanPenunjang],
+      } = await findPemeriksaanPenunjangByIdPemeriksaanPenunjang(id);
+
+      if (findPemeriksaanPenunjang) {
+        let data = {
+          id,
+        };
+
+        await deletePemeriksaanPenunjang(data);
+        response(res, 200, true, data, 'delete pemeriksaan penunjang success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id pemeriksaan penunjang not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete pemeriksaan penunjang failed');
     }
   },
 };

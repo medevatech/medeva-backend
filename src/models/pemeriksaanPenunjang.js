@@ -1,15 +1,15 @@
 const Pool = require('../config/db');
 
 const insertPemeriksaanPenunjang = (data) => {
-  const { id, id_pemeriksaan, id_lab, id_kunjungan } = data;
+  const { id, id_pemeriksaan, id_lab, id_kunjungan, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_pemeriksaan_penunjang 
-        (id, id_pemeriksaan, id_lab, id_kunjungan,
-            created_at, updated_at) 
-        VALUES
-        ('${id}', '${id_pemeriksaan}', '${id_lab}', '${id_kunjungan}', 
-            NOW(), NOW())`,
+        (id, id_pemeriksaan, id_lab, id_kunjungan, is_active,
+        created_at, updated_at)  
+      VALUES
+        ('${id}', '${id_pemeriksaan}', '${id_lab}', '${id_kunjungan}', ${is_active}, 
+        NOW(), NOW())`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -23,6 +23,9 @@ const insertPemeriksaanPenunjang = (data) => {
 
 const allPemeriksaanPenunjang = ({
   search,
+  searchPemeriksaan,
+  searchLab,
+  searchStatus,
   sortBy,
   sortOrder,
   limit,
@@ -31,16 +34,23 @@ const allPemeriksaanPenunjang = ({
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_pemeriksaan_penunjang.id, 
-            tbl_pemeriksaan_penunjang.id_pemeriksaan, 
-                tbl_pemeriksaan.nama AS nama,
-            tbl_pemeriksaan_penunjang.id_lab, id_kunjungan,
-            to_char( tbl_pemeriksaan_penunjang.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-            to_char( tbl_pemeriksaan_penunjang.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
-        INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
-        WHERE tbl_pemeriksaan.nama
-        ILIKE '%${search}%' ORDER BY tbl_pemeriksaan_penunjang.${sortBy} ${sortOrder} 
-        LIMIT ${limit} OFFSET ${offset}`,
+        tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
+        tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
+      FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
+      INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
+      INNER JOIN tbl_laboratorium AS tbl_laboratorium ON tbl_pemeriksaan_penunjang.id_lab = tbl_laboratorium.id
+      WHERE
+        tbl_pemeriksaan.id ILIKE '%${search}%' 
+      AND
+        tbl_pemeriksaan.nama ILIKE '%${searchPemeriksaan}%'
+      AND
+        tbl_laboratorium.nama ILIKE '%${searchLab}%'
+      AND
+        CAST(tbl_pemeriksaan_penunjang.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY tbl_pemeriksaan_penunjang.${sortBy} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -52,21 +62,38 @@ const allPemeriksaanPenunjang = ({
   );
 };
 
-const countAllPemeriksaanPenunjang = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_pemeriksaan_penunjang`);
+const countAllPemeriksaanPenunjang = (
+  search,
+  searchPemeriksaan,
+  searchLab,
+  searchStatus
+) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
+  INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
+  INNER JOIN tbl_laboratorium AS tbl_laboratorium ON tbl_pemeriksaan_penunjang.id_lab = tbl_laboratorium.id
+  WHERE
+    tbl_pemeriksaan.id ILIKE '%${search}%' 
+  AND
+    tbl_pemeriksaan.nama ILIKE '%${searchPemeriksaan}%'
+  AND
+    tbl_laboratorium.nama ILIKE '%${searchLab}%'
+  AND
+    CAST(tbl_pemeriksaan_penunjang.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getPemeriksaanPenunjangById = ({ id }) => {
+const getPemeriksaanPenunjangByIdPemeriksaanPenunjang = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_pemeriksaan_penunjang.id, 
-        tbl_pemeriksaan_penunjang.id_pemeriksaan, 
-            tbl_pemeriksaan.nama AS nama,
-        tbl_pemeriksaan_penunjang.id_lab, id_kunjungan,
-        to_char( tbl_pemeriksaan_penunjang.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_pemeriksaan_penunjang.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
+        tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
+      INNER JOIN tbl_laboratorium AS tbl_laboratorium ON tbl_pemeriksaan_penunjang.id_lab = tbl_laboratorium.id
       WHERE tbl_pemeriksaan_penunjang.id = '${id}'`,
       (err, result) => {
         if (!err) {
@@ -79,11 +106,10 @@ const getPemeriksaanPenunjangById = ({ id }) => {
   );
 };
 
-const findPemeriksaanPenunjangById = (id) => {
+const findPemeriksaanPenunjangByIdPemeriksaanPenunjang = (id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_pemeriksaan_penunjang WHERE id = '${id}'
-           `,
+      `SELECT * FROM tbl_pemeriksaan_penunjang WHERE id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -96,14 +122,14 @@ const findPemeriksaanPenunjangById = (id) => {
 };
 
 const editPemeriksaanPenunjang = (data) => {
-  const { id, id_pemeriksaan, id_lab } = data;
+  const { id, id_pemeriksaan, id_lab, id_kunjungan, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_pemeriksaan_penunjang 
-          SET
-            id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', 
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', id_kunjungan='${id_kunjungan}', is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -119,13 +145,13 @@ const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_pemeriksaan_penunjang.id, 
-        tbl_pemeriksaan_penunjang.id_pemeriksaan, 
-            tbl_pemeriksaan.nama AS nama,
-        tbl_pemeriksaan_penunjang.id_lab, id_kunjungan,
-        to_char( tbl_pemeriksaan_penunjang.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-        to_char( tbl_pemeriksaan_penunjang.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
+        tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
+        tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
+      INNER JOIN tbl_laboratorium AS tbl_laboratorium ON tbl_pemeriksaan_penunjang.id_lab = tbl_laboratorium.id
       WHERE tbl_pemeriksaan_penunjang.id_kunjungan = '${id_kunjungan}'`,
       (err, result) => {
         if (!err) {
@@ -141,8 +167,43 @@ const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
 const findPemeriksaanPenunjangByIdKunjungan = (id_kunjungan) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_pemeriksaan_penunjang WHERE id_kunjungan = '${id_kunjungan}'
-           `,
+      `SELECT * FROM tbl_pemeriksaan_penunjang WHERE id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const editPemeriksaanPenunjangActiveArchive = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_pemeriksaan_penunjang 
+      SET
+        is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const deletePemeriksaanPenunjang = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `DELETE FROM tbl_pemeriksaan_penunjang WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -158,9 +219,11 @@ module.exports = {
   insertPemeriksaanPenunjang,
   allPemeriksaanPenunjang,
   countAllPemeriksaanPenunjang,
-  findPemeriksaanPenunjangById,
-  getPemeriksaanPenunjangById,
+  getPemeriksaanPenunjangByIdPemeriksaanPenunjang,
+  findPemeriksaanPenunjangByIdPemeriksaanPenunjang,
   editPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdKunjungan,
   findPemeriksaanPenunjangByIdKunjungan,
+  editPemeriksaanPenunjangActiveArchive,
+  deletePemeriksaanPenunjang,
 };
