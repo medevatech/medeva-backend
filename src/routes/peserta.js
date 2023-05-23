@@ -10,6 +10,8 @@ router.get(`/`, pesertaControllers.getAll);
 router.get(`/:id`, pesertaControllers.getById);
 router.put(`/:id`, uploaded.array(), pesertaControllers.edit);
 router.get(`/pasien/:id_pasien`, pesertaControllers.getByIdPasien);
+router.put(`/activate/:id`, uploaded.array(), pesertaControllers.editActivate);
+router.put(`/archive/:id`, uploaded.array(), pesertaControllers.editArchive);
 router.delete(`/:id`, uploaded.array(), pesertaControllers.delete);
 
 module.exports = router;

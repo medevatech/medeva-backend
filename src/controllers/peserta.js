@@ -3,11 +3,12 @@ const {
   insertPeserta,
   allPeserta,
   countAllPeserta,
-  getPesertaById,
-  findPesertaById,
+  getPesertaByIdPeserta,
+  findPesertaByIdPeserta,
   editPeserta,
   getPesertaByIdPasien,
   findPesertaByIdPasien,
+  editPesertaActiveArchive,
   deletePeserta,
 } = require(`../models/peserta`);
 const { v4: uuidv4 } = require('uuid');
@@ -24,8 +25,12 @@ const pesertaControllers = {
         is_active: 1,
       };
 
-      await insertPeserta(data);
-      response(res, 200, true, data, 'insert peserta success');
+      if (data.id_pasien == '') {
+        response(res, 200, true, data, 'insert peserta but id_pasien null');
+      } else {
+        await insertPeserta(data);
+        response(res, 200, true, data, 'insert peserta success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert peserta failed');
@@ -40,12 +45,14 @@ const pesertaControllers = {
       const search = req.query.search || '';
       const searchPasien = req.query.searchPasien || '';
       const searchAsuransi = req.query.searchAsuransi || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allPeserta({
         search,
         searchPasien,
         searchAsuransi,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -54,7 +61,12 @@ const pesertaControllers = {
 
       const {
         rows: [count],
-      } = await countAllPeserta();
+      } = await countAllPeserta(
+        search,
+        searchPasien,
+        searchAsuransi,
+        searchStatus
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -75,13 +87,13 @@ const pesertaControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getPesertaById({
+      const result = await getPesertaByIdPeserta({
         id,
       });
 
       const {
         rows: [findPeserta],
-      } = await findPesertaById(id);
+      } = await findPesertaByIdPeserta(id);
 
       if (findPeserta) {
         response(res, 200, true, result.rows, 'get peserta success');
@@ -105,7 +117,7 @@ const pesertaControllers = {
 
       const {
         rows: [findPeserta],
-      } = await findPesertaById(id);
+      } = await findPesertaByIdPeserta(id);
 
       if (findPeserta) {
         let data = {
@@ -117,8 +129,13 @@ const pesertaControllers = {
           is_active: 1,
         };
 
-        await editPeserta(data);
-        response(res, 200, true, data, 'edit peserta success');
+        if (data.id_pasien == '') {
+          await deletePeserta(data);
+          response(res, 200, true, data, 'delete peserta success');
+        } else {
+          await editPeserta(data);
+          response(res, 200, true, data, 'edit peserta success');
+        }
       } else {
         return response(
           res,
@@ -161,13 +178,73 @@ const pesertaControllers = {
       response(res, 404, false, error, 'get peserta failed');
     }
   },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPeserta],
+      } = await findPesertaByIdPeserta(id);
+
+      if (findPeserta) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editPesertaActiveArchive(data);
+        response(res, 200, true, data, 'activate peserta success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id peserta not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active peserta failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPeserta],
+      } = await findPesertaByIdPeserta(id);
+
+      if (findPeserta) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editPesertaActiveArchive(data);
+        response(res, 200, true, data, 'archive peserta success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id peserta not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive peserta failed');
+    }
+  },
   delete: async (req, res, next) => {
     try {
       let id = req.params.id;
 
       const {
         rows: [findPeserta],
-      } = await findPesertaById(id);
+      } = await findPesertaByIdPeserta(id);
 
       if (findPeserta) {
         let data = {
@@ -177,7 +254,13 @@ const pesertaControllers = {
         await deletePeserta(data);
         response(res, 200, true, data, 'delete peserta success');
       } else {
-        return response(res, 200, [], null, `id pasien not found, check again`);
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id peserta not found, check again`
+        );
       }
     } catch (error) {
       console.log(error);
