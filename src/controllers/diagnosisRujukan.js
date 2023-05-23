@@ -3,9 +3,11 @@ const {
   insertDiagnosisRujukan,
   allDiagnosisRujukan,
   countAllDiagnosisRujukan,
-  getDiagnosisRujukanById,
-  findDiagnosisRujukanById,
+  getDiagnosisRujukanByIdDiagnosisRujukan,
+  findDiagnosisRujukanByIdDiagnosisRujukan,
   editDiagnosisRujukan,
+  editDiagnosisRujukanActiveArchive,
+  deleteDiagnosisRujukan,
 } = require(`../models/diagnosisRujukan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -18,10 +20,37 @@ const diagnosisRujukanControllers = {
         id_penyakit: req.body.id_penyakit,
         tipe_wd: req.body.tipe_wd,
         tipe_dd: req.body.tipe_dd,
+        is_active: 1,
       };
 
-      await insertDiagnosisRujukan(data);
-      response(res, 200, true, data, 'insert diagnosis rujukan success');
+      if (data.id_penyakit == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis rujukan but id_penyakit null'
+        );
+      } else if (data.tipe_wd == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis rujukan but tipe_wd null'
+        );
+      } else if (data.tipe_dd == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis rujukan but tipe_dd null'
+        );
+      } else {
+        await insertDiagnosisRujukan(data);
+        response(res, 200, true, data, 'insert diagnosis rujukan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert diagnosis rujukan failed');
@@ -34,10 +63,14 @@ const diagnosisRujukanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPenyakit = req.query.searchPenyakit || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allDiagnosisRujukan({
         search,
+        searchPenyakit,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -46,7 +79,7 @@ const diagnosisRujukanControllers = {
 
       const {
         rows: [count],
-      } = await countAllDiagnosisRujukan();
+      } = await countAllDiagnosisRujukan(search, searchPenyakit, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -74,13 +107,13 @@ const diagnosisRujukanControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getDiagnosisRujukanById({
+      const result = await getDiagnosisRujukanByIdDiagnosisRujukan({
         id,
       });
 
       const {
         rows: [findDiagnosisRujukan],
-      } = await findDiagnosisRujukanById(id);
+      } = await findDiagnosisRujukanByIdDiagnosisRujukan(id);
 
       if (findDiagnosisRujukan) {
         response(res, 200, true, result.rows, 'get diagnosis rujukan success');
@@ -104,19 +137,31 @@ const diagnosisRujukanControllers = {
 
       const {
         rows: [findDiagnosisRujukan],
-      } = await findDiagnosisRujukanById(id);
+      } = await findDiagnosisRujukanByIdDiagnosisRujukan(id);
 
       if (findDiagnosisRujukan) {
         let data = {
           id,
           id_rujukan: req.body.id_rujukan,
-        id_penyakit: req.body.id_penyakit,
-        tipe_wd: req.body.tipe_wd,
-        tipe_dd: req.body.tipe_dd,
+          id_penyakit: req.body.id_penyakit,
+          tipe_wd: req.body.tipe_wd,
+          tipe_dd: req.body.tipe_dd,
+          is_active: 1,
         };
 
-        await editDiagnosisRujukan(data);
-        response(res, 200, true, data, 'edit diagnosis rujukan success');
+        if (data.id_penyakit == '') {
+          await deleteDiagnosisRujukan(data);
+          response(res, 200, true, data, 'delete diagnosis rujukan success');
+        } else if (data.tipe_wd == '') {
+          await deleteDiagnosisRujukan(data);
+          response(res, 200, true, data, 'delete diagnosis rujukan success');
+        } else if (data.tipe_dd == '') {
+          await deleteDiagnosisRujukan(data);
+          response(res, 200, true, data, 'delete diagnosis rujukan success');
+        } else {
+          await editDiagnosisRujukan(data);
+          response(res, 200, true, data, 'edit diagnosis rujukan success');
+        }
       } else {
         return response(
           res,
@@ -129,6 +174,95 @@ const diagnosisRujukanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit diagnosis rujukan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDiagnosisRujukan],
+      } = await findDiagnosisRujukanByIdDiagnosisRujukan(id);
+
+      if (findDiagnosisRujukan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editDiagnosisRujukanActiveArchive(data);
+        response(res, 200, true, data, 'activate diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active diagnosis rujukan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findDiagnosisRujukan],
+      } = await findDiagnosisRujukanByIdDiagnosisRujukan(id);
+
+      if (findDiagnosisRujukan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editDiagnosisRujukanActiveArchive(data);
+        response(res, 200, true, data, 'archive diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive diagnosis rujukan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findDiagnosisRujukan],
+      } = await findDiagnosisRujukanByIdDiagnosisRujukan(id);
+
+      if (findDiagnosisRujukan) {
+        let data = {
+          id,
+        };
+
+        await deleteDiagnosisRujukan(data);
+        response(res, 200, true, data, 'delete diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete diagnosis rujukan failed');
     }
   },
 };

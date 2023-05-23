@@ -112,10 +112,10 @@ const editDiagnosis = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_diagnosis 
-          SET
-            id_kunjungan='${id_kunjungan}', id_penyakit='${id_penyakit}', tipe_wd='${tipe_wd}', tipe_dd='${tipe_dd}', is_active=${is_active},
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        id_kunjungan='${id_kunjungan}', id_penyakit='${id_penyakit}', tipe_wd='${tipe_wd}', tipe_dd='${tipe_dd}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
