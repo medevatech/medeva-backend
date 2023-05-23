@@ -60,7 +60,7 @@ const allDiagnosisRujukan = ({
 const countAllDiagnosisRujukan = (search, searchPenyakit, searchStatus) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
-  FROM tbl_diagnosis_rujukan
+  FROM tbl_diagnosis_rujukan AS tbl_diagnosis_rujukan
   INNER JOIN tbl_penyakit AS tbl_penyakit ON tbl_diagnosis_rujukan.id_penyakit = tbl_penyakit.id
   WHERE 
     tbl_diagnosis_rujukan.id ILIKE '%${search}%'
