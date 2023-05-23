@@ -10,5 +10,8 @@ router.get(`/`, layananControllers.getAll);
 router.get(`/:id`, layananControllers.getById);
 router.put(`/:id`, uploaded.array(), layananControllers.edit);
 router.get(`/kunjungan/:id_kunjungan`, layananControllers.getByIdKunjungan);
+router.put(`/activate/:id`, uploaded.array(), layananControllers.editActivate);
+router.put(`/archive/:id`, uploaded.array(), layananControllers.editArchive);
+router.delete(`/:id`, uploaded.array(), layananControllers.delete);
 
 module.exports = router;

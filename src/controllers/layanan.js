@@ -3,11 +3,13 @@ const {
   insertLayanan,
   allLayanan,
   countAllLayanan,
-  getLayananById,
-  findLayananById,
+  getLayananByIdLayanan,
+  findLayananByIdLayanan,
   editLayanan,
   getLayananByIdKunjungan,
   findLayananByIdKunjungan,
+  editLayananActiveArchive,
+  deleteLayanan,
 } = require(`../models/layanan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -17,11 +19,23 @@ const layananControllers = {
       let data = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
+        id_daftar_layanan: req.body.id_daftar_layanan,
         catatan: req.body.catatan,
+        is_active: 1,
       };
 
-      await insertLayanan(data);
-      response(res, 200, true, data, 'insert layanan success');
+      if (data.id_daftar_layanan == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert layanan but id_daftar_layanan null'
+        );
+      } else {
+        await insertLayanan(data);
+        response(res, 200, true, data, 'insert layanan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert layanan failed');
@@ -34,10 +48,14 @@ const layananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchDaftarLayanan = req.query.searchDaftarLayanan || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allLayanan({
         search,
+        searchDaftarLayanan,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -46,7 +64,7 @@ const layananControllers = {
 
       const {
         rows: [count],
-      } = await countAllLayanan();
+      } = await countAllLayanan(search, searchDaftarLayanan, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -67,13 +85,13 @@ const layananControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getLayananById({
+      const result = await getLayananByIdLayanan({
         id,
       });
 
       const {
         rows: [findLayanan],
-      } = await findLayananById(id);
+      } = await findLayananByIdLayanan(id);
 
       if (findLayanan) {
         response(res, 200, true, result.rows, 'get layanan success');
@@ -97,17 +115,24 @@ const layananControllers = {
 
       const {
         rows: [findLayanan],
-      } = await findLayananById(id);
+      } = await findLayananByIdLayanan(id);
 
       if (findLayanan) {
         let data = {
           id,
           id_kunjungan: req.body.id_kunjungan,
+          id_daftar_layanan: req.body.id_daftar_layanan,
           catatan: req.body.catatan,
+          is_active: 1,
         };
 
-        await editLayanan(data);
-        response(res, 200, true, data, 'edit layanan success');
+        if (data.id_daftar_layanan == '') {
+          await deleteLayanan(data);
+          response(res, 200, true, data, 'delete layanan success');
+        } else {
+          await editLayanan(data);
+          response(res, 200, true, data, 'edit layanan success');
+        }
       } else {
         return response(
           res,
@@ -148,6 +173,95 @@ const layananControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get layanan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananByIdLayanan(id);
+
+      if (findLayanan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editLayananActiveArchive(data);
+        response(res, 200, true, data, 'activate layanan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active layanan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananByIdLayanan(id);
+
+      if (findLayanan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editLayananActiveArchive(data);
+        response(res, 200, true, data, 'archive layanan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive layanan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananByIdLayanan(id);
+
+      if (findLayanan) {
+        let data = {
+          id,
+        };
+
+        await deleteLayanan(data);
+        response(res, 200, true, data, 'delete layanan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete layanan failed');
     }
   },
 };
