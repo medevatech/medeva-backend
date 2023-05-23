@@ -3,11 +3,11 @@ const {
   insertPemeriksaan,
   allPemeriksaan,
   countAllPemeriksaan,
-  getPemeriksaanById,
-  findPemeriksaanById,
+  getPemeriksaanByIdPemeriksaan,
+  findPemeriksaanByIdPemeriksaan,
   editPemeriksaan,
-  getPemeriksaanByIdLayananLab,
-  findPemeriksaanByIdLayananLab,
+  editPemeriksaanActiveArchive,
+  deletePemeriksaan,
 } = require(`../models/pemeriksaan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -17,6 +17,7 @@ const pemeriksaanControllers = {
       let data = {
         id: uuidv4(),
         nama: req.body.nama,
+        is_active: 1,
       };
 
       await insertPemeriksaan(data);
@@ -33,10 +34,14 @@ const pemeriksaanControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchNama = req.query.searchNama || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allPemeriksaan({
         search,
+        searchNama,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -45,7 +50,7 @@ const pemeriksaanControllers = {
 
       const {
         rows: [count],
-      } = await countAllPemeriksaan();
+      } = await countAllPemeriksaan(search, searchNama, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -73,13 +78,13 @@ const pemeriksaanControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getPemeriksaanById({
+      const result = await getPemeriksaanByIdPemeriksaan({
         id,
       });
 
       const {
         rows: [findPemeriksaan],
-      } = await findPemeriksaanById(id);
+      } = await findPemeriksaanByIdPemeriksaan(id);
 
       if (findPemeriksaan) {
         response(res, 200, true, result.rows, 'get pemeriksaan success');
@@ -103,12 +108,13 @@ const pemeriksaanControllers = {
 
       const {
         rows: [findPemeriksaan],
-      } = await findPemeriksaanById(id);
+      } = await findPemeriksaanByIdPemeriksaan(id);
 
       if (findPemeriksaan) {
         let data = {
           id,
           nama: req.body.nama,
+          is_active: 1,
         };
 
         await editPemeriksaan(data);
@@ -125,6 +131,95 @@ const pemeriksaanControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit pemeriksaan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPemeriksaan],
+      } = await findPemeriksaanByIdPemeriksaan(id);
+
+      if (findPemeriksaan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editPemeriksaanActiveArchive(data);
+        response(res, 200, true, data, 'activate diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active diagnosis rujukan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPemeriksaan],
+      } = await findPemeriksaanByIdPemeriksaan(id);
+
+      if (findPemeriksaan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editPemeriksaanActiveArchive(data);
+        response(res, 200, true, data, 'archive diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive diagnosis rujukan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPemeriksaan],
+      } = await findPemeriksaanByIdPemeriksaan(id);
+
+      if (findPemeriksaan) {
+        let data = {
+          id,
+        };
+
+        await deletePemeriksaan(data);
+        response(res, 200, true, data, 'delete diagnosis rujukan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id diagnosis rujukan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete diagnosis rujukan failed');
     }
   },
 };
