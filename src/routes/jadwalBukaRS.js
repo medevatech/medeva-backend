@@ -9,5 +9,16 @@ router.post(`/`, uploaded.array(), jadwalBukaRSControllers.add);
 router.get(`/`, jadwalBukaRSControllers.getAll);
 router.get(`/:id`, jadwalBukaRSControllers.getById);
 router.put(`/:id`, uploaded.array(), jadwalBukaRSControllers.edit);
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  jadwalBukaRSControllers.editActivate
+);
+router.put(
+  `/archive/:id`,
+  uploaded.array(),
+  jadwalBukaRSControllers.editArchive
+);
+router.delete(`/:id`, uploaded.array(), jadwalBukaRSControllers.delete);
 
 module.exports = router;

@@ -31,6 +31,7 @@ const kunjunganControllers = {
         kasus_kll: req.body.kasus_kll,
         status_pulang: req.body.status_pulang,
         keluhan: req.body.keluhan,
+        catatan_tambahan: req.body.catatan_tambahan,
         is_active: 1,
       };
 
@@ -205,6 +206,7 @@ const kunjunganControllers = {
           kasus_kll: req.body.kasus_kll,
           status_pulang: req.body.status_pulang,
           keluhan: req.body.keluhan,
+          catatan_tambahan: req.body.catatan_tambahan,
           is_active: 1,
         };
 

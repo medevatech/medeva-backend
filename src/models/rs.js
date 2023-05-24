@@ -1,15 +1,15 @@
 const Pool = require('../config/db');
 
 const insertRS = (data) => {
-  const { id, nama, tipe, alamat, nomor_telepon } = data;
+  const { id, nama, tipe, alamat, nomor_telepon, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_rs 
-        (id, nama, tipe, alamat, nomor_telepon,
-            created_at, updated_at) 
-        VALUES
-        ('${id}', '${nama}', '${tipe}', '${alamat}', '${nomor_telepon}',
-            NOW(), NOW())`,
+        (id, nama, tipe, alamat, nomor_telepon, is_active,
+        created_at, updated_at) 
+      VALUES
+        ('${id}', '${nama}', '${tipe}', '${alamat}', '${nomor_telepon}', ${is_active},
+        NOW(), NOW())`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -21,14 +21,17 @@ const insertRS = (data) => {
   );
 };
 
-const allRS = ({ search, sortBy, sortOrder, limit, offset }) => {
+const allRS = ({ search, searchStatus, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_rs.id, tbl_rs.nama, tbl_rs.tipe, tbl_rs.alamat, tbl_rs.nomor_telepon,
+      `SELECT tbl_rs.id, tbl_rs.nama, tbl_rs.tipe, tbl_rs.alamat, tbl_rs.nomor_telepon, tbl_rs.is_active,
         tbl_rs.created_at, tbl_rs.updated_at
       FROM tbl_rs AS tbl_rs
-      WHERE tbl_rs.nama
-      ILIKE '%${search}%' ORDER BY tbl_rs.${sortBy} ${sortOrder} 
+      WHERE
+        tbl_rs.nama ILIKE '%${search}%' 
+      AND
+        CAST (tbl_rs.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY tbl_rs.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
@@ -41,11 +44,17 @@ const allRS = ({ search, sortBy, sortOrder, limit, offset }) => {
   );
 };
 
-const countAllRS = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_rs`);
+const countAllRS = (search, searchStatus) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_rs AS tbl_rs
+  WHERE
+    tbl_rs.nama ILIKE '%${search}%' 
+  AND
+    CAST (tbl_rs.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getRSById = ({ id }) => {
+const getRSByIdRS = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rs.id, tbl_rs.nama, tbl_rs.tipe, tbl_rs.alamat, tbl_rs.nomor_telepon,
@@ -63,11 +72,27 @@ const getRSById = ({ id }) => {
   );
 };
 
-const findRSById = (id) => {
+const findRSByIdRS = (id) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(`SELECT * FROM tbl_rs WHERE id = '${id}' `, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    })
+  );
+};
+
+const editRS = (data) => {
+  const { id, nama, tipe, alamat, nomor_telepon, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_rs WHERE id = '${id}'
-           `,
+      `UPDATE tbl_rs 
+      SET
+        nama='${nama}', tipe='${tipe}', alamat='${alamat}', nomor_telepon='${nomor_telepon}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -79,15 +104,15 @@ const findRSById = (id) => {
   );
 };
 
-const editRS = (data) => {
-  const { id, nama, tipe, alamat, nomor_telepon } = data;
+const editRSActiveArchive = (data) => {
+  const { id, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_rs 
-          SET
-            nama='${nama}', tipe='${tipe}', alamat='${alamat}', nomor_telepon='${nomor_telepon}',
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -96,6 +121,19 @@ const editRS = (data) => {
         }
       }
     )
+  );
+};
+
+const deleteRS = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(`DELETE FROM tbl_rs WHERE id='${id}'`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    })
   );
 };
 
@@ -103,7 +141,9 @@ module.exports = {
   insertRS,
   allRS,
   countAllRS,
-  findRSById,
-  getRSById,
+  getRSByIdRS,
+  findRSByIdRS,
   editRS,
+  editRSActiveArchive,
+  deleteRS,
 };

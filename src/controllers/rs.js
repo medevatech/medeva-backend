@@ -3,9 +3,11 @@ const {
   insertRS,
   allRS,
   countAllRS,
-  getRSById,
-  findRSById,
+  getRSByIdRS,
+  findRSByIdRS,
   editRS,
+  editRSActiveArchive,
+  deleteRS,
 } = require(`../models/rs`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -18,6 +20,7 @@ const rsControllers = {
         tipe: req.body.tipe,
         alamat: req.body.alamat,
         nomor_telepon: req.body.nomor_telepon,
+        is_active: 1,
       };
 
       await insertRS(data);
@@ -34,10 +37,12 @@ const rsControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allRS({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -46,7 +51,7 @@ const rsControllers = {
 
       const {
         rows: [count],
-      } = await countAllRS();
+      } = await countAllRS(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -57,14 +62,7 @@ const rsControllers = {
         totalPage,
       };
 
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        'get rs success',
-        pagination
-      );
+      response(res, 200, true, result.rows, 'get rs success', pagination);
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get rs failed');
@@ -74,24 +72,18 @@ const rsControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getRSById({
+      const result = await getRSByIdRS({
         id,
       });
 
       const {
         rows: [findRS],
-      } = await findRSById(id);
+      } = await findRSByIdRS(id);
 
       if (findRS) {
         response(res, 200, true, result.rows, 'get rs success');
       } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id rs not found, check again`
-        );
+        return response(res, 404, false, null, `id rs not found, check again`);
       }
     } catch (error) {
       console.log(error);
@@ -104,7 +96,7 @@ const rsControllers = {
 
       const {
         rows: [findRS],
-      } = await findRSById(id);
+      } = await findRSByIdRS(id);
 
       if (findRS) {
         let data = {
@@ -113,22 +105,88 @@ const rsControllers = {
           tipe: req.body.tipe,
           alamat: req.body.alamat,
           nomor_telepon: req.body.nomor_telepon,
+          is_active: 1,
         };
 
         await editRS(data);
         response(res, 200, true, data, 'edit rs success');
       } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id rs not found, check again`
-        );
+        return response(res, 404, false, null, `id rs not found, check again`);
       }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit rs failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findRS],
+      } = await findRSByIdRS(id);
+
+      if (findRS) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editRSActiveArchive(data);
+        response(res, 200, true, data, 'activate rs success');
+      } else {
+        return response(res, 200, [], null, `id rs not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active rs failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findRS],
+      } = await findRSByIdRS(id);
+
+      if (findRS) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editRSActiveArchive(data);
+        response(res, 200, true, data, 'archive rs success');
+      } else {
+        return response(res, 200, [], null, `id rs not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive rs failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findRS],
+      } = await findRSByIdRS(id);
+
+      if (findRS) {
+        let data = {
+          id,
+        };
+
+        await deleteRS(data);
+        response(res, 200, true, data, 'delete rs success');
+      } else {
+        return response(res, 200, [], null, `id rs not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete rs failed');
     }
   },
 };
