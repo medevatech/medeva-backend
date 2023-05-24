@@ -1,9 +1,9 @@
 const { response } = require(`../middleware/common`);
 const {
   insertPenyakit,
-  countAll,
   allPenyakit,
   countAllPenyakit,
+  countAll,
   getPenyakitByIdPenyakit,
   findPenyakitByIdPenyakit,
   editPenyakit,
@@ -31,6 +31,46 @@ const penyakitControllers = {
     }
   },
   getAll: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 5;
+      const sortBy = req.query.sortBy || 'created_at';
+      const sortOrder = req.query.sortOrder || 'DESC';
+      const search = req.query.search || '';
+      const searchNama = req.query.searchNama || '';
+      const searchStatus = req.query.searchStatus || '';
+      const offset = (page - 1) * limit;
+
+      const result = await allPenyakit({
+        search,
+        searchNama,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+
+      const {
+        rows: [count],
+      } = await countAllPenyakit(search, searchNama, searchStatus);
+
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+
+      response(res, 200, true, result.rows, 'get penyakit success', pagination);
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get penyakit failed');
+    }
+  },
+  getWithOutLimit: async (req, res) => {
     try {
       const {
         rows: [countPenyakit],

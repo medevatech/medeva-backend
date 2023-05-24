@@ -7,6 +7,7 @@ let uploaded = multer();
 
 router.post(`/`, uploaded.array(), penyakitControllers.add);
 router.get(`/`, penyakitControllers.getAll);
+router.get(`/all`, penyakitControllers.getWithOutLimit);
 router.get(`/:id`, penyakitControllers.getById);
 router.put(`/:id`, uploaded.array(), penyakitControllers.edit);
 router.put(`/activate/:id`, uploaded.array(), penyakitControllers.editActivate);

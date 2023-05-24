@@ -21,12 +21,6 @@ const insertPenyakit = (data) => {
   );
 };
 
-const countAll = () => {
-  return Pool.query(`
-  SELECT COUNT(*) AS total
-  FROM tbl_penyakit`);
-};
-
 const allPenyakit = ({
   search,
   searchNama,
@@ -70,6 +64,12 @@ const countAllPenyakit = (search, searchNama, searchStatus) => {
     tbl_penyakit.nama_penyakit ILIKE '%${searchNama}%'
   AND
     CAST(tbl_penyakit.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
+};
+
+const countAll = () => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_penyakit`);
 };
 
 const getPenyakitByIdPenyakit = ({ id }) => {
@@ -160,9 +160,9 @@ const deletePenyakit = (data) => {
 
 module.exports = {
   insertPenyakit,
-  countAll,
   allPenyakit,
   countAllPenyakit,
+  countAll,
   getPenyakitByIdPenyakit,
   findPenyakitByIdPenyakit,
   editPenyakit,
