@@ -1,6 +1,7 @@
 const { response } = require(`../middleware/common`);
 const {
   insertPenyakit,
+  countAll,
   allPenyakit,
   countAllPenyakit,
   getPenyakitByIdPenyakit,
@@ -31,8 +32,16 @@ const penyakitControllers = {
   },
   getAll: async (req, res) => {
     try {
+      const {
+        rows: [countPenyakit],
+      } = await countAll();
+
+      const all = parseInt(countPenyakit.total);
+      console.log(countPenyakit);
+      console.log(all);
+
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 5;
+      const limit = parseInt(req.query.limit) || all;
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';

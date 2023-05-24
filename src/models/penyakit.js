@@ -21,6 +21,12 @@ const insertPenyakit = (data) => {
   );
 };
 
+const countAll = () => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_penyakit`);
+};
+
 const allPenyakit = ({
   search,
   searchNama,
@@ -154,6 +160,7 @@ const deletePenyakit = (data) => {
 
 module.exports = {
   insertPenyakit,
+  countAll,
   allPenyakit,
   countAllPenyakit,
   getPenyakitByIdPenyakit,
