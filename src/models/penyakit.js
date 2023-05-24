@@ -1,15 +1,15 @@
 const Pool = require('../config/db');
 
 const insertPenyakit = (data) => {
-  const { id, kode_icd10, nama_penyakit, kronis } = data;
+  const { id, kode_icd10, nama_penyakit, kronis, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_penyakit 
-        (id, kode_icd10, nama_penyakit, kronis, 
-            created_at, updated_at) 
-        VALUES
-        ('${id}', '${kode_icd10}', '${nama_penyakit}', '${kronis}', 
-            NOW(), NOW())`,
+        (id, kode_icd10, nama_penyakit, kronis, is_active, 
+        created_at, updated_at) 
+      VALUES
+        ('${id}', '${kode_icd10}', '${nama_penyakit}', '${kronis}', ${is_active}, 
+        NOW(), NOW())`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -21,16 +21,28 @@ const insertPenyakit = (data) => {
   );
 };
 
-const allPenyakit = ({ search, sortBy, sortOrder, limit, offset }) => {
+const allPenyakit = ({
+  search,
+  searchNama,
+  searchStatus,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_penyakit.id, tbl_penyakit.kode_icd10, tbl_penyakit.nama_penyakit, tbl_penyakit.kronis, 
-          to_char( tbl_penyakit.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-          to_char( tbl_penyakit.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_penyakit AS tbl_penyakit
-        WHERE tbl_penyakit.nama_penyakit
-        ILIKE '%${search}%' ORDER BY tbl_penyakit.${sortBy} ${sortOrder} 
-        LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT tbl_penyakit.id, tbl_penyakit.kode_icd10, tbl_penyakit.nama_penyakit, tbl_penyakit.kronis, tbl_penyakit.is_active, 
+        tbl_penyakit.created_at, tbl_penyakit.updated_at
+      FROM tbl_penyakit AS tbl_penyakit
+      WHERE 
+        tbl_penyakit.kode_icd10 ILIKE '%${search}%' 
+      AND
+        tbl_penyakit.nama_penyakit ILIKE '%${searchNama}%'
+      AND
+        CAST(tbl_penyakit.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY tbl_penyakit.${sortBy} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -42,18 +54,25 @@ const allPenyakit = ({ search, sortBy, sortOrder, limit, offset }) => {
   );
 };
 
-const countAllPenyakit = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_penyakit`);
+const countAllPenyakit = (search, searchNama, searchStatus) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_penyakit
+  WHERE 
+    tbl_penyakit.kode_icd10 ILIKE '%${search}%' 
+  AND
+    tbl_penyakit.nama_penyakit ILIKE '%${searchNama}%'
+  AND
+    CAST(tbl_penyakit.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getPenyakitById = ({ id }) => {
+const getPenyakitByIdPenyakit = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_penyakit.id, tbl_penyakit.kode_icd10, tbl_penyakit.nama_penyakit, tbl_penyakit.kronis, 
-            to_char( tbl_penyakit.created_at, 'DD Month YYYY - HH24:MI' ) AS created_at,
-            to_char( tbl_penyakit.updated_at, 'DD Month YYYY - HH24:MI' ) AS updated_at
-        FROM tbl_penyakit AS tbl_penyakit
-        WHERE tbl_penyakit.id = '${id}'`,
+      `SELECT tbl_penyakit.id, tbl_penyakit.kode_icd10, tbl_penyakit.nama_penyakit, tbl_penyakit.kronis, tbl_penyakit.is_active, 
+        tbl_penyakit.created_at, tbl_penyakit.updated_at
+      FROM tbl_penyakit AS tbl_penyakit
+      WHERE tbl_penyakit.id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -65,13 +84,10 @@ const getPenyakitById = ({ id }) => {
   );
 };
 
-const findPenyakitById = (id) => {
+const findPenyakitByIdPenyakit = (id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_penyakit 
-        WHERE
-            id = '${id}' 
-        `,
+      `SELECT * FROM tbl_penyakit WHERE id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -84,14 +100,14 @@ const findPenyakitById = (id) => {
 };
 
 const editPenyakit = (data) => {
-  const { id, kode_icd10, nama_penyakit, kronis } = data;
+  const { id, kode_icd10, nama_penyakit, kronis, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_penyakit 
-          SET
-            kode_icd10='${kode_icd10}', nama_penyakit='${nama_penyakit}',  kronis='${kronis}',
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        kode_icd10='${kode_icd10}', nama_penyakit='${nama_penyakit}',  kronis='${kronis}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -103,11 +119,46 @@ const editPenyakit = (data) => {
   );
 };
 
+const editPenyakitActiveArchive = (data) => {
+  const { id, is_active } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_penyakit 
+      SET
+        is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const deletePenyakit = (data) => {
+  const { id } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(`DELETE FROM tbl_penyakit WHERE id='${id}'`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
+      }
+    })
+  );
+};
+
 module.exports = {
   insertPenyakit,
   allPenyakit,
   countAllPenyakit,
-  getPenyakitById,
-  findPenyakitById,
+  getPenyakitByIdPenyakit,
+  findPenyakitByIdPenyakit,
   editPenyakit,
+  editPenyakitActiveArchive,
+  deletePenyakit,
 };
