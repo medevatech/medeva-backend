@@ -120,8 +120,11 @@ const vitalSignsControllers = {
     try {
       const id_pasien = req.params.id_pasien;
 
+      const tanggal = req.query.tanggal || '';
+
       const result = await getVitalByIdPasien({
         id_pasien,
+        tanggal,
       });
 
       const {

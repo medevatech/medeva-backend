@@ -92,7 +92,7 @@ const countAllVital = (search, searchPasien, searchStatus) => {
     CAST(tbl_vital_signs.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getVitalByIdVitalSigns = ({ id }) => {
+const getVitalByIdVitalSigns = ({ id, tanggal }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_vital_signs.id, 
@@ -103,7 +103,8 @@ const getVitalByIdVitalSigns = ({ id }) => {
         tbl_vital_signs.created_at, tbl_vital_signs.updated_at
       FROM tbl_vital_signs AS tbl_vital_signs
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
-      WHERE tbl_vital_signs.id = '${id}'`,
+      WHERE
+        tbl_vital_signs.id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -130,7 +131,7 @@ const findVitalByIdVitalSigns = (id) => {
   );
 };
 
-const getVitalByIdPasien = ({ id_pasien }) => {
+const getVitalByIdPasien = ({ id_pasien, tanggal }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_vital_signs.id, 
@@ -141,7 +142,10 @@ const getVitalByIdPasien = ({ id_pasien }) => {
         tbl_vital_signs.created_at, tbl_vital_signs.updated_at
       FROM tbl_vital_signs AS tbl_vital_signs
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_vital_signs.id_pasien = tbl_pasien.id
-      WHERE tbl_vital_signs.id_pasien = '${id_pasien}'`,
+      WHERE
+        tbl_vital_signs.id_pasien = '${id_pasien}'
+      AND
+        CAST(tbl_vital_signs.created_at AS TEXT) ILIKE '%${tanggal}%'`,
       (err, result) => {
         if (!err) {
           resolve(result);
