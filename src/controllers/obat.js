@@ -3,9 +3,11 @@ const {
   insertObat,
   allObat,
   countAllObat,
-  getObatById,
-  findObatById,
+  getObatByIdObat,
+  findObatByIdObat,
   editObat,
+  editObatActiveArchive,
+  deleteObat,
 } = require(`../models/obat`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -24,6 +26,7 @@ const obatControllers = {
         produsen: req.body.produsen,
         deskripsi: req.body.deskripsi,
         indikasi: req.body.indikasi,
+        is_active: 1,
       };
 
       await insertObat(data);
@@ -40,10 +43,12 @@ const obatControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allObat({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -52,7 +57,7 @@ const obatControllers = {
 
       const {
         rows: [count],
-      } = await countAllObat();
+      } = await countAllObat(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -73,13 +78,13 @@ const obatControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getObatById({
+      const result = await getObatByIdObat({
         id,
       });
 
       const {
         rows: [findObat],
-      } = await findObatById(id);
+      } = await findObatByIdObat(id);
 
       if (findObat) {
         response(res, 200, true, result.rows, 'get obat success');
@@ -103,7 +108,7 @@ const obatControllers = {
 
       const {
         rows: [findObat],
-      } = await findObatById(id);
+      } = await findObatByIdObat(id);
 
       if (findObat) {
         let data = {
@@ -118,6 +123,7 @@ const obatControllers = {
           produsen: req.body.produsen,
           deskripsi: req.body.deskripsi,
           indikasi: req.body.indikasi,
+          is_active: 1,
         };
 
         await editObat(data);
@@ -134,6 +140,77 @@ const obatControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit obat failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findObat],
+      } = await findObatByIdObat(id);
+
+      if (findObat) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editObatActiveArchive(data);
+        response(res, 200, true, data, 'activate obat success');
+      } else {
+        return response(res, 200, [], null, `id obat not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active obat failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findObat],
+      } = await findObatByIdObat(id);
+
+      if (findObat) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editObatActiveArchive(data);
+        response(res, 200, true, data, 'archive obat success');
+      } else {
+        return response(res, 200, [], null, `id obat not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive obat failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findObat],
+      } = await findObatByIdObat(id);
+
+      if (findObat) {
+        let data = {
+          id,
+        };
+
+        await deleteObat(data);
+        response(res, 200, true, data, 'delete obat success');
+      } else {
+        return response(res, 200, [], null, `id obat not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete obat failed');
     }
   },
 };
