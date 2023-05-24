@@ -61,7 +61,12 @@ const alergiPasienControllers = {
 
       const {
         rows: [count],
-      } = await countAllAlergiPasien(search, searchStatus);
+      } = await countAllAlergiPasien(
+        search,
+        searchStatus,
+        searchPasien,
+        searchAlergi
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
