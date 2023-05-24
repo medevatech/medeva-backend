@@ -22,13 +22,12 @@ const shiftController = {
         id,
         id_klinik: req.body.id_klinik,
         id_divisi: req.body.id_divisi,
-        shift: {
-          hari: req.body.hari,
-          tanggal: req.body.tanggal,
-          waktu_mulai: req.body.waktu_mulai,
-          waktu_selesai: req.body.waktu_selesai,
-        },
+        hari: req.body.hari,
+        tanggal: req.body.tanggal,
+        waktu_mulai: req.body.waktu_mulai,
+        waktu_selesai: req.body.waktu_selesai,
       };
+      console.log(data);
       await createShift(data);
       response(res, 200, true, data, "Create shift success");
     } catch (err) {
