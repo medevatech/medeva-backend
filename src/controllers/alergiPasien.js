@@ -200,13 +200,19 @@ const alergiPasienControllers = {
         };
 
         await editAlergiPasienActiveArchive(data);
-        response(res, 200, true, data, 'activate pasien success');
+        response(res, 200, true, data, 'activate alergi pasien success');
       } else {
-        return response(res, 200, [], null, `id pasien not found, check again`);
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id alergi pasien not found, check again`
+        );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'active pasien failed');
+      response(res, 404, false, error, 'active alergi pasien failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -224,13 +230,19 @@ const alergiPasienControllers = {
         };
 
         await editAlergiPasienActiveArchive(data);
-        response(res, 200, true, data, 'archive pasien success');
+        response(res, 200, true, data, 'archive alergi pasien success');
       } else {
-        return response(res, 200, [], null, `id pasien not found, check again`);
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id alergi pasien not found, check again`
+        );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'archive pasien failed');
+      response(res, 404, false, error, 'archive alergi pasien failed');
     }
   },
   delete: async (req, res, next) => {
