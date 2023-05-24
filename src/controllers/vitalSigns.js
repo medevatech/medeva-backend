@@ -3,11 +3,13 @@ const {
   insertVital,
   allVital,
   countAllVital,
-  getVitalById,
-  findVitalById,
+  getVitalByIdVitalSigns,
+  findVitalByIdVitalSigns,
   getVitalByIdPasien,
   findVitalByIdPasien,
   editVital,
+  editVitalSignsActiveArchive,
+  deleteVitalSigns,
 } = require(`../models/vitalSigns`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -29,6 +31,7 @@ const vitalSignsControllers = {
         respiratory_rate: req.body.respiratory_rate,
         heart_rate: req.body.heart_rate,
         catatan_tambahan: req.body.catatan_tambahan,
+        is_active: 1,
       };
 
       await insertVital(data);
@@ -45,10 +48,14 @@ const vitalSignsControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allVital({
         search,
+        searchPasien,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -57,7 +64,7 @@ const vitalSignsControllers = {
 
       const {
         rows: [count],
-      } = await countAllVital();
+      } = await countAllVital(search, searchPasien, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -85,13 +92,13 @@ const vitalSignsControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getVitalById({
+      const result = await getVitalByIdVitalSigns({
         id,
       });
 
       const {
         rows: [findVital],
-      } = await findVitalById(id);
+      } = await findVitalByIdVitalSigns(id);
 
       if (findVital) {
         response(res, 200, true, result.rows, 'get vital signs success');
@@ -143,7 +150,7 @@ const vitalSignsControllers = {
 
       const {
         rows: [findVital],
-      } = await findVitalById(id);
+      } = await findVitalByIdVitalSigns(id);
 
       if (findVital) {
         let data = {
@@ -161,6 +168,7 @@ const vitalSignsControllers = {
           respiratory_rate: req.body.respiratory_rate,
           heart_rate: req.body.heart_rate,
           catatan_tambahan: req.body.catatan_tambahan,
+          is_active: 1,
         };
 
         await editVital(data);
@@ -177,6 +185,95 @@ const vitalSignsControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit vital signs failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findVital],
+      } = await findVitalByIdVitalSigns(id);
+
+      if (findVital) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editVitalSignsActiveArchive(data);
+        response(res, 200, true, data, 'activate vital signs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id vital signs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active vital signs failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findVital],
+      } = await findVitalByIdVitalSigns(id);
+
+      if (findVital) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editVitalSignsActiveArchive(data);
+        response(res, 200, true, data, 'archive vital signs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id vital signs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive vital signs failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findVital],
+      } = await findVitalByIdVitalSigns(id);
+
+      if (findVital) {
+        let data = {
+          id,
+        };
+
+        await deleteVitalSigns(data);
+        response(res, 200, true, data, 'delete vital signs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id vital signs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete alergi vital signs failed');
     }
   },
 };
