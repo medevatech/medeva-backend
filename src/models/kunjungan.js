@@ -15,17 +15,18 @@ const insertKunjungan = (data) => {
     kasus_kll,
     status_pulang,
     keluhan,
+    catatan_tambahan,
     is_active,
   } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_kunjungan 
         (id, id_jaga, id_vs, id_pasien, waktu_mulai, waktu_selesai, tipe, anamnesis, 
-        pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan, is_active,
+        pemeriksaan_fisik, prognosa, kasus_kll, status_pulang, keluhan, catatan_tambahan, is_active,
         created_at, updated_at) 
       VALUES
         ('${id}', '${id_jaga}', '${id_vs}', '${id_pasien}', '${waktu_mulai}',  NOW(), '${tipe}', '${anamnesis}', 
-        '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}', ${is_active},
+        '${pemeriksaan_fisik}', '${prognosa}', '${kasus_kll}', '${status_pulang}', '${keluhan}', '${catatan_tambahan}', ${is_active},
         NOW(), NOW())`,
       (err, res) => {
         if (!err) {
@@ -53,7 +54,7 @@ const allKunjungan = ({
         tbl_kunjungan.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap, 
         tbl_kunjungan.waktu_mulai, tbl_kunjungan.waktu_selesai,
         tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
-        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.is_active,  
+        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.catatan_tambahan, tbl_kunjungan.is_active,  
         tbl_kunjungan.created_at, tbl_kunjungan.updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
@@ -96,7 +97,7 @@ const getKunjunganByIdKunjungan = ({ id }) => {
         tbl_kunjungan.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap, 
         tbl_kunjungan.waktu_mulai, tbl_kunjungan.waktu_selesai,
         tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
-        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.is_active,  
+        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.catatan_tambahan, tbl_kunjungan.is_active,  
         tbl_kunjungan.created_at, tbl_kunjungan.updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
@@ -134,7 +135,7 @@ const getKunjunganByIdPasien = ({ id_pasien }) => {
         tbl_kunjungan.id_pasien, tbl_pasien.nama_lengkap AS nama_lengkap, 
         tbl_kunjungan.waktu_mulai, tbl_kunjungan.waktu_selesai,
         tbl_kunjungan.tipe, tbl_kunjungan.anamnesis, tbl_kunjungan.pemeriksaan_fisik, 
-        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.is_active,  
+        tbl_kunjungan.prognosa, tbl_kunjungan.kasus_kll, tbl_kunjungan.status_pulang, tbl_kunjungan.keluhan, tbl_kunjungan.catatan_tambahan, tbl_kunjungan.is_active,  
         tbl_kunjungan.created_at, tbl_kunjungan.updated_at
       FROM tbl_kunjungan AS tbl_kunjungan
       INNER JOIN tbl_pasien AS tbl_pasien ON tbl_kunjungan.id_pasien = tbl_pasien.id
@@ -186,6 +187,8 @@ const editKunjungan = (data) => {
     kasus_kll,
     status_pulang,
     keluhan,
+    catatan_tambahan,
+    is_active,
   } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
@@ -193,7 +196,7 @@ const editKunjungan = (data) => {
       SET
         id_jaga='${id_jaga}', id_pasien='${id_pasien}', id_vs='${id_vs}', waktu_mulai='${waktu_mulai}', waktu_selesai='${waktu_selesai}', 
         tipe='${tipe}', anamnesis='${anamnesis}', pemeriksaan_fisik='${pemeriksaan_fisik}', prognosa='${prognosa}', kasus_kll='${kasus_kll}', 
-        status_pulang='${status_pulang}', keluhan='${keluhan}', 
+        status_pulang='${status_pulang}', keluhan='${keluhan}',  catatan_tambahan='${catatan_tambahan}',  is_active='=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
