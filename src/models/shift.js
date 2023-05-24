@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require("../config/db");
 
 const createShift = (data) => {
   const {
@@ -59,6 +59,22 @@ const getShiftById = (id) => {
     pool.query(
       `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_shift.is_active, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id
                 WHERE tbl_shift.id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const getShiftByIdClinic = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT tbl_shift.id, tbl_shift.id_klinik, tbl_shift.id_divisi, tbl_shift.hari, tbl_shift.tanggal, tbl_shift.waktu_mulai, tbl_shift.waktu_selesai, tbl_shift.is_active, tbl_klinik.nama_klinik as nama_klinik, tbl_divisi.tipe as tipe FROM tbl_shift INNER JOIN tbl_klinik as tbl_klinik ON tbl_shift.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi as tbl_divisi ON tbl_shift.id_divisi = tbl_divisi.id
+                WHERE tbl_shift.id_klinik = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -147,6 +163,7 @@ module.exports = {
   countShift,
   getShift,
   getShiftById,
+  getShiftByIdClinic,
   updateShift,
   archiveShift,
   activateShift,
