@@ -3,9 +3,11 @@ const {
   insertPoli,
   allPoli,
   countAllPoli,
-  getPoliById,
-  findPoliById,
+  getPoliByIdPoli,
+  findPoliByIdPoli,
   editPoli,
+  editPoliActiveArchive,
+  deletePoli,
 } = require(`../models/poli`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,6 +17,7 @@ const poliControllers = {
       let data = {
         id: uuidv4(),
         nama: req.body.nama,
+        is_active: 1,
       };
 
       await insertPoli(data);
@@ -31,10 +34,12 @@ const poliControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allPoli({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -43,7 +48,7 @@ const poliControllers = {
 
       const {
         rows: [count],
-      } = await countAllPoli();
+      } = await countAllPoli(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -64,13 +69,13 @@ const poliControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getPoliById({
+      const result = await getPoliByIdPoli({
         id,
       });
 
       const {
         rows: [findPoli],
-      } = await findPoliById(id);
+      } = await findPoliByIdPoli(id);
 
       if (findPoli) {
         response(res, 200, true, result.rows, 'get poli success');
@@ -94,12 +99,13 @@ const poliControllers = {
 
       const {
         rows: [findPoli],
-      } = await findPoliById(id);
+      } = await findPoliByIdPoli(id);
 
       if (findPoli) {
         let data = {
           id,
           nama: req.body.nama,
+          is_active: 1,
         };
 
         await editPoli(data);
@@ -116,6 +122,77 @@ const poliControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit poli failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPoli],
+      } = await findPoliByIdPoli(id);
+
+      if (findPoli) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editPoliActiveArchive(data);
+        response(res, 200, true, data, 'activate poli success');
+      } else {
+        return response(res, 200, [], null, `id poli not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active poli failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findPoli],
+      } = await findPoliByIdPoli(id);
+
+      if (findPoli) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editPoliActiveArchive(data);
+        response(res, 200, true, data, 'archive poli success');
+      } else {
+        return response(res, 200, [], null, `id poli not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive poli failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findPoli],
+      } = await findPoliByIdPoli(id);
+
+      if (findPoli) {
+        let data = {
+          id,
+        };
+
+        await deletePoli(data);
+        response(res, 200, true, data, 'delete poli success');
+      } else {
+        return response(res, 200, [], null, `id poli not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete poli failed');
     }
   },
 };
