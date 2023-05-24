@@ -45,7 +45,7 @@ const allRujukan = ({
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, tbl_rs.nama,
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
@@ -93,7 +93,7 @@ const getRujukanByIdRujukan = ({ id }) => {
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, tbl_rs.nama,
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
@@ -161,7 +161,7 @@ const getRujukanByIdKunjungan = ({ id_kunjungan }) => {
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, tbl_rs.nama,
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
+        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
