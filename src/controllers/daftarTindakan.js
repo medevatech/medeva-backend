@@ -3,8 +3,8 @@ const {
   insertDaftarTindakan,
   allDaftarTindakan,
   countAllDaftarTindakan,
-  getDaftarTindakanById,
-  findDaftarTindakanById,
+  getDaftarTindakanByIdDaftarTindakan,
+  findDaftarTindakanByIdDaftarTindakan,
   editDaftarTindakan,
   editDaftarTindakanActivate,
   editDaftarTindakanArchive,
@@ -49,7 +49,7 @@ const daftarTindakanControllers = {
 
       const {
         rows: [count],
-      } = await countAllDaftarTindakan();
+      } = await countAllDaftarTindakan(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -77,13 +77,13 @@ const daftarTindakanControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getDaftarTindakanById({
+      const result = await getDaftarTindakanByIdDaftarTindakan({
         id,
       });
 
       const {
         rows: [findDaftarTindakan],
-      } = await findDaftarTindakanById(id);
+      } = await findDaftarTindakanByIdDaftarTindakan(id);
 
       if (findDaftarTindakan) {
         response(res, 200, true, result.rows, 'get daftar tindakan success');
@@ -107,12 +107,13 @@ const daftarTindakanControllers = {
 
       const {
         rows: [findDaftarTindakan],
-      } = await findDaftarTindakanById(id);
+      } = await findDaftarTindakanByIdDaftarTindakan(id);
 
       if (findDaftarTindakan) {
         let data = {
           id,
           nama: req.body.nama,
+          is_active: 1,
         };
 
         await editDaftarTindakan(data);
@@ -137,7 +138,7 @@ const daftarTindakanControllers = {
 
       const {
         rows: [findDaftarTindakan],
-      } = await findDaftarTindakanById(id);
+      } = await findDaftarTindakanByIdDaftarTindakan(id);
 
       if (findDaftarTindakan) {
         let data = {
@@ -167,7 +168,7 @@ const daftarTindakanControllers = {
 
       const {
         rows: [findDaftarTindakan],
-      } = await findDaftarTindakanById(id);
+      } = await findDaftarTindakanByIdDaftarTindakan(id);
 
       if (findDaftarTindakan) {
         let data = {
@@ -197,7 +198,7 @@ const daftarTindakanControllers = {
 
       const {
         rows: [findDaftarTindakan],
-      } = await findDaftarTindakanById(id);
+      } = await findDaftarTindakanByIdDaftarTindakan(id);
 
       if (findDaftarTindakan) {
         let data = {
