@@ -3,9 +3,11 @@ const {
   insertTempKunjungan,
   allTempKunjungan,
   countAllTempKunjungan,
-  getTempKunjunganById,
-  findTempKunjunganById,
+  getTempKunjunganByIdTempKunjungan,
+  findTempKunjunganByIdTempKunjungan,
   editTempKunjungan,
+  editTempKunjunganActiveArchive,
+  deleteTempKunjungan,
 } = require(`../models/tempKunjungan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,6 +18,7 @@ const tempKunjunganControllers = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
         id_vs: req.body.id_vs,
+        is_active: 1,
       };
 
       await insertTempKunjungan(data);
@@ -32,10 +35,12 @@ const tempKunjunganControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allTempKunjungan({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -44,7 +49,7 @@ const tempKunjunganControllers = {
 
       const {
         rows: [count],
-      } = await countAllTempKunjungan();
+      } = await countAllTempKunjungan(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -72,13 +77,13 @@ const tempKunjunganControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getTempKunjunganById({
+      const result = await getTempKunjunganByIdTempKunjungan({
         id,
       });
 
       const {
         rows: [findTempKunjungan],
-      } = await findTempKunjunganById(id);
+      } = await findTempKunjunganByIdTempKunjungan(id);
 
       if (findTempKunjungan) {
         response(res, 200, true, result.rows, 'get temp kunjungan success');
@@ -102,13 +107,14 @@ const tempKunjunganControllers = {
 
       const {
         rows: [findTempKunjungan],
-      } = await findTempKunjunganById(id);
+      } = await findTempKunjunganByIdTempKunjungan(id);
 
       if (findTempKunjungan) {
         let data = {
           id,
           id_kunjungan: req.body.id_kunjungan,
           id_vs: req.body.id_vs,
+          is_active: 1,
         };
 
         await editTempKunjungan(data);
@@ -125,6 +131,95 @@ const tempKunjunganControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit temp kunjungan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findTempKunjungan],
+      } = await findTempKunjunganByIdTempKunjungan(id);
+
+      if (findTempKunjungan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editTempKunjunganActiveArchive(data);
+        response(res, 200, true, data, 'activate temp kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id temp kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active temp kunjungan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findTempKunjungan],
+      } = await findTempKunjunganByIdTempKunjungan(id);
+
+      if (findTempKunjungan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editTempKunjunganActiveArchive(data);
+        response(res, 200, true, data, 'archive temp kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id temp kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive temp kunjungan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findTempKunjungan],
+      } = await findTempKunjunganByIdTempKunjungan(id);
+
+      if (findTempKunjungan) {
+        let data = {
+          id,
+        };
+
+        await deleteTempKunjungan(data);
+        response(res, 200, true, data, 'delete temp kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id temp kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete temp kunjungan failed');
     }
   },
 };
