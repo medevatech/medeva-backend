@@ -3,9 +3,11 @@ const {
   insertJadwalBukaRS,
   allJadwalBukaRS,
   countAllJadwalBukaRS,
-  getJadwalBukaRSById,
-  findJadwalBukaRSById,
+  getJadwalBukaRSByIdJadwalBukaRS,
+  findJadwalBukaRSByIdJadwalBukaRS,
   editJadwalBukaRS,
+  editJadwalBukaRSActiveArchive,
+  deleteJadwalBukaRS,
 } = require(`../models/jadwalBukaRS`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -18,6 +20,7 @@ const jadwalBukaRSControllers = {
         hari: req.body.hari,
         jam_buka: req.body.jam_buka,
         jam_tutup: req.body.jam_tutup,
+        is_active: 1,
       };
 
       await insertJadwalBukaRS(data);
@@ -34,10 +37,14 @@ const jadwalBukaRSControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchRS = req.query.searchRS || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allJadwalBukaRS({
         search,
+        searchRS,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -46,7 +53,7 @@ const jadwalBukaRSControllers = {
 
       const {
         rows: [count],
-      } = await countAllJadwalBukaRS();
+      } = await countAllJadwalBukaRS(search, searchRS, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -74,13 +81,13 @@ const jadwalBukaRSControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getJadwalBukaRSById({
+      const result = await getJadwalBukaRSByIdJadwalBukaRS({
         id,
       });
 
       const {
         rows: [findJadwalBukaRS],
-      } = await findJadwalBukaRSById(id);
+      } = await findJadwalBukaRSByIdJadwalBukaRS(id);
 
       if (findJadwalBukaRS) {
         response(res, 200, true, result.rows, 'get jadwal buka rs success');
@@ -104,7 +111,7 @@ const jadwalBukaRSControllers = {
 
       const {
         rows: [findJadwalBukaRS],
-      } = await findJadwalBukaRSById(id);
+      } = await findJadwalBukaRSByIdJadwalBukaRS(id);
 
       if (findJadwalBukaRS) {
         let data = {
@@ -113,6 +120,7 @@ const jadwalBukaRSControllers = {
           hari: req.body.hari,
           jam_buka: req.body.jam_buka,
           jam_tutup: req.body.jam_tutup,
+          is_active: 1,
         };
 
         await editJadwalBukaRS(data);
@@ -129,6 +137,95 @@ const jadwalBukaRSControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit jadwal buka rs failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findJadwalBukaRS],
+      } = await findJadwalBukaRSByIdJadwalBukaRS(id);
+
+      if (findJadwalBukaRS) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editJadwalBukaRSActiveArchive(data);
+        response(res, 200, true, data, 'activate jadwal buka rs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id jadwal buka rs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active jadwal buka rs failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findJadwalBukaRS],
+      } = await findJadwalBukaRSByIdJadwalBukaRS(id);
+
+      if (findJadwalBukaRS) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editJadwalBukaRSActiveArchive(data);
+        response(res, 200, true, data, 'archive jadwal buka rs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id jadwal buka rs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive jadwal buka rs failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findJadwalBukaRS],
+      } = await findJadwalBukaRSByIdJadwalBukaRS(id);
+
+      if (findJadwalBukaRS) {
+        let data = {
+          id,
+        };
+
+        await deleteJadwalBukaRS(data);
+        response(res, 200, true, data, 'delete jadwal buka rs success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id jadwal buka rs not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete jadwal buka rs failed');
     }
   },
 };
