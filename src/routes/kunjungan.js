@@ -10,5 +10,12 @@ router.get(`/`, kunjunganControllers.getAll);
 router.get(`/:id`, kunjunganControllers.getByIdKunjungan);
 router.get(`/pasien/:id_pasien`, kunjunganControllers.getByIdPasien);
 router.put(`/:id`, uploaded.array(), kunjunganControllers.edit);
+router.put(
+  `/activate/:id`,
+  uploaded.array(),
+  kunjunganControllers.editActivate
+);
+router.put(`/archive/:id`, uploaded.array(), kunjunganControllers.editArchive);
+router.delete(`/:id`, uploaded.array(), kunjunganControllers.delete);
 
 module.exports = router;

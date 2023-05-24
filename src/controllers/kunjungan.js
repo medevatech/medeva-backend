@@ -3,12 +3,14 @@ const {
   insertKunjungan,
   allKunjungan,
   countAllKunjungan,
-  getKunjunganById,
-  findKunjunganById,
+  getKunjunganByIdKunjungan,
+  findKunjunganByIdKunjungan,
   getKunjunganByIdPasien,
   findKunjunganByIdPasien,
   countAllKunjunganPasien,
   editKunjungan,
+  editKunjunganActiveArchive,
+  deleteKunjungan,
 } = require(`../models/kunjungan`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -29,6 +31,7 @@ const kunjunganControllers = {
         kasus_kll: req.body.kasus_kll,
         status_pulang: req.body.status_pulang,
         keluhan: req.body.keluhan,
+        is_active: 1,
       };
 
       if (req.body.waktu_mulai === '') {
@@ -57,10 +60,14 @@ const kunjunganControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allKunjungan({
         search,
+        searchPasien,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -69,7 +76,7 @@ const kunjunganControllers = {
 
       const {
         rows: [count],
-      } = await countAllKunjungan();
+      } = await countAllKunjungan(search, searchPasien, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -97,13 +104,13 @@ const kunjunganControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getKunjunganById({
+      const result = await getKunjunganByIdKunjungan({
         id,
       });
 
       const {
         rows: [findKunjungan],
-      } = await findKunjunganById(id);
+      } = await findKunjunganByIdKunjungan(id);
 
       if (findKunjungan) {
         response(res, 200, true, result.rows, 'get kunjungan success');
@@ -181,7 +188,7 @@ const kunjunganControllers = {
 
       const {
         rows: [findKunjungan],
-      } = await findKunjunganById(id);
+      } = await findKunjunganByIdKunjungan(id);
 
       if (findKunjungan) {
         let data = {
@@ -198,6 +205,7 @@ const kunjunganControllers = {
           kasus_kll: req.body.kasus_kll,
           status_pulang: req.body.status_pulang,
           keluhan: req.body.keluhan,
+          is_active: 1,
         };
 
         await editKunjungan(data);
@@ -214,6 +222,95 @@ const kunjunganControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit kunjungan failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findKunjungan],
+      } = await findKunjunganByIdKunjungan(id);
+
+      if (findKunjungan) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editKunjunganActiveArchive(data);
+        response(res, 200, true, data, 'activate kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active kunjungan failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findKunjungan],
+      } = await findKunjunganByIdKunjungan(id);
+
+      if (findKunjungan) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editKunjunganActiveArchive(data);
+        response(res, 200, true, data, 'archive kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive kunjungan failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findKunjungan],
+      } = await findKunjunganByIdKunjungan(id);
+
+      if (findKunjungan) {
+        let data = {
+          id,
+        };
+
+        await deleteKunjungan(data);
+        response(res, 200, true, data, 'delete kunjungan success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete kunjungan failed');
     }
   },
 };
