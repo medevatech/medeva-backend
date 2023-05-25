@@ -8,7 +8,7 @@ const insertDiagnosisRujukan = (data) => {
         (id, id_rujukan, id_penyakit, tipe_wd, tipe_dd, is_active,
           created_at, updated_at) 
       VALUES
-        ('${id}', '${id_rujukan}', '${id_penyakit}', '${tipe_wd}', '${tipe_dd}', ${is_active},
+        ('${id}', '${id_rujukan}', '${id_penyakit}', ${tipe_wd}, ${tipe_dd}, ${is_active},
           NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -112,7 +112,7 @@ const editDiagnosisRujukan = (data) => {
     Pool.query(
       `UPDATE tbl_diagnosis_rujukan 
       SET
-        id_rujukan='${id_rujukan}', id_penyakit='${id_penyakit}', tipe_wd='${tipe_wd}', tipe_dd='${tipe_dd}', is_active=${is_active},
+        id_rujukan='${id_rujukan}', id_penyakit='${id_penyakit}', tipe_wd=${tipe_wd}, tipe_dd=${tipe_dd}, is_active=${is_active},
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
