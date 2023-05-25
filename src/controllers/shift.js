@@ -8,6 +8,7 @@ const {
   archiveShift,
   activateShift,
   deleteShift,
+  getShiftByIdClinic,
 } = require("../models/shift");
 
 const shiftController = {
@@ -83,6 +84,21 @@ const shiftController = {
     } catch (err) {
       console.log("Get shift data by ID error", err);
       response(res, 400, false, err, "Get shift data by ID failed");
+    }
+  },
+  getByIdClinic: async (req, res, next) => {
+    try {
+      const result = await getShiftByIdClinic(req.params.id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get shift data by ID clinic success"
+      );
+    } catch (err) {
+      console.log("Get shift data by ID error", err);
+      response(res, 400, false, err, "Get shift data by ID clinic failed");
     }
   },
   update: async (req, res, next) => {

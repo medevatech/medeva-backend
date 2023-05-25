@@ -81,6 +81,25 @@ const getDivisiById = (id) => {
   });
 };
 
+const getDivisiByIdClinic = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, divisi.is_active, klinik.nama_klinik as nama_klinik
+      FROM tbl_divisi as divisi 
+      INNER JOIN tbl_klinik as klinik 
+      ON divisi.id_klinik = klinik.id
+      WHERE divisi.id_klinik = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const updateDivisi = (data) => {
   const { id, id_klinik, tipe } = data;
   return new Promise((resolve, reject) => {
@@ -151,6 +170,7 @@ module.exports = {
   countDivisi,
   getDivisi,
   getDivisiById,
+  getDivisiByIdClinic,
   updateDivisi,
   archiveDivisi,
   activateDivisi,

@@ -9,6 +9,7 @@ const {
   archiveDivisi,
   activateDivisi,
   deleteDivisi,
+  getDivisiByIdClinic,
 } = require("../models/divisi");
 
 const divisiController = {
@@ -87,6 +88,21 @@ const divisiController = {
     } catch (err) {
       console.log("Get division data by ID error", err);
       response(res, 400, false, err, "Get division data by ID failed");
+    }
+  },
+  getByIdClinic: async (req, res, next) => {
+    try {
+      const result = await getDivisiByIdClinic(req.params.id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get division data by ID clinic success"
+      );
+    } catch (err) {
+      console.log("Get division data by ID clinic error", err);
+      response(res, 400, false, err, "Get division data by ID clinic failed");
     }
   },
   update: async (req, res, next) => {
