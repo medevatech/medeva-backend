@@ -25,12 +25,26 @@ const diagnosisControllers = {
         is_active: 1,
       };
 
+      console.log(data.tipe_wd);
+
       if (data.id_penyakit == '') {
         response(res, 200, true, data, 'insert diagnosis but id_penyakit null');
-      } else if (data.tipe_wd == '') {
-        response(res, 200, true, data, 'insert diagnosis but tipe_wd null');
-      } else if (data.tipe_dd == '') {
-        response(res, 200, true, data, 'insert diagnosis but tipe_dd null');
+      } else if (data.tipe_wd !== true && data.tipe_wd !== false) {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis but tipe_wd not correct'
+        );
+      } else if (data.tipe_dd !== true && data.tipe_dd !== false) {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis but tipe_dd not correct'
+        );
       } else {
         await insertDiagnosis(data);
         response(res, 200, true, data, 'insert diagnosis success');
@@ -136,10 +150,10 @@ const diagnosisControllers = {
         if (data.id_penyakit == '') {
           await deleteDiagnosis(data);
           response(res, 200, true, data, 'delete diagnosis success');
-        } else if (data.tipe_wd == '') {
+        } else if (data.tipe_wd !== true && data.tipe_wd !== false) {
           await deleteDiagnosis(data);
           response(res, 200, true, data, 'delete diagnosis success');
-        } else if (data.tipe_dd == '') {
+        } else if (data.tipe_dd !== true && data.tipe_dd !== false) {
           await deleteDiagnosis(data);
           response(res, 200, true, data, 'delete diagnosis success');
         } else {

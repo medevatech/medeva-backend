@@ -8,7 +8,7 @@ const insertDiagnosis = (data) => {
       (id, id_kunjungan, id_penyakit, tipe_wd, tipe_dd, is_active,
         created_at, updated_at) 
       VALUES
-      ('${id}', '${id_kunjungan}', '${id_penyakit}', '${tipe_wd}', '${tipe_dd}', ${is_active},
+      ('${id}', '${id_kunjungan}', '${id_penyakit}', ${tipe_wd}, ${tipe_dd}, ${is_active},
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -94,8 +94,7 @@ const getDiagnosisByIdDiagnosis = ({ id }) => {
 const findDiagnosisByIdDiagnosis = (id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_diagnosis WHERE id = '${id}'
-           `,
+      `SELECT * FROM tbl_diagnosis WHERE id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -113,7 +112,7 @@ const editDiagnosis = (data) => {
     Pool.query(
       `UPDATE tbl_diagnosis 
       SET
-        id_kunjungan='${id_kunjungan}', id_penyakit='${id_penyakit}', tipe_wd='${tipe_wd}', tipe_dd='${tipe_dd}', is_active=${is_active},
+        id_kunjungan='${id_kunjungan}', id_penyakit='${id_penyakit}', tipe_wd=${tipe_wd}, tipe_dd=${tipe_dd}, is_active=${is_active},
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
