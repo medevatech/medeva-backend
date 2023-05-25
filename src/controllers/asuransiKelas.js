@@ -3,11 +3,13 @@ const {
   insertAsuransiKelas,
   allAsuransiKelas,
   countAllAsuransiKelas,
-  getAsuransiKelasById,
-  findAsuransiKelasById,
+  getAsuransiKelasByIdAsuransiKelas,
+  findAsuransiKelasByIdAsuransiKelas,
   editAsuransiKelas,
   getAsuransiKelasByIdAsuransi,
   findAsuransiKelasByIdAsuransi,
+  editAsuransiKelasActiveArchive,
+  deleteAsuransiKelas,
 } = require(`../models/asuransiKelas`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -19,6 +21,7 @@ const asuransiKelasControllers = {
         id_asuransi: req.body.id_asuransi,
         nama_kelas: req.body.nama_kelas,
         sistem: req.body.sistem,
+        is_active: 1,
       };
 
       await insertAsuransiKelas(data);
@@ -35,10 +38,14 @@ const asuransiKelasControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchAsuransi = req.query.searchAsuransi || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allAsuransiKelas({
         search,
+        searchAsuransi,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -47,7 +54,7 @@ const asuransiKelasControllers = {
 
       const {
         rows: [count],
-      } = await countAllAsuransiKelas();
+      } = await countAllAsuransiKelas(search, searchAsuransi, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -75,13 +82,13 @@ const asuransiKelasControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getAsuransiKelasById({
+      const result = await getAsuransiKelasByIdAsuransiKelas({
         id,
       });
 
       const {
         rows: [findAsuransiKelas],
-      } = await findAsuransiKelasById(id);
+      } = await findAsuransiKelasByIdAsuransiKelas(id);
 
       if (findAsuransiKelas) {
         response(res, 200, true, result.rows, 'get asuransi kelas success');
@@ -105,7 +112,7 @@ const asuransiKelasControllers = {
 
       const {
         rows: [findAsuransiKelas],
-      } = await findAsuransiKelasById(id);
+      } = await findAsuransiKelasByIdAsuransiKelas(id);
 
       if (findAsuransiKelas) {
         let data = {
@@ -113,6 +120,7 @@ const asuransiKelasControllers = {
           id_asuransi: req.body.id_asuransi,
           nama_kelas: req.body.nama_kelas,
           sistem: req.body.sistem,
+          is_active: 1,
         };
 
         await editAsuransiKelas(data);
@@ -140,10 +148,10 @@ const asuransiKelasControllers = {
       });
 
       const {
-        rows: [findPeserta],
+        rows: [findAsuransi],
       } = await findAsuransiKelasByIdAsuransi(id_asuransi);
 
-      if (findPeserta) {
+      if (findAsuransi) {
         response(res, 200, true, result.rows, 'get asuransi kelas success');
       } else {
         return response(
@@ -157,6 +165,95 @@ const asuransiKelasControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get asuransi kelas failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAsuransiKelas],
+      } = await findAsuransiKelasByIdAsuransiKelas(id);
+
+      if (findAsuransiKelas) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editAsuransiKelasActiveArchive(data);
+        response(res, 200, true, data, 'activate asuransi kelas success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi kelas not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active asuransi kelas failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAsuransiKelas],
+      } = await findAsuransiKelasByIdAsuransiKelas(id);
+
+      if (findAsuransiKelas) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editAsuransiKelasActiveArchive(data);
+        response(res, 200, true, data, 'archive asuransi kelas success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi kelas not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive asuransi kelas failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findAsuransiKelas],
+      } = await findAsuransiKelasByIdAsuransiKelas(id);
+
+      if (findAsuransiKelas) {
+        let data = {
+          id,
+        };
+
+        await deleteAsuransiKelas(data);
+        response(res, 200, true, data, 'delete asuransi kelas success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id asuransi kelas not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete asuransi kelas failed');
     }
   },
 };
