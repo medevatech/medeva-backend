@@ -20,8 +20,8 @@ const insertResep = (data) => {
         frekuensi, periode, metode_konsumsi, aturan_pakai, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${id_kunjungan}', '${id_obat}', '${jumlah}', '${satuan}', 
-        '${frekuensi}', '${periode}', '${metode_konsumsi}', '${aturan_pakai}', ${is_active}, 
+        ('${id}', '${id_kunjungan}', '${id_obat}', ${jumlah}, '${satuan}', 
+        ${frekuensi}, '${periode}', '${metode_konsumsi}', '${aturan_pakai}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -53,7 +53,7 @@ const allResep = ({
       FROM tbl_resep AS tbl_resep
       INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
       WHERE
-        tbl_resep.jumlah ILIKE '%${search}%' 
+        CAST(tbl_resep.jumlah AS TEXT) ILIKE '%${search}%'
       AND
         tbl_obat.nama ILIKE '%${searchObat}%' 
       AND
@@ -77,7 +77,7 @@ const countAllResep = (search, searchObat, searchStatus) => {
   FROM tbl_resep AS tbl_resep
   INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
   WHERE
-    tbl_resep.jumlah ILIKE '%${search}%' 
+    CAST(tbl_resep.jumlah AS TEXT) ILIKE '%${search}%'
   AND
     tbl_obat.nama ILIKE '%${searchObat}%' 
   AND
@@ -136,8 +136,8 @@ const editResep = (data) => {
     Pool.query(
       `UPDATE tbl_resep 
       SET
-        id_kunjungan='${id_kunjungan}', id_obat='${id_obat}', jumlah='${jumlah}', satuan='${satuan}',
-            frekuensi='${frekuensi}', periode='${periode}', metode_konsumsi='${metode_konsumsi}', aturan_pakai='${aturan_pakai}', is_active=${is_active},
+        id_kunjungan='${id_kunjungan}', id_obat='${id_obat}', jumlah=${jumlah}, satuan='${satuan}',
+            frekuensi=${frekuensi}, periode='${periode}', metode_konsumsi='${metode_konsumsi}', aturan_pakai='${aturan_pakai}', is_active=${is_active},
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
