@@ -27,8 +27,14 @@ const rujukanjControllers = {
         is_active: 1,
       };
 
-      await insertRujukan(data);
-      response(res, 200, true, data, 'insert rujukan success');
+      if (data.id_kunjungan == '') {
+        response(res, 200, true, data, 'insert rujukan but id_kunjungan null');
+      } else if (data.id_poli == '') {
+        response(res, 200, true, data, 'insert rujukan but id_poli null');
+      } else {
+        await insertRujukan(data);
+        response(res, 200, true, data, 'insert rujukan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert rujukan failed');
@@ -124,8 +130,16 @@ const rujukanjControllers = {
           is_active: 1,
         };
 
-        await editRujukan(data);
-        response(res, 200, true, data, 'edit rujukan success');
+        if (data.id_kunjungan == '') {
+          await deleteRujukan(data);
+          response(res, 200, true, data, 'delete rujukan success');
+        } else if (data.id_poli == '') {
+          await deleteRujukan(data);
+          response(res, 200, true, data, 'delete rujukan success');
+        } else {
+          await editRujukan(data);
+          response(res, 200, true, data, 'edit rujukan success');
+        }
       } else {
         return response(
           res,
