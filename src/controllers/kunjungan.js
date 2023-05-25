@@ -210,6 +210,8 @@ const kunjunganControllers = {
           is_active: 1,
         };
 
+        console.log(data);
+
         await editKunjungan(data);
         response(res, 200, true, data, 'edit kunjungan success');
       } else {
