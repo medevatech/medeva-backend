@@ -6,10 +6,10 @@ const insertDaftarLayanan = (data) => {
     Pool.query(
       `INSERT INTO tbl_daftar_layanan 
         (id,  nama, is_active,
-            created_at, updated_at) 
-        VALUES
+        created_at, updated_at) 
+      VALUES
         ('${id}', '${nama}', ${is_active}, 
-            NOW(), NOW())`,
+        NOW(), NOW())`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -52,11 +52,17 @@ const allDaftarLayanan = ({
   );
 };
 
-const countAllDaftarLayanan = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_daftar_layanan`);
+const countAllDaftarLayanan = (search, searchStatus) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_daftar_layanan AS tbl_daftar_layanan
+  WHERE
+    tbl_daftar_layanan.nama ILIKE '%${search}%' 
+  AND
+    CAST(tbl_daftar_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
-const getDaftarLayananById = ({ id }) => {
+const getDaftarLayananByIdDaftarLayanan = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_daftar_layanan.id, tbl_daftar_layanan.nama, 
@@ -75,11 +81,10 @@ const getDaftarLayananById = ({ id }) => {
   );
 };
 
-const findDaftarLayananById = (id) => {
+const findDaftarLayananByIdDaftarLayanan = (id) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_daftar_layanan WHERE id = '${id}'
-           `,
+      `SELECT * FROM tbl_daftar_layanan WHERE id = '${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -92,14 +97,14 @@ const findDaftarLayananById = (id) => {
 };
 
 const editDaftarLayanan = (data) => {
-  const { id, nama } = data;
+  const { id, nama, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_daftar_layanan 
-          SET
-            nama='${nama}', 
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        nama='${nama}', is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -171,8 +176,8 @@ module.exports = {
   insertDaftarLayanan,
   allDaftarLayanan,
   countAllDaftarLayanan,
-  findDaftarLayananById,
-  getDaftarLayananById,
+  getDaftarLayananByIdDaftarLayanan,
+  findDaftarLayananByIdDaftarLayanan,
   editDaftarLayanan,
   editDaftarLayananActivate,
   editDaftarLayananArchive,
