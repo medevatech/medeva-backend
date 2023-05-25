@@ -25,7 +25,15 @@ const diagnosisRujukanControllers = {
         is_active: 1,
       };
 
-      if (data.id_penyakit == '') {
+      if (data.id_rujukan == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis rujukan but id_rujukan null'
+        );
+      } else if (data.id_penyakit == '') {
         response(
           res,
           200,
@@ -151,7 +159,10 @@ const diagnosisRujukanControllers = {
           is_active: 1,
         };
 
-        if (data.id_penyakit == '') {
+        if (data.id_rujukan == '') {
+          await deleteDiagnosisRujukan(data);
+          response(res, 200, true, data, 'delete diagnosis rujukan success');
+        } else if (data.id_penyakit == '') {
           await deleteDiagnosisRujukan(data);
           response(res, 200, true, data, 'delete diagnosis rujukan success');
         } else if (data.tipe_wd !== true && data.tipe_wd !== false) {

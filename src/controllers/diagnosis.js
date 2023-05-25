@@ -25,9 +25,18 @@ const diagnosisControllers = {
         is_active: 1,
       };
 
-      console.log(data.tipe_wd);
+      console.log('ini tipe wd', data.tipe_wd);
+      console.log('ini tipe dd', req.body.tipe_dd);
 
-      if (data.id_penyakit == '') {
+      if (data.id_kunjungan == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert diagnosis but id_kunjungan null'
+        );
+      } else if (data.id_penyakit == '') {
         response(res, 200, true, data, 'insert diagnosis but id_penyakit null');
       } else if (data.tipe_wd !== true && data.tipe_wd !== false) {
         response(
@@ -147,7 +156,13 @@ const diagnosisControllers = {
           is_active: 1,
         };
 
-        if (data.id_penyakit == '') {
+        // console.log('ini tipe wd', data.tipe_wd);
+        console.log('ini tipe dd', req.body.tipe_dd);
+
+        if (data.id_kunjungan == '') {
+          await deleteDiagnosis(data);
+          response(res, 200, true, data, 'delete diagnosis success');
+        } else if (data.id_penyakit == '') {
           await deleteDiagnosis(data);
           response(res, 200, true, data, 'delete diagnosis success');
         } else if (data.tipe_wd !== true && data.tipe_wd !== false) {
