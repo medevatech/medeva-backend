@@ -24,7 +24,9 @@ const layananControllers = {
         is_active: 1,
       };
 
-      if (data.id_daftar_layanan == '') {
+      if (data.id_kunjungan == '') {
+        response(res, 200, true, data, 'insert layanan but id_kunjungan null');
+      } else if (data.id_daftar_layanan == '') {
         response(
           res,
           200,
@@ -126,7 +128,10 @@ const layananControllers = {
           is_active: 1,
         };
 
-        if (data.id_daftar_layanan == '') {
+        if (data.id_kunjungan == '') {
+          await deleteLayanan(data);
+          response(res, 200, true, data, 'delete layanan success');
+        } else if (data.id_daftar_layanan == '') {
           await deleteLayanan(data);
           response(res, 200, true, data, 'delete layanan success');
         } else {
