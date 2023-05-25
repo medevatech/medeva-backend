@@ -3,8 +3,8 @@ const {
   insertDaftarLayanan,
   allDaftarLayanan,
   countAllDaftarLayanan,
-  getDaftarLayananById,
-  findDaftarLayananById,
+  getDaftarLayananByIdDaftarLayanan,
+  findDaftarLayananByIdDaftarLayanan,
   editDaftarLayanan,
   editDaftarLayananActivate,
   editDaftarLayananArchive,
@@ -49,7 +49,7 @@ const daftarLayananControllers = {
 
       const {
         rows: [count],
-      } = await countAllDaftarLayanan();
+      } = await countAllDaftarLayanan(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -77,13 +77,13 @@ const daftarLayananControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getDaftarLayananById({
+      const result = await getDaftarLayananByIdDaftarLayanan({
         id,
       });
 
       const {
         rows: [findDaftarLayanan],
-      } = await findDaftarLayananById(id);
+      } = await findDaftarLayananByIdDaftarLayanan(id);
 
       if (findDaftarLayanan) {
         response(res, 200, true, result.rows, 'get daftar layanan success');
@@ -107,12 +107,13 @@ const daftarLayananControllers = {
 
       const {
         rows: [findDaftarLayanan],
-      } = await findDaftarLayananById(id);
+      } = await findDaftarLayananByIdDaftarLayanan(id);
 
       if (findDaftarLayanan) {
         let data = {
           id,
           nama: req.body.nama,
+          is_active: 1,
         };
 
         await editDaftarLayanan(data);
@@ -137,7 +138,7 @@ const daftarLayananControllers = {
 
       const {
         rows: [findDaftarLayanan],
-      } = await findDaftarLayananById(id);
+      } = await findDaftarLayananByIdDaftarLayanan(id);
 
       if (findDaftarLayanan) {
         let data = {
@@ -167,7 +168,7 @@ const daftarLayananControllers = {
 
       const {
         rows: [findDaftarLayanan],
-      } = await findDaftarLayananById(id);
+      } = await findDaftarLayananByIdDaftarLayanan(id);
 
       if (findDaftarLayanan) {
         let data = {
@@ -197,7 +198,7 @@ const daftarLayananControllers = {
 
       const {
         rows: [findDaftarLayanan],
-      } = await findDaftarLayananById(id);
+      } = await findDaftarLayananByIdDaftarLayanan(id);
 
       if (findDaftarLayanan) {
         let data = {
