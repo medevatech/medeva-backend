@@ -24,7 +24,9 @@ const tindakanControllers = {
         is_active: 1,
       };
 
-      if (data.id_daftar_tindakan == '') {
+      if (data.id_kunjungan == '') {
+        response(res, 200, true, data, 'insert tindakan but id_kunjungan null');
+      } else if (data.id_daftar_tindakan == '') {
         response(
           res,
           200,
@@ -126,7 +128,10 @@ const tindakanControllers = {
           is_active: 1,
         };
 
-        if (data.id_daftar_tindakan == '') {
+        if (data.id_kunjungan == '') {
+          await deleteTindakan(data);
+          response(res, 200, true, data, 'delete tindakan success');
+        } else if (data.id_daftar_tindakan == '') {
           await deleteTindakan(data);
           response(res, 200, true, data, 'delete tindakan success');
         } else {
