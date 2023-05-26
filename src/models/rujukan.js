@@ -32,7 +32,6 @@ const insertRujukan = (data) => {
 
 const allRujukan = ({
   search,
-  searchRS,
   searchPoli,
   searchStatus,
   sortBy,
@@ -43,17 +42,14 @@ const allRujukan = ({
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
-        tbl_rujukan.id_rs, tbl_rs.nama,
+        tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
-      INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
       WHERE 
         tbl_rujukan.anamnesis ILIKE '%${search}%' 
-      AND
-        tbl_rs.nama ILIKE '%${searchRS}%'
       AND
       tbl_poli.nama ILIKE '%${searchPoli}%'
       AND
@@ -71,16 +67,13 @@ const allRujukan = ({
   );
 };
 
-const countAllRujukan = (search, searchRS, searchPoli, searchStatus) => {
+const countAllRujukan = (search, searchPoli, searchStatus) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
   FROM tbl_rujukan AS tbl_rujukan
-  INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
   INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
   WHERE 
     tbl_rujukan.anamnesis ILIKE '%${search}%' 
-  AND
-    tbl_rs.nama ILIKE '%${searchRS}%'
   AND
   tbl_poli.nama ILIKE '%${searchPoli}%'
   AND
@@ -91,12 +84,11 @@ const getRujukanByIdRujukan = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
-        tbl_rujukan.id_rs, tbl_rs.nama,
+        tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
-      INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
       WHERE tbl_rujukan.id = '${id}'`,
       (err, result) => {
@@ -139,11 +131,11 @@ const editRujukan = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_rujukan 
-          SET
-            id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}', 
-            anamnesis='${anamnesis}', terapi='${terapi}', catatan='${catatan}', is_active=${is_active},
-            updated_at=NOW()
-          WHERE id='${id}'`,
+      SET
+        id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}', 
+        anamnesis='${anamnesis}', terapi='${terapi}', catatan='${catatan}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -159,12 +151,11 @@ const getRujukanByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
-        tbl_rujukan.id_rs, tbl_rs.nama,
+        tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
-      INNER JOIN tbl_rs AS tbl_rs ON tbl_rujukan.id_rs = tbl_rs.id
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
       WHERE tbl_rujukan.id_kunjungan = '${id_kunjungan}'`,
       (err, result) => {
