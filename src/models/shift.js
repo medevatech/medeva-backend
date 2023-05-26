@@ -12,7 +12,7 @@ const createShift = (data) => {
   } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_shift (id, id_klinik, id_divisi, hari, tanggal, waktu_mulai, waktu_selesai) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${hari}', '${tanggal}', '${waktu_mulai}', '${waktu_selesai}' )`,
+      `INSERT INTO tbl_shift (id, id_klinik, id_divisi, hari, tanggal, waktu_mulai, waktu_selesai, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${hari}', '${tanggal}', '${waktu_mulai}', '${waktu_selesai}', "1", NOW(), NOW() )`,
       (err, res) => {
         if (!err) {
           resolve(res);
