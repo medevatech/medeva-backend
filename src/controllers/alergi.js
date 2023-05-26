@@ -3,9 +3,11 @@ const {
   insertAlergi,
   allAlergi,
   countAllAlergi,
-  getAlergiById,
-  findAlergiById,
+  getAlergiByIdAlergi,
+  findAlergiByIdAlergi,
   editAlergi,
+  editAlergiActiveArchive,
+  deleteAlergi,
 } = require(`../models/alergi`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,6 +18,7 @@ const alergiControllers = {
         id: uuidv4(),
         nama: req.body.nama,
         kategori: req.body.kategori,
+        is_active: 1,
       };
 
       await insertAlergi(data);
@@ -32,10 +35,12 @@ const alergiControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allAlergi({
         search,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -44,7 +49,7 @@ const alergiControllers = {
 
       const {
         rows: [count],
-      } = await countAllAlergi();
+      } = await countAllAlergi(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -65,13 +70,13 @@ const alergiControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getAlergiById({
+      const result = await getAlergiByIdAlergi({
         id,
       });
 
       const {
         rows: [findAlergi],
-      } = await findAlergiById(id);
+      } = await findAlergiByIdAlergi(id);
 
       if (findAlergi) {
         response(res, 200, true, result.rows, 'get alergi success');
@@ -95,13 +100,14 @@ const alergiControllers = {
 
       const {
         rows: [findAlergi],
-      } = await findAlergiById(id);
+      } = await findAlergiByIdAlergi(id);
 
       if (findAlergi) {
         let data = {
           id,
           nama: req.body.nama,
           kategori: req.body.kategori,
+          is_active: 1,
         };
 
         await editAlergi(data);
@@ -118,6 +124,77 @@ const alergiControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit alergi failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAlergi],
+      } = await findAlergiByIdAlergi(id);
+
+      if (findAlergi) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editAlergiActiveArchive(data);
+        response(res, 200, true, data, 'activate alergi success');
+      } else {
+        return response(res, 200, [], null, `id alergi not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active alergi failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findAlergi],
+      } = await findAlergiByIdAlergi(id);
+
+      if (findAlergi) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editAlergiActiveArchive(data);
+        response(res, 200, true, data, 'archive alergi success');
+      } else {
+        return response(res, 200, [], null, `id alergi not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive alergi failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findAlergi],
+      } = await findAlergiByIdAlergi(id);
+
+      if (findAlergi) {
+        let data = {
+          id,
+        };
+
+        await deleteAlergi(data);
+        response(res, 200, true, data, 'delete alergi success');
+      } else {
+        return response(res, 200, [], null, `id alergi not found, check again`);
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete alergi failed');
     }
   },
 };

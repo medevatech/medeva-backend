@@ -196,7 +196,7 @@ const editKunjungan = (data) => {
       SET
         id_jaga='${id_jaga}', id_pasien='${id_pasien}', id_vs='${id_vs}', waktu_mulai='${waktu_mulai}', waktu_selesai='${waktu_selesai}', 
         tipe='${tipe}', anamnesis='${anamnesis}', pemeriksaan_fisik='${pemeriksaan_fisik}', prognosa='${prognosa}', kasus_kll='${kasus_kll}', 
-        status_pulang='${status_pulang}', keluhan='${keluhan}',  catatan_tambahan='${catatan_tambahan}',  is_active='=${is_active}, 
+        status_pulang='${status_pulang}', keluhan='${keluhan}',  catatan_tambahan='${catatan_tambahan}',  is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {

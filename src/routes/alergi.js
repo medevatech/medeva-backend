@@ -9,5 +9,8 @@ router.post(`/`, uploaded.array(), alergiControllers.add);
 router.get(`/`, alergiControllers.getAll);
 router.get(`/:id`, alergiControllers.getById);
 router.put(`/:id`, uploaded.array(), alergiControllers.edit);
+router.put(`/activate/:id`, uploaded.array(), alergiControllers.editActivate);
+router.put(`/archive/:id`, uploaded.array(), alergiControllers.editArchive);
+router.delete(`/:id`, uploaded.array(), alergiControllers.delete);
 
 module.exports = router;

@@ -24,13 +24,13 @@ const pemeriksaanPenunjangControllers = {
         is_active: 1,
       };
 
-      if (data.id_pemeriksaan == '') {
+      if (data.id_kunjungan == '') {
         response(
           res,
           200,
           true,
           data,
-          'insert pemeriksaan but id_pemeriksaan null'
+          'insert pemeriksaan but id_kunjungan null'
         );
       } else if (data.id_lab == '') {
         response(res, 200, true, data, 'insert pemeriksaan but id_lab null');
@@ -182,7 +182,7 @@ const pemeriksaanPenunjangControllers = {
           is_active: 1,
         };
 
-        if (data.id_pemeriksaan == '') {
+        if (data.id_kunjungan == '') {
           await deletePemeriksaanPenunjang(data);
           response(
             res,
