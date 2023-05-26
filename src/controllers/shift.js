@@ -20,10 +20,6 @@ const shiftController = {
       for (let i = 0; i < 6; i++) {
         id += digits[Math.floor(Math.random() * 10)];
       }
-      let id2 = "JGA";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const data = {
         id,
         id_klinik: req.body.id_klinik,
@@ -33,16 +29,9 @@ const shiftController = {
         waktu_mulai: req.body.waktu_mulai,
         waktu_selesai: req.body.waktu_selesai,
       };
-      const data2 = {
-        id: id2,
-        id_klinik: req.body.id_klinik,
-        id_divisi: req.body.id_divisi,
-        id_shift: req.body.id,
-        id_karyawan: req.body.id_karyawan,
-      };
       console.log(data);
       await createShift(data);
-      await createJaga(data2);
+      // createJaga(data2);
       response(res, 200, true, data, "Create shift success");
     } catch (err) {
       console.log(err);
