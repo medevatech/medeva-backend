@@ -47,14 +47,12 @@ const rujukanjControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchRS = req.query.searchRS || '';
       const searchPoli = req.query.searchPoli || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allRujukan({
         search,
-        searchRS,
         searchPoli,
         searchStatus,
         sortBy,
@@ -65,7 +63,7 @@ const rujukanjControllers = {
 
       const {
         rows: [count],
-      } = await countAllRujukan(search, searchRS, searchPoli, searchStatus);
+      } = await countAllRujukan(search, searchPoli, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
