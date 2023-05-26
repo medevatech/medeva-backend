@@ -47,10 +47,12 @@ const divisiController = {
       const searchName = req.query.searchName || "";
       const searchStatus = req.query.searchStatus || "";
       const searchKlinik = req.query.searchKlinik || "";
+      const searchDivisi = req.query.searchDivisi || "";
       const offset = (page - 1) * limit;
       const result = await getDivisi({
         searchName,
         searchStatus,
+        searchDivisi,
         searchKlinik,
         sortBy,
         sortOrder,
