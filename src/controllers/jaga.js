@@ -8,6 +8,7 @@ const {
   archiveJaga,
   activateJaga,
   deleteJaga,
+  getJagaByIdDivisi,
 } = require("../models/jaga");
 
 const jagaController = {
@@ -89,19 +90,30 @@ const jagaController = {
       response(res, 400, false, err, "Get jaga data by ID failed");
     }
   },
+  getByIdDivisi: async (req, res, next) => {
+    try {
+      const result = await getJagaByIdDivisi(req.params.id);
+      response(res, 200, true, result.rows, "Get jaga by ID divisi success");
+    } catch (err) {
+      console.log("Get jaga by ID divisi error", err);
+      response(res, 400, false, err, "Get jaga by ID divisi failed");
+    }
+  },
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const id_klinik = req.body.id_klinik;
-      const id_divisi = req.body.id_divisi;
-      const id_shift = req.body.id_shift;
       const id_karyawan = req.body.id_karyawan;
+      const hari = req.body.hari;
+      const tanggal = req.body.tanggal;
+      const waktu_mulai = req.body.waktu_mulai;
+      const waktu_selesai = req.body.waktu_selesai;
       const data = {
         id,
-        id_klinik,
-        id_divisi,
-        id_shift,
         id_karyawan,
+        hari,
+        tanggal,
+        waktu_mulai,
+        waktu_selesai,
       };
       await updateJaga(data);
       response(res, 200, true, data, "Update jaga data success");
