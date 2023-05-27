@@ -1,10 +1,19 @@
 const pool = require("../config/db");
 
 const createJaga = (data) => {
-  const { id, id_klinik, id_divisi, id_shift, id_karyawan } = data;
+  const {
+    id,
+    id_klinik,
+    id_divisi,
+    id_karyawan,
+    hari,
+    tanggal,
+    waktu_mulai,
+    waktu_selesai,
+  } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_shift, id_karyawan, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_shift}', '${id_karyawan}', '1', NOW(), NOW() )`,
+      `INSERT INTO tbl_jaga (id, id_klinik, id_divisi, id_karyawan, hari, tanggal, waktu_mulai, waktu_selesai, is_active, created_at, updated_at) VALUES('${id}', '${id_klinik}', '${id_divisi}', '${id_karyawan}', '${hari}', '${tanggal}', '${waktu_mulai}}', '${waktu_selesai}', '1', NOW(), NOW() )`,
       (err, res) => {
         if (!err) {
           resolve(res);

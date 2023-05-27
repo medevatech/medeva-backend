@@ -22,8 +22,11 @@ const jagaController = {
         id,
         id_klinik: req.body.id_klinik,
         id_divisi: req.body.id_divisi,
-        id_shift: req.body.id_shift,
         id_karyawan: req.body.id_karyawan,
+        hari: req.body.hari,
+        tanggal: req.body.tanggal,
+        waktu_mulai: req.body.waktu_mulai,
+        waktu_selesai: req.body.waktu_selesai,
       };
       await createJaga(data);
       response(res, 200, true, data, "Create jaga success");
