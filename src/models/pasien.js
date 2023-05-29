@@ -114,17 +114,13 @@ const getPasienByIdPasien = ({ id }) => {
 
 const findPasienByIdPasien = (id) => {
   return new Promise((resolve, reject) =>
-    Pool.query(
-      `SELECT * FROM tbl_pasien WHERE id = '${id}'
-           `,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
+    Pool.query(`SELECT * FROM tbl_pasien WHERE id = '${id}'`, (err, result) => {
+      if (!err) {
+        resolve(result);
+      } else {
+        reject(err);
       }
-    )
+    })
   );
 };
 
