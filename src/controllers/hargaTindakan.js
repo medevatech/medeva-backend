@@ -55,7 +55,12 @@ const hargaTindakanControllers = {
 
       const {
         rows: [count],
-      } = await countAllHargaTindakan();
+      } = await countAllHargaTindakan(
+        search,
+        searchKlinik,
+        searchStatus,
+        searchDaftarTindakan
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
