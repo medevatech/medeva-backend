@@ -91,8 +91,9 @@ const jagaController = {
     }
   },
   getByIdDivisi: async (req, res, next) => {
+    const searchStatus = req.query.searchStatus || "";
     try {
-      const result = await getJagaByIdDivisi(req.params.id);
+      const result = await getJagaByIdDivisi(req.params.id, searchStatus);
       response(res, 200, true, result.rows, "Get jaga by ID divisi success");
     } catch (err) {
       console.log("Get jaga by ID divisi error", err);
