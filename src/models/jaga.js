@@ -67,8 +67,12 @@ const getJaga = ({
 const getJagaById = ({ id }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT tbl_jaga.id, tbl_jaga.id_klinik, tbl_jaga.id_divisi, tbl_jaga.id_shift, tbl_jaga.id_karyawan, tbl_jaga.is_active, tbl_klinik.nama_klinik, tbl_divisi.tipe, tbl_shift.hari, tbl_karyawan.nama as nama_karyawan FROM tbl_jaga as tbl_jaga INNER JOIN tbl_klinik AS tbl_klinik ON tbl_jaga.id_klinik = tbl_klinik.id INNER JOIN tbl_divisi AS tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id INNER JOIN tbl_shift AS tbl_shift ON tbl_jaga.id_shift = tbl_shift.id INNER JOIN tbl_karyawan AS tbl_karyawan ON tbl_jaga.id_karyawan = tbl_karyawan.id
-        WHERE tbl_jaga.id_divisi = '${id}'`,
+      `SELECT SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_karyawan, jaga.hari, jaga.tanggal, jaga.waktu_mulai, jaga.waktu_selesai, jaga.is_active, jaga.created_at, jaga.updated_at, divisi.tipe, kry.nama as nama_karyawan, klinik.nama_klinik
+      FROM tbl_jaga AS jaga
+      INNER JOIN tbl_klinik AS klinik ON jaga.id_klinik = klinik.id
+      INNER JOIN tbl_divisi AS divisi ON jaga.id_divisi = divisi.id
+      INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
+      WHERE jaga.id_divisi = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
