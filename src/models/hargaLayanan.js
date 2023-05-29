@@ -62,8 +62,25 @@ const allHargaLayanan = ({
   );
 };
 
-const countAllHargaLayanan = () => {
-  return Pool.query(`SELECT COUNT(*) AS total FROM tbl_harga_layanan`);
+const countAllHargaLayanan = (
+  search,
+  searchKlinik,
+  searchStatus,
+  searchDaftarLayanan
+) => {
+  return Pool.query(`
+  SELECT COUNT(*) AS total
+  FROM tbl_harga_layanan AS tbl_harga_layanan
+  INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_layanan.id_klinik = tbl_klinik.id
+  INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_harga_layanan.id_daftar_layanan = tbl_daftar_layanan.id
+  WHERE 
+    tbl_harga_layanan.id ILIKE '%${search}%' 
+  AND
+    tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+  AND
+    CAST(tbl_harga_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
+  AND
+    tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%' `);
 };
 
 const getHargaLayananById = ({ id }) => {
