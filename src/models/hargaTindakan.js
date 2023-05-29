@@ -62,15 +62,15 @@ const allHargaTindakan = ({
   );
 };
 
-const countAllHargaTindakan = (
+const countAllHargaTindakan = ({
   search,
   searchKlinik,
   searchStatus,
-  searchDaftarTindakan
-) => {
+  searchDaftarTindakan,
+}) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
-  FROM tbl_harga_tindakan AS tbl_harga_tindakan
+  FROM tbl_harga_tindakan AS tbl_harga_tindakan 
   INNER JOIN tbl_klinik as tbl_klinik ON tbl_harga_tindakan.id_klinik = tbl_klinik.id
   INNER JOIN tbl_daftar_tindakan as tbl_daftar_tindakan ON tbl_harga_tindakan.id_daftar_tindakan = tbl_daftar_tindakan.id
   WHERE 
