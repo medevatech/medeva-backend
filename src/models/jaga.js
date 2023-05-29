@@ -88,7 +88,8 @@ const getJagaByIdDivisi = (id) => {
       INNER JOIN tbl_klinik AS klinik ON jaga.id_klinik = klinik.id
       INNER JOIN tbl_divisi AS divisi ON jaga.id_divisi = divisi.id
       INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
-      WHERE jaga.id_divisi = '${id}'`,
+      WHERE jaga.id_divisi = '${id}'
+      AND jaga.is_active ILIKE '%${searchDivisi}%'`,
       (err, res) => {
         if (!err) {
           resolve(res);
