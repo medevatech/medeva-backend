@@ -19,5 +19,6 @@ router.put(
   uploaded.array(),
   hargaLayananControllers.editArchive
 );
+router.delete(`/:id`, uploaded.array(), hargaLayananControllers.delete);
 
 module.exports = router;

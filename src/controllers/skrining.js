@@ -3,9 +3,11 @@ const {
   insertSkrining,
   allSkrining,
   countAllSkrining,
-  getSkriningById,
-  findSkriningById,
+  getSkriningByIdSkrining,
+  findSkriningByIdSkrining,
   editSkrining,
+  editSkriningActiveArchive,
+  deleteSkrining,
 } = require(`../models/skrining`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,6 +17,7 @@ const skriningControllers = {
       let data = {
         id: uuidv4(),
         id_pasien: req.body.id_pasien,
+        is_active: 1,
       };
 
       await insertSkrining(data);
@@ -31,10 +34,14 @@ const skriningControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchPasien = req.query.searchPasien || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allSkrining({
         search,
+        searchPasien,
+        searchStatus,
         sortBy,
         sortOrder,
         limit,
@@ -43,7 +50,7 @@ const skriningControllers = {
 
       const {
         rows: [count],
-      } = await countAllSkrining();
+      } = await countAllSkrining(search, searchPasien, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -64,13 +71,13 @@ const skriningControllers = {
     try {
       const id = req.params.id;
 
-      const result = await getSkriningById({
+      const result = await getSkriningByIdSkrining({
         id,
       });
 
       const {
         rows: [findSkrining],
-      } = await findSkriningById(id);
+      } = await findSkriningByIdSkrining(id);
 
       if (findSkrining) {
         response(res, 200, true, result.rows, 'get skrining success');
@@ -94,12 +101,13 @@ const skriningControllers = {
 
       const {
         rows: [findSkrining],
-      } = await findSkriningById(id);
+      } = await findSkriningByIdSkrining(id);
 
       if (findSkrining) {
         let data = {
           id,
           id_pasien: req.body.id_pasien,
+          is_active: 1,
         };
 
         await editSkrining(data);
@@ -116,6 +124,95 @@ const skriningControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit skrining failed');
+    }
+  },
+  editActivate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findSkrining],
+      } = await findSkriningByIdSkrining(id);
+
+      if (findSkrining) {
+        let data = {
+          id,
+          is_active: 1,
+        };
+
+        await editSkriningActiveArchive(data);
+        response(res, 200, true, data, 'activate skrining success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id skrining not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'active skrining failed');
+    }
+  },
+  editArchive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findSkrining],
+      } = await findSkriningByIdSkrining(id);
+
+      if (findSkrining) {
+        let data = {
+          id,
+          is_active: 0,
+        };
+
+        await editSkriningActiveArchive(data);
+        response(res, 200, true, data, 'archive skrining success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id skrining not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive skrining failed');
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      let id = req.params.id;
+
+      const {
+        rows: [findSkrining],
+      } = await findSkriningByIdSkrining(id);
+
+      if (findSkrining) {
+        let data = {
+          id,
+        };
+
+        await deleteSkrining(data);
+        response(res, 200, true, data, 'delete skrining success');
+      } else {
+        return response(
+          res,
+          200,
+          [],
+          null,
+          `id skrining not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete skrining failed');
     }
   },
 };
