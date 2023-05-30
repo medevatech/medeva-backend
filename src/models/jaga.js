@@ -50,7 +50,7 @@ const getJaga = ({
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
         AND jaga.is_active ILIKE '%${searchStatus}%'
         AND divisi.tipe ILIKE '%${searchDivisiName}%'
-        ORDER BY jaga.${sortBy} ${sortOrder}
+        ORDER BY jaga.${sortBy}, jaga.tanggal ${sortOrder}
         LIMIT ${limit}
         OFFSET ${offset}`,
       (err, res) => {
