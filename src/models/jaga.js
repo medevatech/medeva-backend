@@ -92,7 +92,6 @@ const getJagaByIdDivisi = ({
   limit,
   offset,
 }) => {
-  // console.log(id, sortBy, sortOrder, limit, offset);
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT jaga.id, jaga.id_klinik, jaga.id_divisi, jaga.id_karyawan, jaga.hari, jaga.tanggal, jaga.waktu_mulai, jaga.waktu_selesai, jaga.is_active, jaga.created_at, jaga.updated_at, divisi.tipe as nama_divisi, kry.nama, klinik.nama_klinik as nama_klinik
@@ -102,7 +101,7 @@ const getJagaByIdDivisi = ({
       INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
       WHERE jaga.id_divisi = '${id}'
       AND jaga.is_active = '${searchStatus}'
-      ORDER BY jaga.nama, jaga.hari, jaga.tanggal ${sortOrder}
+      ORDER BY kry.nama, jaga.hari, jaga.tanggal ${sortOrder}
       LIMIT ${limit}
       OFFSET ${offset}`,
       (err, res) => {
