@@ -102,7 +102,7 @@ const getJagaByIdDivisi = ({
       INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
       WHERE jaga.id_divisi = '${id}'
       AND jaga.is_active = '${searchStatus}'
-      ORDER BY jaga.${sortBy} ${sortOrder}
+      ORDER BY jaga.nama, jaga.hari, jaga.tanggal ${sortOrder}
       LIMIT ${limit}
       OFFSET ${offset}`,
       (err, res) => {
@@ -134,7 +134,7 @@ const getJagaByIdKaryawan = ({
       INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
       WHERE jaga.id_karyawan = '${id}'
       AND jaga.is_active ILIKE '%${searchStatus}%'
-      ORDER BY jaga.tanggal ${sortOrder}
+      ORDER BY jaga.nama_klinik, jaga.hari, jaga.tanggal ${sortOrder}
       LIMIT ${limit}
       OFFSET ${offset}`,
       (err, res) => {
