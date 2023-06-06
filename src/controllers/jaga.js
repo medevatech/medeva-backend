@@ -9,6 +9,7 @@ const {
   activateJaga,
   deleteJaga,
   getJagaByIdDivisi,
+  getJagaByIdKaryawan,
 } = require("../models/jaga");
 
 const jagaController = {
@@ -91,13 +92,87 @@ const jagaController = {
     }
   },
   getByIdDivisi: async (req, res, next) => {
-    const searchStatus = req.query.searchStatus || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchStatus = req.query.searchStatus || "1";
+    const sortBy = req.query.sortBy || "id";
+    const sortOrder = req.query.sortOrder || "asc";
+    const offset = (page - 1) * limit;
+    const id = req.params.id;
+    // console.log(page, limit, sortBy, sortOrder, offset, id);
     try {
-      const result = await getJagaByIdDivisi(req.params.id, searchStatus);
-      response(res, 200, true, result.rows, "Get jaga by ID divisi success");
+      const result = await getJagaByIdDivisi({
+        id,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countJaga();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jaga by ID divisi success",
+        pagination
+      );
     } catch (err) {
       console.log("Get jaga by ID divisi error", err);
       response(res, 400, false, err, "Get jaga by ID divisi failed");
+    }
+  },
+  getByIdKaryawan: async (req, res, next) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchStatus = req.query.searchStatus || "1";
+    const sortBy = req.query.sortBy || "id";
+    const sortOrder = req.query.sortOrder || "asc";
+    const offset = (page - 1) * limit;
+    const id = req.params.id;
+    // console.log(page, limit, sortBy, sortOrder, offset, id);
+    try {
+      const result = await getJagaByIdKaryawan({
+        id,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countJaga();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jaga by ID karyawan success",
+        pagination
+      );
+    } catch (err) {
+      console.log("Get jaga by ID karyawan error", err);
+      response(res, 400, false, err, "Get jaga by ID karyawan failed");
     }
   },
   update: async (req, res, next) => {
