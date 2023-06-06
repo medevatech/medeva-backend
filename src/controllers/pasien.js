@@ -10,6 +10,7 @@ const {
   deletePasien,
 } = require(`../models/pasien`);
 const { v4: uuidv4 } = require('uuid');
+const client = require(`../config/redis`);
 
 const pasienControllers = {
   add: async (req, res, next) => {
@@ -79,6 +80,20 @@ const pasienControllers = {
         totalData,
         totalPage,
       };
+
+      const key = req.originalUrl || req.url;
+
+      client.set(
+        key,
+        JSON.stringify({
+          success: true,
+          statusCode: 200,
+          data: result.rows,
+          message: 'get pasien success redis',
+          pagination,
+        }),
+        { EX: 60 }
+      );
 
       response(res, 200, true, result.rows, 'get pasien success', pagination);
     } catch (error) {

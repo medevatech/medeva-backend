@@ -11,6 +11,7 @@ const {
   deletePenyakit,
 } = require(`../models/penyakit`);
 const { v4: uuidv4 } = require('uuid');
+const client = require(`../config/redis`);
 
 const penyakitControllers = {
   add: async (req, res, next) => {
@@ -64,6 +65,20 @@ const penyakitControllers = {
         totalPage,
       };
 
+      const key = req.originalUrl || req.url;
+
+      client.set(
+        key,
+        JSON.stringify({
+          success: true,
+          statusCode: 200,
+          data: result.rows,
+          message: 'get penyakit success redis',
+          pagination,
+        }),
+        { EX: 60 }
+      );
+
       response(res, 200, true, result.rows, 'get penyakit success', pagination);
     } catch (error) {
       console.log(error);
@@ -77,8 +92,6 @@ const penyakitControllers = {
       } = await countAll();
 
       const all = parseInt(countPenyakit.total);
-      console.log(countPenyakit);
-      console.log(all);
 
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || all;
@@ -111,6 +124,20 @@ const penyakitControllers = {
         totalData,
         totalPage,
       };
+
+      const key = req.originalUrl || req.url;
+
+      client.set(
+        key,
+        JSON.stringify({
+          success: true,
+          statusCode: 200,
+          data: result.rows,
+          message: 'get penyakit success redis',
+          pagination,
+        }),
+        { EX: 60 }
+      );
 
       response(res, 200, true, result.rows, 'get penyakit success', pagination);
     } catch (error) {
