@@ -10,6 +10,8 @@ const {
   deleteJaga,
   getJagaByIdDivisi,
   getJagaByIdKaryawan,
+  getDistictSchedule,
+  getScheduleByIdDivision,
 } = require("../models/jaga");
 
 const jagaController = {
@@ -80,6 +82,30 @@ const jagaController = {
     } catch (err) {
       console.log("Get jaga data error", err);
       response(res, 400, false, null, "Get jaga data failed");
+    }
+  },
+  getDistinct: async (req, res, next) => {
+    try {
+      const result = await getDistictSchedule();
+      response(res, 200, true, result.rows, "Get distinct schedule success");
+    } catch (err) {
+      console.log("err", err);
+      response(res, 400, false, null, "Get distinct schedule error");
+    }
+  },
+  getByIdDivision: async (req, res, next) => {
+    try {
+      const result = await getScheduleByIdDivision(req.params.id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get schedule by id division success"
+      );
+    } catch (err) {
+      console.log("err", err);
+      response(res, 400, false, null, "Get schedule by id division error");
     }
   },
   getById: async (req, res, next) => {

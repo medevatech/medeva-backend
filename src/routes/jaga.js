@@ -4,6 +4,8 @@ const { jagaController } = require("../controllers/jaga");
 
 router.post("/", jagaController.create);
 router.get("/", jagaController.get);
+router.get("/distinct", jagaController.getDistinct);
+router.get("/dvs/:id", jagaController.getByIdDivision);
 router.get("/:id", jagaController.getById);
 router.get("/on-divisi/:id", jagaController.getByIdDivisi);
 router.get("/on-employee/:id", jagaController.getByIdKaryawan);

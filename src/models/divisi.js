@@ -63,6 +63,22 @@ const getDivisi = ({
   });
 };
 
+const getDistictDivision = () => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT DISTINCT ON(divisi.id, divisi.tipe) divisi.id, divisi.tipe as nama_divisi
+      FROM tbl_divisi as divisi`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getDivisiById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -170,6 +186,7 @@ module.exports = {
   findDivisi,
   countDivisi,
   getDivisi,
+  getDistictDivision,
   getDivisiById,
   getDivisiByIdClinic,
   updateDivisi,
