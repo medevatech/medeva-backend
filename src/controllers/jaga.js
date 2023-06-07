@@ -95,7 +95,23 @@ const jagaController = {
   },
   getByIdDivision: async (req, res, next) => {
     try {
-      const result = await getScheduleByIdDivision(req.params.id);
+      const id = req.params.id;
+      const searchDay = req.query.searchDay || "";
+      console.log("serdei", searchDay);
+      let searchDays = 0;
+      if (searchDay === "Senin") {
+        searchDays = 1;
+      }
+      if (searchDay === "Selasa") {
+        searchDays = 2;
+      }
+      if (searchDay === "Rabu") {
+        searchDays = 3;
+      }
+      const result = await getScheduleByIdDivision({
+        id: id,
+        searchDay: searchDays,
+      });
       response(
         res,
         200,
