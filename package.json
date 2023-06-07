@@ -24,6 +24,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^2.0.22",
     "pg": "^8.10.0",
+    "redis": "^4.6.6",
     "uuid": "^9.0.0"
   }
 }
