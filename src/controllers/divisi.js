@@ -10,6 +10,7 @@ const {
   activateDivisi,
   deleteDivisi,
   getDivisiByIdClinic,
+  getDistictDivision,
 } = require("../models/divisi");
 
 const divisiController = {
@@ -81,6 +82,15 @@ const divisiController = {
     } catch (err) {
       console.log("Get division data error", err);
       response(res, 400, false, null, "Get division data failed");
+    }
+  },
+  getDistinct: async (req, res, next) => {
+    try {
+      const result = await getDistictDivision();
+      response(res, 200, true, result.rows, "Get distinct division success");
+    } catch (err) {
+      console.log("err", err);
+      response(res, 400, false, null, "Get distinct division error");
     }
   },
   getById: async (req, res, next) => {

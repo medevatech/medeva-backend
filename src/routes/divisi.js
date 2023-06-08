@@ -4,6 +4,7 @@ const { divisiController } = require("../controllers/divisi");
 
 router.post("/", divisiController.create);
 router.get("/", divisiController.get);
+router.get("/distinct", divisiController.getDistinct);
 router.get("/:id", divisiController.getById);
 router.get("/clinic/:id", divisiController.getByIdClinic);
 router.put("/:id", divisiController.update);

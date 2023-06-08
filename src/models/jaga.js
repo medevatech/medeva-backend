@@ -64,6 +64,45 @@ const getJaga = ({
   });
 };
 
+const getDistictSchedule = () => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT DISTINCT ON(jaga.id_divisi) jaga.id, jaga.id_divisi, jaga.id_karyawan, divisi.tipe as nama_divisi, kry.nama as nama_karyawan
+      FROM tbl_jaga as jaga
+      INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id
+      INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const getScheduleByIdDivision = ({ id, searchDay }) => {
+  console.log("day", searchDay);
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT jaga.id, jaga.id_divisi, jaga.id_karyawan, kry.nama as nama_karyawan, jaga.hari, jaga.tanggal, jaga.waktu_mulai, jaga.waktu_selesai, kry.tipe as tipe_karyawan
+      FROM tbl_jaga as jaga
+      INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id
+      WHERE jaga.id_divisi = '${id}'
+      AND jaga.hari = '${searchDay}'
+      AND kry.tipe ILIKE 'dokter'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getJagaById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -215,6 +254,8 @@ module.exports = {
   createJaga,
   countJaga,
   getJaga,
+  getDistictSchedule,
+  getScheduleByIdDivision,
   getJagaById,
   getJagaByIdDivisi,
   getJagaByIdKaryawan,
