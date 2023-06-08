@@ -67,6 +67,24 @@ const getAntrian = ({
   });
 };
 
+const getAntrianById = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT antrian.id, antrian.id_pasien, pasien.nama_lengkap
+      FROM tbl_antrian
+      INNER JOIN tbl_pasien ON antrian.id_pasien = pasien.id
+      WHERE antrian.id = ${id}`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getTotalAntrian = () => {
   var date = new Date().toISOString().slice(0, 10);
   return new Promise((resolve, reject) => {
@@ -179,6 +197,7 @@ module.exports = {
   countAntrianAll,
   createAntrian,
   getAntrian,
+  getAntrianById,
   getTotalAntrian,
   getRestAntrian,
   getNowAntrian,

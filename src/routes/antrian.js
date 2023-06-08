@@ -4,6 +4,7 @@ const { antrianController } = require("../controllers/antrian");
 
 router.post("/", antrianController.create);
 router.get("/", antrianController.get);
+router.get("/:id", antrianController.getById);
 router.get("/total", antrianController.getTotal);
 router.get("/rest", antrianController.getRest);
 router.get("/now", antrianController.getNow);
