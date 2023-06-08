@@ -108,6 +108,18 @@ const jagaController = {
       if (searchDay === "Rabu") {
         searchDays = 3;
       }
+      if (searchDay === "Kamis") {
+        searchDays = 4;
+      }
+      if (searchDay === "Jumat") {
+        searchDays = 5;
+      }
+      if (searchDay === "Sabtu") {
+        searchDays = 6;
+      }
+      if (searchDay === "Minggu") {
+        searchDays = 7;
+      }
       const result = await getScheduleByIdDivision({
         id: id,
         searchDay: searchDays,
