@@ -71,7 +71,7 @@ const getAntrianById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT antrian.id, antrian.id_pasien, pasien.nama_lengkap
-      FROM tbl_antrian
+      FROM tbl_antrian as antrian
       INNER JOIN tbl_pasien ON antrian.id_pasien = pasien.id
       WHERE antrian.id = ${id}`,
       (err, res) => {
