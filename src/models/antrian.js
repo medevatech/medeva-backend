@@ -72,8 +72,8 @@ const getAntrianById = (id) => {
     pool.query(
       `SELECT antrian.id, antrian.id_pasien, pasien.nama_lengkap
       FROM tbl_antrian as antrian
-      INNER JOIN tbl_pasien ON antrian.id_pasien = pasien.id
-      WHERE antrian.id = ${id}`,
+      INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id
+      WHERE antrian.id = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
