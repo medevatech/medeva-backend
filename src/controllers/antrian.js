@@ -11,6 +11,7 @@ const {
   updateAntrian,
   deleteAntrian,
   updatePrioritasAntrian,
+  getAntrianById,
 } = require("../models/antrian");
 
 const antrianController = {
@@ -94,6 +95,15 @@ const antrianController = {
     } catch (err) {
       console.log(err);
       return response(res, 400, false, err, "Get antrian failed");
+    }
+  },
+  getById: async (req, res, next) => {
+    try {
+      const result = await getAntrianById(req.params.id);
+      response(res, 200, true, result.rows, "Get antrian by ID success");
+    } catch (err) {
+      console.log("err", err);
+      response(res, 400, false, null, "Get antrian by ID error");
     }
   },
   getTotal: async (req, res, next) => {
