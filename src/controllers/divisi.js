@@ -34,9 +34,10 @@ const divisiController = {
       };
       if (data.tipe === "") {
         response(res, 400, false, null, "Name of division can't be null");
+      } else {
+        await createDivisi(data);
+        response(res, 200, true, data, "Create division success");
       }
-      await createDivisi(data);
-      response(res, 200, true, data, "Create division success");
     } catch (err) {
       console.log(err);
       response(res, 400, false, err, "Create division failed");
