@@ -32,6 +32,9 @@ const divisiController = {
         id_klinik: req.body.id_klinik,
         tipe: req.body.tipe,
       };
+      if (data.tipe === "") {
+        response(res, 400, false, null, "Name of division can't be null");
+      }
       await createDivisi(data);
       response(res, 200, true, data, "Create division success");
     } catch (err) {

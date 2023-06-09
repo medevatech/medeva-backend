@@ -8,9 +8,7 @@ const {
   archiveShift,
   activateShift,
   deleteShift,
-  getShiftByIdClinic,
 } = require("../models/shift");
-const { createJaga } = require("../models/jaga");
 
 const shiftController = {
   create: async (req, res, next) => {
@@ -22,16 +20,11 @@ const shiftController = {
       }
       const data = {
         id,
-        id_klinik: req.body.id_klinik,
-        id_divisi: req.body.id_divisi,
-        hari: req.body.hari,
-        tanggal: req.body.tanggal,
-        waktu_mulai: req.body.waktu_mulai,
-        waktu_selesai: req.body.waktu_selesai,
+        id_schedule: req.body.id_schedule,
+        id_employee: req.body.id_employee,
       };
       console.log(data);
       await createShift(data);
-      // createJaga(data2);
       response(res, 200, true, data, "Create shift success");
     } catch (err) {
       console.log(err);
