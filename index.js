@@ -66,7 +66,7 @@ app.use(morgan('dev'));
 
 app.use('/api/v1/', mainRouter);
 
-app.all('*', (req, res, next) => {
+app.all('*', (res, next) => {
   res.status(404).json({
     status: 'error',
     statusCode: 404,
