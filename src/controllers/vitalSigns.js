@@ -34,64 +34,23 @@ const vitalSignsControllers = {
         is_active: 1,
       };
 
-      if (data.kesadaran == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed kesadaran required'
-        );
-      } else if (data.temperatur == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed temperatur required'
-        );
-      } else if (data.tinggi_badan == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed tinggi_badan required'
-        );
-      } else if (data.berat_badan == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed berat_badan required'
-        );
-      } else if (data.lingkar_perut == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed lingkar_perut required'
-        );
-      } else if (data.respiratory_rate == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed respiratory_rate required'
-        );
-      } else if (data.heart_rate == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert vital signs failed heart_rate required'
-        );
-      } else {
-        await insertVital(data);
+      for (let [key, value] of Object.entries(data)) {
+        if (
+          (key === 'kesadaran' && value === '') ||
+          (key === 'temperatur' && value === '') ||
+          (key === 'tinggi_badan' && value === '') ||
+          (key === 'berat_badan' && value === '') ||
+          (key === 'lingkar_perut' && value === '') ||
+          (key === 'respiratory_rate' && value === '') ||
+          (key === 'heart_rate' && value === '')
+        ) {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
+        await insertPasien(data);
         response(res, 200, true, data, 'insert vital signs success');
       }
     } catch (error) {
