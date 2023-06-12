@@ -45,17 +45,17 @@ const pasienControllers = {
       if (data.nama_lengkap == '') {
         response(
           res,
-          200,
-          true,
-          data,
+          404,
+          false,
+          null,
           'insert pasien failed nama_lengkap required'
         );
       } else if (data.nomor_kitas == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert pasien failed nomor_kitas required'
         );
       } else {
