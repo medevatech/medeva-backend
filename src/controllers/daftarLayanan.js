@@ -21,16 +21,15 @@ const daftarLayananControllers = {
         is_active: 1,
       };
 
-      if (data.nama == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert daftar layanan failed nama required'
-        );
-      } else {
-        await insertDaftarLayanan(data);
+      for (let [key, value] of Object.entries(data)) {
+        if (key === 'nama' && value === '') {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
+        await insertPasien(data);
         response(res, 200, true, data, 'insert daftar layanan success');
       }
     } catch (error) {
