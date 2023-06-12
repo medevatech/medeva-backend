@@ -50,9 +50,9 @@ const kunjunganControllers = {
       if (data.status_pulang == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert kunjungan failed status_pulang required'
         );
       } else {
