@@ -37,57 +37,57 @@ const vitalSignsControllers = {
       if (data.kesadaran == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed kesadaran required'
         );
       } else if (data.temperatur == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed temperatur required'
         );
       } else if (data.tinggi_badan == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed tinggi_badan required'
         );
       } else if (data.berat_badan == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed berat_badan required'
         );
       } else if (data.lingkar_perut == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed lingkar_perut required'
         );
       } else if (data.respiratory_rate == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed respiratory_rate required'
         );
       } else if (data.heart_rate == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert vital signs failed heart_rate required'
         );
       } else {
