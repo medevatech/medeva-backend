@@ -21,8 +21,18 @@ const daftarLayananControllers = {
         is_active: 1,
       };
 
-      await insertDaftarLayanan(data);
-      response(res, 200, true, data, 'insert daftar layanan success');
+      if (data.nama == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert daftar layanan failed nama required'
+        );
+      } else {
+        await insertDaftarLayanan(data);
+        response(res, 200, true, data, 'insert daftar layanan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert daftar layanan failed');
