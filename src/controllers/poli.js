@@ -28,7 +28,7 @@ const poliControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertPoli(data);
         response(res, 200, true, data, 'insert pasien success');
       }
     } catch (error) {

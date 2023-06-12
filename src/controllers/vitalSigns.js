@@ -50,7 +50,7 @@ const vitalSignsControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertVital(data);
         response(res, 200, true, data, 'insert vital signs success');
       }
     } catch (error) {

@@ -29,7 +29,7 @@ const daftarLayananControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertDaftarLayanan(data);
         response(res, 200, true, data, 'insert daftar layanan success');
       }
     } catch (error) {

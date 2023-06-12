@@ -34,7 +34,7 @@ const hargaLayananControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertHargaLayanan(data);
         response(res, 200, true, data, 'insert harga layanan success');
       }
     } catch (error) {

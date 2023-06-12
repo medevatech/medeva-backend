@@ -55,7 +55,8 @@ const kunjunganControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await await insertPoli(data);
+        data;
         response(res, 200, true, data, 'insert kunjungan success');
       }
     } catch (error) {
