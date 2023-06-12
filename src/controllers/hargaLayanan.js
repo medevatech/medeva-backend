@@ -26,17 +26,17 @@ const hargaLayananControllers = {
       if (data.id_daftar_layanan == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert harga layanan failed id_daftar_layanan required'
         );
       } else if (data.harga == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert harga layanan failed harga required'
         );
       } else {
