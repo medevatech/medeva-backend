@@ -34,6 +34,8 @@ const vitalSignsControllers = {
         is_active: 1,
       };
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (
           (key === 'kesadaran' && value === '') ||
@@ -50,7 +52,7 @@ const vitalSignsControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertVital(data);
         response(res, 200, true, data, 'insert vital signs success');
       }
     } catch (error) {

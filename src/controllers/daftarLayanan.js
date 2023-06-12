@@ -21,6 +21,8 @@ const daftarLayananControllers = {
         is_active: 1,
       };
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (key === 'nama' && value === '') {
           isError = true;
@@ -29,7 +31,7 @@ const daftarLayananControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertDaftarLayanan(data);
         response(res, 200, true, data, 'insert daftar layanan success');
       }
     } catch (error) {

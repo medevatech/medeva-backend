@@ -23,6 +23,8 @@ const hargaLayananControllers = {
         is_active: '1',
       };
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (
           (key === 'id_daftar_layanan' && value === '') ||
@@ -34,7 +36,7 @@ const hargaLayananControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await insertHargaLayanan(data);
         response(res, 200, true, data, 'insert harga layanan success');
       }
     } catch (error) {

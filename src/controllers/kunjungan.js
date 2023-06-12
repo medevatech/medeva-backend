@@ -47,6 +47,8 @@ const kunjunganControllers = {
         data.kasus_kll = false;
       }
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (key === 'status_pulang' && value === '') {
           isError = true;
@@ -55,7 +57,8 @@ const kunjunganControllers = {
       }
 
       if (isError === false) {
-        await insertPasien(data);
+        await await insertPoli(data);
+        data;
         response(res, 200, true, data, 'insert kunjungan success');
       }
     } catch (error) {
