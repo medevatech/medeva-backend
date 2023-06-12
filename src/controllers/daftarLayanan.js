@@ -24,9 +24,9 @@ const daftarLayananControllers = {
       if (data.nama == '') {
         response(
           res,
-          200,
+          404,
           true,
-          data,
+          null,
           'insert daftar layanan failed nama required'
         );
       } else {
