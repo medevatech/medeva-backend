@@ -4,7 +4,7 @@ const { karyawanController } = require("../controllers/karyawan");
 const upload = require("../middleware/upload");
 const { protect, dev_man_adm } = require("../middleware/auth");
 
-router.post("/", karyawanController.add);
+router.post("/", protect, karyawanController.add);
 router.post("/login", karyawanController.login);
 router.get("/", protect, karyawanController.get);
 router.get("/:id", karyawanController.getById);
