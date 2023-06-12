@@ -42,23 +42,19 @@ const pasienControllers = {
         data.tanggal_lahir = '1970-01-01';
       }
 
-      if (data.nama_lengkap == '') {
-        response(
-          res,
-          404,
-          false,
-          null,
-          'insert pasien failed nama_lengkap required'
-        );
-      } else if (data.nomor_kitas == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert pasien failed nomor_kitas required'
-        );
-      } else {
+      let isError = false;
+
+      for (let [key, value] of Object.entries(data)) {
+        if (
+          (key === 'nama_lengkap' && value === '') ||
+          (key === 'nomor_kitas' && value === '')
+        ) {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
         await insertPasien(data);
         response(res, 200, true, data, 'insert pasien success');
       }
