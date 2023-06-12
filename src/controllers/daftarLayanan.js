@@ -21,6 +21,8 @@ const daftarLayananControllers = {
         is_active: 1,
       };
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (key === 'nama' && value === '') {
           isError = true;

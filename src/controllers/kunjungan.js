@@ -47,6 +47,8 @@ const kunjunganControllers = {
         data.kasus_kll = false;
       }
 
+      let isError = false;
+
       for (let [key, value] of Object.entries(data)) {
         if (key === 'status_pulang' && value === '') {
           isError = true;
