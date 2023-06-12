@@ -47,8 +47,18 @@ const kunjunganControllers = {
         data.kasus_kll = false;
       }
 
-      await insertKunjungan(data);
-      response(res, 200, true, data, 'insert kunjungan success');
+      if (data.status_pulang == '') {
+        response(
+          res,
+          200,
+          true,
+          data,
+          'insert kunjungan failed status_pulang required'
+        );
+      } else {
+        await insertKunjungan(data);
+        response(res, 200, true, data, 'insert kunjungan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert kunjungan failed');
