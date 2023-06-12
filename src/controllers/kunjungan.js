@@ -47,16 +47,15 @@ const kunjunganControllers = {
         data.kasus_kll = false;
       }
 
-      if (data.status_pulang == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert kunjungan failed status_pulang required'
-        );
-      } else {
-        await insertKunjungan(data);
+      for (let [key, value] of Object.entries(data)) {
+        if (key === 'status_pulang' && value === '') {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
+        await insertPasien(data);
         response(res, 200, true, data, 'insert kunjungan success');
       }
     } catch (error) {
