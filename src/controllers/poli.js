@@ -20,11 +20,16 @@ const poliControllers = {
         is_active: 1,
       };
 
-      if (data.nama == '') {
-        response(res, 404, true, null, 'insert poli failed nama required');
-      } else {
-        await insertPoli(data);
-        response(res, 200, true, data, 'insert poli success');
+      for (let [key, value] of Object.entries(data)) {
+        if (key === 'nama' && value === '') {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
+        await insertPasien(data);
+        response(res, 200, true, data, 'insert pasien success');
       }
     } catch (error) {
       console.log(error);
