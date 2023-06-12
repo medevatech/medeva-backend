@@ -41,8 +41,14 @@ const antrianController = {
         no_antrian,
         prioritas: req.body.prioritas,
       };
-      await createAntrian(data);
-      return response(res, 200, true, data, "Create antrian success");
+      if (data.id_jaga === "" || null) {
+        response(res, 400, false, null, "Schedule ID can't be empty");
+      } else if (data.id_pasien === "" || null) {
+        response(res, 400, false, null, "Patient ID can't be null");
+      } else {
+        await createAntrian(data);
+        return response(res, 200, true, data, "Create antrian success");
+      }
     } catch (err) {
       console.log(err);
       return response(res, 400, false, err, "Create antrian failed");
