@@ -23,24 +23,18 @@ const hargaLayananControllers = {
         is_active: '1',
       };
 
-      if (data.id_daftar_layanan == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert harga layanan failed id_daftar_layanan required'
-        );
-      } else if (data.harga == '') {
-        response(
-          res,
-          404,
-          true,
-          null,
-          'insert harga layanan failed harga required'
-        );
-      } else {
-        await insertHargaLayanan(data);
+      for (let [key, value] of Object.entries(data)) {
+        if (
+          (key === 'id_daftar_layanan' && value === '') ||
+          (key === 'harga' && value === '')
+        ) {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
+        await insertPasien(data);
         response(res, 200, true, data, 'insert harga layanan success');
       }
     } catch (error) {
