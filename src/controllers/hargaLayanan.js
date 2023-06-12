@@ -23,8 +23,26 @@ const hargaLayananControllers = {
         is_active: '1',
       };
 
-      await insertHargaLayanan(data);
-      response(res, 200, true, data, 'insert harga layanan success');
+      if (data.id_daftar_layanan == '') {
+        response(
+          res,
+          404,
+          true,
+          null,
+          'insert harga layanan failed id_daftar_layanan required'
+        );
+      } else if (data.harga == '') {
+        response(
+          res,
+          404,
+          true,
+          null,
+          'insert harga layanan failed harga required'
+        );
+      } else {
+        await insertHargaLayanan(data);
+        response(res, 200, true, data, 'insert harga layanan success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert harga layanan failed');

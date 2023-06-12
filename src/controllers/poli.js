@@ -20,8 +20,12 @@ const poliControllers = {
         is_active: 1,
       };
 
-      await insertPoli(data);
-      response(res, 200, true, data, 'insert poli success');
+      if (data.nama == '') {
+        response(res, 404, true, null, 'insert poli failed nama required');
+      } else {
+        await insertPoli(data);
+        response(res, 200, true, data, 'insert poli success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert poli failed');

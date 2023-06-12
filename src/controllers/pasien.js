@@ -42,8 +42,26 @@ const pasienControllers = {
         data.tanggal_lahir = '1970-01-01';
       }
 
-      await insertPasien(data);
-      response(res, 200, true, data, 'insert pasien success');
+      if (data.nama_lengkap == '') {
+        response(
+          res,
+          404,
+          false,
+          null,
+          'insert pasien failed nama_lengkap required'
+        );
+      } else if (data.nomor_kitas == '') {
+        response(
+          res,
+          404,
+          true,
+          null,
+          'insert pasien failed nomor_kitas required'
+        );
+      } else {
+        await insertPasien(data);
+        response(res, 200, true, data, 'insert pasien success');
+      }
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'insert pasien failed');
