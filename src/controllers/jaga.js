@@ -13,17 +13,13 @@ const {
   getDistictSchedule,
   getScheduleByIdDivision,
 } = require("../models/jaga");
+const { v4: uuidv4 } = require("uuid");
 
 const jagaController = {
   create: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "JJG";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const data = {
-        id,
+        id: uuidv4(),
         id_klinik: req.body.id_klinik,
         id_divisi: req.body.id_divisi,
         id_karyawan: req.body.id_karyawan,

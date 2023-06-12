@@ -13,6 +13,7 @@ const {
   updatePrioritasAntrian,
   getAntrianById,
 } = require("../models/antrian");
+const { v4: uuidv4 } = require("uuid");
 
 const antrianController = {
   create: async (req, res, next) => {
@@ -27,27 +28,30 @@ const antrianController = {
       no_antrian += 1;
     }
     try {
-      let digits = "0123456789";
-      let id = "ANT";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const tanggal = new Date().toISOString().slice(0, 10);
       const data = {
-        id,
+        id: uuidv4(),
         id_jaga: req.body.id_jaga,
         id_pasien: req.body.id_pasien,
         tanggal,
         no_antrian,
         prioritas: req.body.prioritas,
       };
-      if (data.id_jaga === "" || null) {
-        response(res, 400, false, null, "Schedule ID can't be empty");
-      } else if (data.id_pasien === "" || null) {
-        response(res, 400, false, null, "Patient ID can't be null");
-      } else {
+      let isError = false;
+
+      for (let [key, value] of Object.entries(data)) {
+        if (
+          (key === "id_jaga" && value === "") ||
+          (key === "id_pasien" && value === "")
+        ) {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
         await createAntrian(data);
-        return response(res, 200, true, data, "Create antrian success");
+        response(res, 200, true, data, "Create antrian success");
       }
     } catch (err) {
       console.log(err);

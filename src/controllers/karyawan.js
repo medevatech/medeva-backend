@@ -18,6 +18,7 @@ const argon2 = require("argon2");
 const { generateToken, generateRefreshToken } = require("../helpers/auth");
 // const client = require("../config/redis");
 const cloudinary = require("../config/cloud");
+const { v4: uuidv4 } = require("uuid");
 
 const karyawanController = {
   add: async (req, res, next) => {
@@ -34,55 +35,144 @@ const karyawanController = {
     } else if (currentUsername) {
       return response(res, 400, false, null, "Username is already used");
     } else {
-      let digits = "0123456789";
-      let id = "KRY";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
-      const hash = await argon2.hash(req.body.password);
-      const password = `${hash}`;
-      let data = {
-        id: id,
-        nama: req.body.nama,
-        username: req.body.username,
-        email: req.body.email,
-        password,
-        is_admin: parseInt(req.body.is_admin),
-        is_resepsionis: parseInt(req.body.is_resepsionis),
-        is_perawat: parseInt(req.body.is_perawat),
-        is_dokter: parseInt(req.body.is_dokter),
-        is_manajemen: parseInt(req.body.is_manajemen),
-        jenis_kelamin: req.body.jenis_kelamin,
-        nomor_kitas: req.body.nomor_kitas,
-        tipe_izin: req.body.tipe_izin,
-        nomor_izin: req.body.nomor_izin,
-        kadaluarsa_izin: req.body.kadaluarsa_izin,
-        nomor_hp: req.body.nomor_hp,
-        tempat_lahir: req.body.tempat_lahir,
-        tanggal_lahir: req.body.tanggal_lahir,
-        alamat: req.body.alamat,
-        provinsi: req.body.provinsi,
-        kota: req.body.kota,
-        kecamatan: req.body.kecamatan,
-        kelurahan: req.body.kelurahan,
-        kode_pos: req.body.kode_pos,
-        status_menikah: req.body.status_menikah,
-        tipe: req.body.tipe,
-        spesialis: req.body.spesialis,
-      };
-      if (data.kadaluarsa_izin === "") {
-        data.kadaluarsa_izin = "1900/01/01";
-      }
-      if (data.tanggal_lahir === "") {
-        data.tanggal_lahir = "1900/01/01";
-      }
-      try {
-        const result = await createKaryawan(data);
-        if (result) {
-          return response(res, 200, true, data, "Add karyawan success");
+      if (req.body.password === "") {
+        const password = req.body.password;
+        let data = {
+          id: uuidv4(),
+          nama: req.body.nama,
+          username: req.body.username,
+          email: req.body.email,
+          password,
+          is_admin: parseInt(req.body.is_admin),
+          is_resepsionis: parseInt(req.body.is_resepsionis),
+          is_perawat: parseInt(req.body.is_perawat),
+          is_dokter: parseInt(req.body.is_dokter),
+          is_manajemen: parseInt(req.body.is_manajemen),
+          jenis_kelamin: req.body.jenis_kelamin,
+          nomor_kitas: req.body.nomor_kitas,
+          tipe_izin: req.body.tipe_izin,
+          nomor_izin: req.body.nomor_izin,
+          kadaluarsa_izin: req.body.kadaluarsa_izin,
+          nomor_hp: req.body.nomor_hp,
+          tempat_lahir: req.body.tempat_lahir,
+          tanggal_lahir: req.body.tanggal_lahir,
+          alamat: req.body.alamat,
+          provinsi: req.body.provinsi,
+          kota: req.body.kota,
+          kecamatan: req.body.kecamatan,
+          kelurahan: req.body.kelurahan,
+          kode_pos: req.body.kode_pos,
+          status_menikah: req.body.status_menikah,
+          tipe: req.body.tipe,
+          spesialis: req.body.spesialis,
+        };
+        if (data.kadaluarsa_izin === "") {
+          data.kadaluarsa_izin = "1900/01/01";
         }
-      } catch (err) {
-        return response(res, 400, false, err, "Add karyawan failed");
+        if (data.tanggal_lahir === "") {
+          data.tanggal_lahir = "1900/01/01";
+        }
+        try {
+          let isError = false;
+          for (let [key, value] of Object.entries(data)) {
+            if (
+              (key === "username" && value === "") ||
+              (key === "password" && value === "") ||
+              (key === "nomor_kitas" && value === "") ||
+              (key === "tipe" && value === "") ||
+              (key === "tipe_izin" && value === "") ||
+              (key === "nomor_izin" && value === "") ||
+              (key === "kadaluarsa_izin" && value === "")
+            ) {
+              isError = true;
+              response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+            }
+          }
+
+          if (isError === false) {
+            await createKaryawan(data);
+            return response(res, 200, true, data, "Add karyawan success");
+          }
+        } catch (err) {
+          return response(res, 400, false, err, "Add karyawan failed");
+        }
+      } else if (
+        parseInt(req.body.is_admin) === 0 &&
+        parseInt(req.body.is_dokter) === 0 &&
+        parseInt(req.body.is_manajemen) === 0 &&
+        parseInt(req.body.is_perawat) === 0 &&
+        parseInt(req.body.is_resepsionis) === 0
+      ) {
+        return response(
+          res,
+          400,
+          false,
+          null,
+          "Peran wajib diisi minimal satu"
+        );
+      } else {
+        const hash = await argon2.hash(req.body.password);
+        const password = `${hash}`;
+        let data = {
+          id: id,
+          nama: req.body.nama,
+          username: req.body.username,
+          email: req.body.email,
+          password,
+          is_admin: parseInt(req.body.is_admin),
+          is_resepsionis: parseInt(req.body.is_resepsionis),
+          is_perawat: parseInt(req.body.is_perawat),
+          is_dokter: parseInt(req.body.is_dokter),
+          is_manajemen: parseInt(req.body.is_manajemen),
+          jenis_kelamin: req.body.jenis_kelamin,
+          nomor_kitas: req.body.nomor_kitas,
+          tipe_izin: req.body.tipe_izin,
+          nomor_izin: req.body.nomor_izin,
+          kadaluarsa_izin: req.body.kadaluarsa_izin,
+          nomor_hp: req.body.nomor_hp,
+          tempat_lahir: req.body.tempat_lahir,
+          tanggal_lahir: req.body.tanggal_lahir,
+          alamat: req.body.alamat,
+          provinsi: req.body.provinsi,
+          kota: req.body.kota,
+          kecamatan: req.body.kecamatan,
+          kelurahan: req.body.kelurahan,
+          kode_pos: req.body.kode_pos,
+          status_menikah: req.body.status_menikah,
+          tipe: req.body.tipe,
+          spesialis: req.body.spesialis,
+        };
+        if (data.kadaluarsa_izin === "") {
+          data.kadaluarsa_izin = "1900/01/01";
+        }
+        if (data.tanggal_lahir === "") {
+          data.tanggal_lahir = "1900/01/01";
+        }
+        try {
+          let isError = false;
+
+          for (let [key, value] of Object.entries(data)) {
+            if (
+              (key === "username" && value === "") ||
+              (key === "password" && value === "") ||
+              (key === "nomor_kitas" && value === "") ||
+              (key === "tipe" && value === "") ||
+              (key === "tipe_izin" && value === "") ||
+              (key === "nomor_izin" && value === "") ||
+              (key === "kadaluarsa_izin" && value === "")
+            ) {
+              isError = true;
+              response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+            }
+          }
+
+          if (isError === false) {
+            await createKaryawan(data);
+            return response(res, 200, true, data, "Add karyawan success");
+          }
+        } catch (err) {
+          return response(res, 400, false, err, "Add karyawan failed");
+        }
       }
     }
   },
@@ -124,7 +214,7 @@ const karyawanController = {
     try {
       const page = req.query.page || 1;
       const limit = req.query.limit || 10;
-      const sortBy = req.query.sortBy || "nama";
+      const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
       const searchTipe = req.query.searchTipe || "";
