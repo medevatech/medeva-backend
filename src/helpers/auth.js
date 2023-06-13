@@ -1,17 +1,17 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 let key = process.env.JWT_KEY;
 
 const generateToken = (payload) => {
   const verifyOpts = {
-    expiresIn: "1m",
+    expiresIn: '24h',
   };
   const token = jwt.sign(payload, key, verifyOpts);
   return token;
 };
 const generateRefreshToken = (payload) => {
   const verifyOpts = {
-    expiresIn: "24h",
+    expiresIn: '24h',
   };
   const token = jwt.sign(payload, key, verifyOpts);
   return token;
