@@ -6,7 +6,7 @@ let multer = require('multer');
 let uploaded = multer();
 
 router.post(`/`, uploaded.array(), daftarLayananControllers.add);
-router.get(`/`, daftarLayananControllers.getAll);
+router.get(`/`, protect, daftarLayananControllers.getAll);
 router.get(`/:id`, daftarLayananControllers.getById);
 router.put(`/:id`, uploaded.array(), daftarLayananControllers.edit);
 router.put(
