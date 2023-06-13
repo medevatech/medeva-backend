@@ -7,8 +7,8 @@ const protect = (req, res, next) => {
   try {
     let token;
     console.log(req.headers, 'cekk');
-    if (req.headers.authorization) {
-      let auth = req.headers.authorization;
+    if (req.headers.token) {
+      let auth = req.headers.token;
       token = auth.split(' ')[1];
       let decode = jwt.verify(token, key);
       req.payload = decode;
