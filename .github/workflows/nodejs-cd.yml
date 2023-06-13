@@ -6,12 +6,9 @@ name: Node.js CD
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+    
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +23,6 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           whoami
-          ls -al
           cd /home/sandbox/repositories/medeva-backend
           git pull origin main
           git status
