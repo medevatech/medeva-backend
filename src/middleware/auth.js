@@ -8,7 +8,6 @@ const protect = (req, res, next) => {
     let token;
     if (req.headers.authorization) {
       let auth = req.headers.authorization;
-
       token = auth.split(" ")[1];
       let decode = jwt.verify(token, key);
       req.payload = decode;
