@@ -1,21 +1,27 @@
 const express = require(`express`);
 const router = express.Router();
 const { kunjunganControllers } = require(`../controllers/kunjungan`);
-const { protect } = require('../middleware/auth');
-let multer = require('multer');
+const { protect } = require("../middleware/auth");
+let multer = require("multer");
 let uploaded = multer();
 
-router.post(`/`, uploaded.array(), kunjunganControllers.add);
-router.get(`/`, kunjunganControllers.getAll);
-router.get(`/:id`, kunjunganControllers.getByIdKunjungan);
-router.get(`/pasien/:id_pasien`, kunjunganControllers.getByIdPasien);
-router.put(`/:id`, uploaded.array(), kunjunganControllers.edit);
+router.post(`/`, protect, uploaded.array(), kunjunganControllers.add);
+router.get(`/`, protect, kunjunganControllers.getAll);
+router.get(`/:id`, protect, kunjunganControllers.getByIdKunjungan);
+router.get(`/pasien/:id_pasien`, protect, kunjunganControllers.getByIdPasien);
+router.put(`/:id`, protect, uploaded.array(), kunjunganControllers.edit);
 router.put(
   `/activate/:id`,
+  protect,
   uploaded.array(),
   kunjunganControllers.editActivate
 );
-router.put(`/archive/:id`, uploaded.array(), kunjunganControllers.editArchive);
-router.delete(`/:id`, uploaded.array(), kunjunganControllers.delete);
+router.put(
+  `/archive/:id`,
+  protect,
+  uploaded.array(),
+  kunjunganControllers.editArchive
+);
+router.delete(`/:id`, protect, uploaded.array(), kunjunganControllers.delete);
 
 module.exports = router;
