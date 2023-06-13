@@ -58,6 +58,8 @@ const corsOptions = {
   origin: 'http://192.168.18.6:3000',
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
+  methods: ['GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 app.use(cors(corsOptions));
 
