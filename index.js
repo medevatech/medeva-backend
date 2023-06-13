@@ -11,57 +11,18 @@ const { response } = require(`./src/middleware/common`);
 
 const app = express();
 const port = process.env.PORT;
-// const REDIS_HOST = process.env.REDIS_HOST;
-// const REDIS_PORT = process.env.REDIS_PORT;
-
-// // Create a Redis client
-// const client = redis.createClient({
-//   host: REDIS_HOST,
-//   port: REDIS_PORT,
-// });
-
-// // Handle errors
-// client.on('error', function (err) {
-//   console.log('Error: ' + err);
-// });
-
-// function cache(req, res, next) {
-//   const key = '__express__' + req.originalUrl || req.url;
-
-//   client
-//     .get(key)
-//     .then((reply) => {
-//       if (reply) {
-//         res.send(JSON.parse(reply));
-//       } else {
-//         res.sendResponse = res.send;
-//         res.send = (body) => {
-//           //expire in 1 min
-//           client.set(key, JSON.stringify(body), { EX: 60 });
-//           res.sendResponse(body);
-//         };
-//         next();
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).send(err);
-//     });
-// }
-
-// app.use(cache);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: 'http://192.168.18.6:3000',
+  origin: 'local:3000',
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
   methods: ['GET', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: '*',
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(cookieParser());
 app.use(morgan('dev'));
