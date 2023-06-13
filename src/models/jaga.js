@@ -67,7 +67,7 @@ const getJaga = ({
 const getDistictSchedule = () => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT DISTINCT ON(jaga.id_divisi) jaga.id, jaga.id_divisi, jaga.id_karyawan, divisi.tipe as nama_divisi, kry.nama as nama_karyawan
+      `SELECT DISTINCT ON(jaga.id_divisi) jaga.id, jaga.id_divisi, jaga.id_karyawan, divisi.tipe, kry.nama as nama_karyawan
       FROM tbl_jaga as jaga
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id
       INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id`,
