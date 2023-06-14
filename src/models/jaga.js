@@ -48,7 +48,7 @@ const getJaga = ({
         INNER JOIN tbl_karyawan AS kry ON jaga.id_karyawan = kry.id
         WHERE kry.nama ILIKE '%${searchName}%'
         AND jaga.id_divisi ILIKE '%${searchDivisi}%'
-        AND jaga.is_active ILIKE '%${searchStatus}%'
+        AND CAST(jaga.is_active AS TEXT) ILIKE '%${searchStatus}%'
         AND divisi.tipe ILIKE '%${searchDivisiName}%'
         ORDER BY jaga.${sortBy} ${sortOrder}
         LIMIT ${limit}

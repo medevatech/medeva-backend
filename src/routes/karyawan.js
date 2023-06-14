@@ -5,7 +5,7 @@ const upload = require("../middleware/upload");
 const { protect, dev_man_adm } = require("../middleware/auth");
 
 router.post("/", protect, karyawanController.add);
-router.post("/login", protect, karyawanController.login);
+router.post("/login", karyawanController.login);
 router.get("/", protect, karyawanController.get);
 router.get("/:id", protect, karyawanController.getById);
 router.put("/:id", protect, karyawanController.update);
