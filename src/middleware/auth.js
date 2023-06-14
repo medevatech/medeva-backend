@@ -7,7 +7,7 @@ const protect = (req, res, next) => {
   try {
     let token;
     console.log(req.headers, "cekk");
-    let authorization = req.headers.authtoken;
+    let authorization = req.headers.authorization;
 
     if (authorization) {
       let auth = authorization;

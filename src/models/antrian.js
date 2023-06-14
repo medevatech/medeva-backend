@@ -55,7 +55,7 @@ const getAntrian = ({
       INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
       INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id 
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id 
-      WHERE antrian.tanggal = '${date}' AND AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
