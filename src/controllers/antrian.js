@@ -117,6 +117,7 @@ const antrianController = {
       const searchDivisi = req.params.id;
       const searchJaga = req.query.searchJaga || "";
       const searchStatus = req.query.searchStatus || 1;
+      const searchDoctor = req.query.searchDoctor || "";
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
@@ -127,6 +128,7 @@ const antrianController = {
         searchDivisi,
         searchJaga,
         searchStatus,
+        searchDoctor,
         sortBy,
         sortOrder,
         limit,
