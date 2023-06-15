@@ -6,7 +6,6 @@ let key = process.env.JWT_KEY;
 const protect = (req, res, next) => {
   try {
     let token;
-    console.log(req.headers, 'cekk');
     let authorization = req.headers.authtoken;
 
     if (authorization) {
