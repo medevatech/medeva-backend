@@ -139,7 +139,18 @@ const penyakitControllers = {
         { EX: 60 }
       );
 
-      response(res, 200, true, result.rows, 'get penyakit success', pagination);
+      let rawCache = await client.get('/api/v1/penyakit/all');
+
+      if (rawCache === null) {
+        console.log('cache null');
+      } else {
+        console.log('cache tidak null');
+        return res.send(JSON.parse(await client.get('/api/v1/penyakit/all')));
+      }
+      // console.log(rawCache, 'heeh');
+      return res.send(JSON.parse(rawCache));
+
+      // response(res, 200, true, result.rows, 'get penyakit success', pagination);
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get penyakit failed');

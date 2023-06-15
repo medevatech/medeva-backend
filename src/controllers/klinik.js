@@ -8,6 +8,7 @@ const {
   updateKlinik,
   deleteKlinik,
 } = require("../models/klinik");
+const { v4: uuidv4 } = require("uuid");
 
 const klinikController = {
   create: async (req, res, next) => {
@@ -18,13 +19,8 @@ const klinikController = {
       response(res, 400, false, null, "Name of clinic is already used");
     }
     try {
-      let digits = "0123456789";
-      let id = "KLN";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const data = {
-        id,
+        id: uuidv4(),
         nama_klinik: req.body.nama_klinik,
         tipe: req.body.tipe,
         alamat: req.body.alamat,
@@ -41,7 +37,7 @@ const klinikController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "nama_klinik";
+      const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
       const offset = (page - 1) * limit;

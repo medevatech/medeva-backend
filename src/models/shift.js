@@ -32,7 +32,7 @@ const getShift = ({
     pool.query(
       `SELECT shift.id, shift.id_jaga as id_jaga, shift.id_karyawan as id_karyawan, kry.nama as nama_karyawan
       INNER JOIN tbl_karyawan as kry ON shift.id_karyawan = kry.id
-                WHERE kry.nama ILIKE '%${searchName}%' AND shift.is_active ILIKE '%${searchStatus}%'
+                WHERE kry.nama ILIKE '%${searchName}%' AND AND CAST(shift.is_active AS TEXT) ILIKE '%${searchStatus}%'
                 ORDER BY tbl_shift.${sortBy} ${sortOrder}
                 LIMIT ${limit}
                 OFFSET ${offset}`,

@@ -12,18 +12,16 @@ const {
   getJagaByIdKaryawan,
   getDistictSchedule,
   getScheduleByIdDivision,
+  countJagaDistinct,
+  countJagaByDivisi,
 } = require("../models/jaga");
+const { v4: uuidv4 } = require("uuid");
 
 const jagaController = {
   create: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "JJG";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const data = {
-        id,
+        id: uuidv4(),
         id_klinik: req.body.id_klinik,
         id_divisi: req.body.id_divisi,
         id_karyawan: req.body.id_karyawan,
@@ -62,7 +60,7 @@ const jagaController = {
       });
       const {
         rows: [count],
-      } = await countJaga();
+      } = await countJaga({ searchDivisiName, searchStatus });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -86,8 +84,44 @@ const jagaController = {
   },
   getDistinct: async (req, res, next) => {
     try {
-      const result = await getDistictSchedule();
-      response(res, 200, true, result.rows, "Get distinct schedule success");
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const sortBy = req.query.sortBy || "id_divisi";
+      const sortOrder = req.query.sortOrder || "desc";
+      const searchName = req.query.searchName || "";
+      const searchStatus = req.query.searchStatus || "";
+      const searchDivisi = req.query.searchDivisi || "";
+      const searchDivisiName = req.query.searchDivisiName || "";
+      const offset = (page - 1) * limit;
+      const result = await getDistictSchedule({
+        searchName,
+        searchStatus,
+        searchDivisi,
+        searchDivisiName,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countJagaDistinct({ searchDivisiName, searchStatus });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get distinct schedule success",
+        pagination
+      );
     } catch (err) {
       console.log("err", err);
       response(res, 400, false, null, "Get distinct schedule error");
@@ -165,7 +199,7 @@ const jagaController = {
       });
       const {
         rows: [count],
-      } = await countJaga();
+      } = await countJagaByDivisi();
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

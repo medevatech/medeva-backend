@@ -160,7 +160,30 @@ const getVitalByIdPasien = ({ id_pasien, tanggal }) => {
 const findVitalByIdPasien = (id_pasien) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT * FROM tbl_vital_signs WHERE id_pasien = '${id_pasien}'`,
+      `SELECT *
+      FROM tbl_vital_signs AS tbl_vital_signs
+      WHERE
+        tbl_vital_signs.id_pasien = '${id_pasien}'
+      `,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findVitalByIdPasienTanggal = (tanggal) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT *
+      FROM tbl_vital_signs AS tbl_vital_signs
+      WHERE
+      CAST(tbl_vital_signs.created_at AS TEXT) ILIKE '%${tanggal}%'
+      `,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -254,6 +277,7 @@ module.exports = {
   findVitalByIdVitalSigns,
   getVitalByIdPasien,
   findVitalByIdPasien,
+  findVitalByIdPasienTanggal,
   editVital,
   editVitalSignsActiveArchive,
   deleteVitalSigns,

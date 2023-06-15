@@ -12,7 +12,9 @@ const {
   deleteAntrian,
   updatePrioritasAntrian,
   getAntrianById,
+  getQueueByScheduleId,
 } = require("../models/antrian");
+const { v4: uuidv4 } = require("uuid");
 
 const antrianController = {
   create: async (req, res, next) => {
@@ -27,27 +29,30 @@ const antrianController = {
       no_antrian += 1;
     }
     try {
-      let digits = "0123456789";
-      let id = "ANT";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const tanggal = new Date().toISOString().slice(0, 10);
       const data = {
-        id,
+        id: uuidv4(),
         id_jaga: req.body.id_jaga,
         id_pasien: req.body.id_pasien,
         tanggal,
         no_antrian,
         prioritas: req.body.prioritas,
       };
-      if (data.id_jaga === "" || null) {
-        response(res, 400, false, null, "Schedule ID can't be empty");
-      } else if (data.id_pasien === "" || null) {
-        response(res, 400, false, null, "Patient ID can't be null");
-      } else {
+      let isError = false;
+
+      for (let [key, value] of Object.entries(data)) {
+        if (
+          (key === "id_jaga" && value === "") ||
+          (key === "id_pasien" && value === "")
+        ) {
+          isError = true;
+          response(res, 404, false, null, `Parameter ${key} wajib diisi`);
+        }
+      }
+
+      if (isError === false) {
         await createAntrian(data);
-        return response(res, 200, true, data, "Create antrian success");
+        response(res, 200, true, data, "Create antrian success");
       }
     } catch (err) {
       console.log(err);
@@ -62,7 +67,7 @@ const antrianController = {
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
       const searchJaga = req.query.searchJaga || "";
-      const searchStatus = req.query.searchStatus || "1";
+      const searchStatus = req.query.searchStatus || 1;
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
@@ -81,7 +86,58 @@ const antrianController = {
       });
       const {
         rows: [countAll],
-      } = await countAntrianAll();
+      } = await countAntrianAll({ searchDivisi, searchStatus });
+      const totalData = parseInt(countAll.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      return response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get antrian success",
+        pagination
+      );
+    } catch (err) {
+      console.log(err);
+      return response(res, 400, false, err, "Get antrian failed");
+    }
+  },
+  getByScheduleId: async (req, res, next) => {
+    var dateDefault = new Date().toISOString().slice(0, 10);
+    try {
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const searchName = req.query.searchName || "";
+      const searchDivisi = req.params.id;
+      const searchJaga = req.query.searchJaga || "";
+      const searchStatus = req.query.searchStatus || 1;
+      const searchDoctor = req.query.searchDoctor || "";
+      const sortBy = req.query.sortBy || "prioritas";
+      const sortOrder = req.query.sortOrder || "asc";
+      const offset = (page - 1) * limit;
+      // const dateNow = new Date().toISOString().slice(0, 10);
+      const date = req.query.date || dateDefault;
+      const result = await getQueueByScheduleId({
+        searchName,
+        searchDivisi,
+        searchJaga,
+        searchStatus,
+        searchDoctor,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+        date,
+      });
+      const {
+        rows: [countAll],
+      } = await countAntrianAll({ searchDivisi, searchStatus });
       const totalData = parseInt(countAll.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

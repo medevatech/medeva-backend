@@ -12,6 +12,7 @@ const {
   getDivisiByIdClinic,
   getDistictDivision,
 } = require("../models/divisi");
+const { v4: uuidv4 } = require("uuid");
 
 const divisiController = {
   create: async (req, res, next) => {
@@ -22,13 +23,8 @@ const divisiController = {
       response(res, 400, false, null, "Name of division is already used");
     }
     try {
-      let digits = "0123456789";
-      let id = "DVS";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
       const data = {
-        id,
+        id: uuidv4(),
         id_klinik: req.body.id_klinik,
         tipe: req.body.tipe,
       };
@@ -47,7 +43,7 @@ const divisiController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "tipe";
+      const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
       const searchStatus = req.query.searchStatus || "";
@@ -90,8 +86,44 @@ const divisiController = {
   },
   getDistinct: async (req, res, next) => {
     try {
-      const result = await getDistictDivision();
-      response(res, 200, true, result.rows, "Get distinct division success");
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const sortBy = req.query.sortBy || "created_at";
+      const sortOrder = req.query.sortOrder || "desc";
+      const searchName = req.query.searchName || "";
+      const searchStatus = req.query.searchStatus || "";
+      const searchKlinik = req.query.searchKlinik || "";
+      const searchDivisi = req.query.searchDivisi || "";
+      const offset = (page - 1) * limit;
+      const result = await getDivisi({
+        searchName,
+        searchStatus,
+        searchDivisi,
+        searchKlinik,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countDivisi();
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get distinct division success",
+        pagination
+      );
     } catch (err) {
       console.log("err", err);
       response(res, 400, false, null, "Get distinct division error");

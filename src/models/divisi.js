@@ -47,7 +47,7 @@ const getDivisi = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT divisi.id, divisi.id_klinik, divisi.tipe as nama_divisi, klinik.nama_klinik as nama_klinik, divisi.is_active
+      `SELECT divisi.id, divisi.id_klinik, divisi.tipe, klinik.nama_klinik as nama_klinik, divisi.is_active
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
         WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
@@ -63,11 +63,22 @@ const getDivisi = ({
   });
 };
 
-const getDistictDivision = () => {
+const getDistictDivision = ({
+  searchName,
+  searchStatus,
+  searchKlinik,
+  searchDivisi,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT DISTINCT ON(divisi.id, divisi.tipe) divisi.id, divisi.tipe as nama_divisi
-      FROM tbl_divisi as divisi`,
+      `SELECT DISTINCT ON(divisi.id, divisi.tipe) divisi.id, divisi.tipe, divisi.id_klinik, klinik.nama_klinik
+      FROM tbl_divisi as divisi
+      INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
+      WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);

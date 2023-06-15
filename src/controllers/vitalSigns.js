@@ -7,6 +7,7 @@ const {
   findVitalByIdVitalSigns,
   getVitalByIdPasien,
   findVitalByIdPasien,
+  findVitalByIdPasienTanggal,
   editVital,
   editVitalSignsActiveArchive,
   deleteVitalSigns,
@@ -124,7 +125,7 @@ const vitalSignsControllers = {
       } else {
         return response(
           res,
-          404,
+          200,
           false,
           null,
           `id vital signs not found, check again`
@@ -150,8 +151,27 @@ const vitalSignsControllers = {
         rows: [findVital],
       } = await findVitalByIdPasien(id_pasien);
 
+      const {
+        rows: [findVitalTanggal],
+      } = await findVitalByIdPasienTanggal(tanggal);
+
       if (findVital) {
-        response(res, 200, true, result.rows, 'get vital signs success');
+        if (findVitalTanggal == undefined) {
+          console.log('cek');
+          response(
+            res,
+            404,
+            true,
+            null,
+            'id_pasien found, vital signs on given date not found'
+          );
+        } else {
+          response(res, 200, true, result.rows, 'get vital signs success');
+        }
+
+        // let isoString = new Date(findVital.created_at)
+        //   .toISOString()
+        //   .slice(0, 10);
       } else {
         return response(
           res,

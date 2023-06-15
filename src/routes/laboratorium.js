@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const { laboratoriumController } = require("../controllers/laboratorium");
+const { protect } = require("../middleware/auth");
 
-router.post("/", laboratoriumController.create);
-router.get("/", laboratoriumController.get);
-router.get("/:id", laboratoriumController.getById);
-router.put("/:id", laboratoriumController.update);
-router.put("/archive/:id", laboratoriumController.archive);
-router.put("/activate/:id", laboratoriumController.activate);
-router.delete("/:id", laboratoriumController.delete);
+router.post("/", protect, laboratoriumController.create);
+router.get("/", protect, laboratoriumController.get);
+router.get("/:id", protect, laboratoriumController.getById);
+router.put("/:id", protect, laboratoriumController.update);
+router.put("/archive/:id", protect, laboratoriumController.archive);
+router.put("/activate/:id", protect, laboratoriumController.activate);
+router.delete("/:id", protect, laboratoriumController.delete);
 
 module.exports = router;
