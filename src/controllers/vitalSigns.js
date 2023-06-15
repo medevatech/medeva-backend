@@ -160,7 +160,7 @@ const vitalSignsControllers = {
           console.log('cek');
           response(
             res,
-            200,
+            404,
             true,
             null,
             'id_pasien found, vital signs on given date not found'
