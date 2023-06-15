@@ -124,7 +124,7 @@ const vitalSignsControllers = {
       } else {
         return response(
           res,
-          404,
+          200,
           false,
           null,
           `id vital signs not found, check again`
@@ -155,7 +155,7 @@ const vitalSignsControllers = {
       } else {
         return response(
           res,
-          404,
+          200,
           false,
           null,
           `id pasien not found, check again`
