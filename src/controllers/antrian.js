@@ -12,6 +12,7 @@ const {
   deleteAntrian,
   updatePrioritasAntrian,
   getAntrianById,
+  getQueueByScheduleId,
 } = require("../models/antrian");
 const { v4: uuidv4 } = require("uuid");
 
@@ -66,7 +67,7 @@ const antrianController = {
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
       const searchJaga = req.query.searchJaga || "";
-      const searchStatus = req.query.searchStatus || "1";
+      const searchStatus = req.query.searchStatus || 1;
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
@@ -85,7 +86,56 @@ const antrianController = {
       });
       const {
         rows: [countAll],
-      } = await countAntrianAll();
+      } = await countAntrianAll({ searchDivisi, searchStatus });
+      const totalData = parseInt(countAll.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      return response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get antrian success",
+        pagination
+      );
+    } catch (err) {
+      console.log(err);
+      return response(res, 400, false, err, "Get antrian failed");
+    }
+  },
+  getByScheduleId: async (req, res, next) => {
+    var dateDefault = new Date().toISOString().slice(0, 10);
+    try {
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const searchName = req.query.searchName || "";
+      const searchDivisi = req.params.id;
+      const searchJaga = req.query.searchJaga || "";
+      const searchStatus = req.query.searchStatus || 1;
+      const sortBy = req.query.sortBy || "prioritas";
+      const sortOrder = req.query.sortOrder || "asc";
+      const offset = (page - 1) * limit;
+      // const dateNow = new Date().toISOString().slice(0, 10);
+      const date = req.query.date || dateDefault;
+      const result = await getQueueByScheduleId({
+        searchName,
+        searchDivisi,
+        searchJaga,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+        date,
+      });
+      const {
+        rows: [countAll],
+      } = await countAntrianAll({ searchDivisi, searchStatus });
       const totalData = parseInt(countAll.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

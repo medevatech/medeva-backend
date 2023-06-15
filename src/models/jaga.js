@@ -25,8 +25,22 @@ const createJaga = (data) => {
   });
 };
 
-const countJaga = () => {
-  return pool.query(`SELECT COUNT(*) AS total FROM tbl_jaga`);
+const countJaga = ({ searchDivisiName, searchStatus }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total FROM tbl_jaga
+    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${searchDivisiName}%'
+    AND CAST(tbl_jaga.is_active AS TEXT) ILIKE '%${searchStatus}%'`
+  );
+};
+
+const countJagaDistinct = ({ searchDivisiName, searchStatus }) => {
+  return pool.query(
+    `SELECT COUNT(DISTINCT tbl_divisi.id) AS total FROM tbl_jaga
+    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${searchDivisiName}%'
+    AND CAST(tbl_jaga.is_active AS TEXT) ILIKE '%${searchStatus}%'`
+  );
 };
 
 const getJaga = ({
@@ -64,13 +78,24 @@ const getJaga = ({
   });
 };
 
-const getDistictSchedule = () => {
+const getDistictSchedule = ({
+  searchName,
+  searchStatus,
+  searchDivisiName,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT DISTINCT ON(jaga.id_divisi) jaga.id, jaga.id_divisi, jaga.id_karyawan, divisi.tipe, kry.nama as nama_karyawan
       FROM tbl_jaga as jaga
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id
-      INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id`,
+      INNER JOIN tbl_karyawan as kry ON jaga.id_karyawan = kry.id
+      WHERE kry.nama ILIKE '%${searchName}%'
+        AND CAST(jaga.is_active AS TEXT) ILIKE '%${searchStatus}%'
+        AND divisi.tipe ILIKE '%${searchDivisiName}%'
+        LIMIT ${limit}
+        OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -253,6 +278,7 @@ const deleteJaga = (id) => {
 module.exports = {
   createJaga,
   countJaga,
+  countJagaDistinct,
   getJaga,
   getDistictSchedule,
   getScheduleByIdDivision,
