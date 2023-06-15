@@ -132,7 +132,7 @@ const pasienControllers = {
       } else {
         return response(
           res,
-          404,
+          200,
           false,
           null,
           `id pasien not found, check again`
