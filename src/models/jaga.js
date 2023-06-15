@@ -25,8 +25,13 @@ const createJaga = (data) => {
   });
 };
 
-const countJaga = () => {
-  return pool.query(`SELECT COUNT(*) AS total FROM tbl_jaga`);
+const countJaga = ({ searchDivisiName }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total FROM tbl_jaga
+    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${searchDivisiName}%'
+    AND CAST(jaga.is_active AS TEXT) ILIKE '%${searchStatus}%'`
+  );
 };
 
 const getJaga = ({

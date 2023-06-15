@@ -16,8 +16,15 @@ const countAntrianDaily = () => {
   });
 };
 
-const countAntrianAll = () => {
-  return pool.query(`SELECT COUNT(*) AS total FROM tbl_antrian`);
+const countAntrianAll = ({ searchDivisi, searchStatus }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total
+    FROM tbl_antrian
+    INNER JOIN tbl_jaga ON tbl_antrian.id_jaga = tbl_jaga.id
+    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${searchDivisi}%'
+    AND CAST(tbl_antrian.status AS TEXT) ILIKE '%${searchStatus}%'`
+  );
 };
 
 const createAntrian = (data) => {

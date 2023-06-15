@@ -66,7 +66,7 @@ const antrianController = {
       const searchName = req.query.searchName || "";
       const searchDivisi = req.query.searchDivisi || "";
       const searchJaga = req.query.searchJaga || "";
-      const searchStatus = req.query.searchStatus || "1";
+      const searchStatus = req.query.searchStatus || 1;
       const sortBy = req.query.sortBy || "prioritas";
       const sortOrder = req.query.sortOrder || "asc";
       const offset = (page - 1) * limit;
@@ -85,7 +85,7 @@ const antrianController = {
       });
       const {
         rows: [countAll],
-      } = await countAntrianAll();
+      } = await countAntrianAll({ searchDivisi, searchStatus });
       const totalData = parseInt(countAll.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
