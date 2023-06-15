@@ -5,7 +5,8 @@ const { protect } = require("../middleware/auth");
 
 router.post("/", protect, antrianController.create);
 router.get("/", protect, antrianController.get);
-router.get("/:id", protect, antrianController.getByScheduleId);
+router.get("/:id", protect, antrianController.getById);
+router.get("/division/:id", protect, antrianController.getById);
 router.get("/total", protect, antrianController.getTotal);
 router.get("/rest", protect, antrianController.getRest);
 router.get("/now", protect, antrianController.getNow);

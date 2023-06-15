@@ -105,6 +105,7 @@ const getQueueByScheduleId = ({
 }) => {
   return new Promise((resolve, reject) => {
     console.log(searchDivisi);
+    console.log(date);
     pool.query(
       `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
