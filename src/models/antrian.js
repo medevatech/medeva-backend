@@ -22,7 +22,7 @@ const countAntrianAll = ({ searchDivisi, searchStatus }) => {
     FROM tbl_antrian
     INNER JOIN tbl_jaga ON tbl_antrian.id_jaga = tbl_jaga.id
     INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
-    WHERE tbl_divisi.tipe ILIKE '%${searchDivisi}%'
+    WHERE tbl_divisi.id = '${searchDivisi}'
     AND CAST(tbl_antrian.status AS TEXT) ILIKE '%${searchStatus}%'`
   );
 };
