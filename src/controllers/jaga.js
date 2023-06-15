@@ -13,6 +13,7 @@ const {
   getDistictSchedule,
   getScheduleByIdDivision,
   countJagaDistinct,
+  countJagaByDivisi,
 } = require("../models/jaga");
 const { v4: uuidv4 } = require("uuid");
 
@@ -198,7 +199,7 @@ const jagaController = {
       });
       const {
         rows: [count],
-      } = await countJaga();
+      } = await countJagaByDivisi();
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

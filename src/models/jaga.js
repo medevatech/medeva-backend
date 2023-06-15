@@ -34,6 +34,10 @@ const countJaga = ({ searchDivisiName, searchStatus }) => {
   );
 };
 
+const countJagaByDivisi = () => {
+  return pool.query(`SELECT COUNT(*) AS total FROM tbl_jaga`);
+};
+
 const countJagaDistinct = ({ searchDivisiName, searchStatus }) => {
   return pool.query(
     `SELECT COUNT(DISTINCT tbl_divisi.id) AS total FROM tbl_jaga
@@ -280,6 +284,7 @@ module.exports = {
   countJaga,
   countJagaDistinct,
   getJaga,
+  countJagaByDivisi,
   getDistictSchedule,
   getScheduleByIdDivision,
   getJagaById,
