@@ -7,6 +7,7 @@ const {
   findVitalByIdVitalSigns,
   getVitalByIdPasien,
   findVitalByIdPasien,
+  findVitalByIdPasienTanggal,
   editVital,
   editVitalSignsActiveArchive,
   deleteVitalSigns,
@@ -150,12 +151,31 @@ const vitalSignsControllers = {
         rows: [findVital],
       } = await findVitalByIdPasien(id_pasien);
 
+      const {
+        rows: [findVitalTanggal],
+      } = await findVitalByIdPasienTanggal(tanggal);
+
       if (findVital) {
-        response(res, 200, true, result.rows, 'get vital signs success');
+        if (findVitalTanggal == undefined) {
+          console.log('cek');
+          response(
+            res,
+            404,
+            true,
+            null,
+            'id_pasien found, vital signs on given date not found'
+          );
+        } else {
+          response(res, 200, true, result.rows, 'get vital signs success');
+        }
+
+        // let isoString = new Date(findVital.created_at)
+        //   .toISOString()
+        //   .slice(0, 10);
       } else {
         return response(
           res,
-          200,
+          404,
           false,
           null,
           `id pasien not found, check again`
