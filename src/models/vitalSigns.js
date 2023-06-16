@@ -131,7 +131,7 @@ const findVitalByIdVitalSigns = (id) => {
   );
 };
 
-const getVitalByIdPasien = ({ id_pasien, tanggal }) => {
+const getVitalByIdPasien = ({ id_pasien, tanggal, sortBy, sortOrder }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_vital_signs.id, 
@@ -145,7 +145,8 @@ const getVitalByIdPasien = ({ id_pasien, tanggal }) => {
       WHERE
         tbl_vital_signs.id_pasien = '${id_pasien}'
       AND
-        CAST(tbl_vital_signs.created_at AS TEXT) ILIKE '%${tanggal}%'`,
+        CAST(tbl_vital_signs.created_at AS TEXT) ILIKE '%${tanggal}%'
+      ORDER BY tbl_vital_signs.${sortBy} ${sortOrder}`,
       (err, result) => {
         if (!err) {
           resolve(result);
