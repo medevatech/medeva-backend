@@ -13,6 +13,7 @@ const {
   updatePrioritasAntrian,
   getAntrianById,
   getQueueByScheduleId,
+  countAntrianDoctor,
 } = require("../models/antrian");
 const { v4: uuidv4 } = require("uuid");
 
@@ -69,7 +70,7 @@ const antrianController = {
       const searchJaga = req.query.searchJaga || "";
       const searchStatus = req.query.searchStatus || 1;
       const sortBy = req.query.sortBy || "prioritas";
-      const sortOrder = req.query.sortOrder || "asc";
+      const sortOrder = req.query.sortOrder || "desc";
       const offset = (page - 1) * limit;
       // const dateNow = new Date().toISOString().slice(0, 10);
       const date = req.query.date || dateDefault;
@@ -86,7 +87,7 @@ const antrianController = {
       });
       const {
         rows: [countAll],
-      } = await countAntrianAll({ searchDivisi, searchStatus });
+      } = await countAntrianAll({ searchDivisi, searchStatus, date });
       const totalData = parseInt(countAll.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -119,7 +120,7 @@ const antrianController = {
       const searchStatus = req.query.searchStatus || 1;
       const searchDoctor = req.query.searchDoctor || "";
       const sortBy = req.query.sortBy || "prioritas";
-      const sortOrder = req.query.sortOrder || "asc";
+      const sortOrder = req.query.sortOrder || "desc";
       const offset = (page - 1) * limit;
       // const dateNow = new Date().toISOString().slice(0, 10);
       const date = req.query.date || dateDefault;
@@ -137,7 +138,12 @@ const antrianController = {
       });
       const {
         rows: [countAll],
-      } = await countAntrianAll({ searchDivisi, searchStatus });
+      } = await countAntrianDoctor({
+        searchDivisi,
+        searchStatus,
+        searchDoctor,
+        date,
+      });
       const totalData = parseInt(countAll.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

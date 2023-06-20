@@ -182,7 +182,7 @@ const karyawanController = {
       rows: [users],
     } = await findLogin(inputLogin);
     if (!users) {
-      return response(res, 400, false, null, "Account not found");
+      return response(res, 400, false, null, "Akun tidak ditemukan");
     } else {
       let validation = await argon2.verify(users.password, req.body.password);
       if (!validation) {
