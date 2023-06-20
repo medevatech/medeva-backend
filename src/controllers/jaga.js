@@ -1,4 +1,4 @@
-const { response } = require("../middleware/common");
+const { response } = require('../middleware/common');
 const {
   createJaga,
   countJaga,
@@ -14,8 +14,8 @@ const {
   getScheduleByIdDivision,
   countJagaDistinct,
   countJagaByDivisi,
-} = require("../models/jaga");
-const { v4: uuidv4 } = require("uuid");
+} = require('../models/jaga');
+const { v4: uuidv4 } = require('uuid');
 
 const jagaController = {
   create: async (req, res, next) => {
@@ -31,22 +31,22 @@ const jagaController = {
         waktu_selesai: req.body.waktu_selesai,
       };
       await createJaga(data);
-      response(res, 200, true, data, "Create jaga success");
+      response(res, 200, true, data, 'Create jaga success');
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Create jaga failed");
+      response(res, 400, false, err, 'Create jaga failed');
     }
   },
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "id";
-      const sortOrder = req.query.sortOrder || "desc";
-      const searchName = req.query.searchName || "";
-      const searchStatus = req.query.searchStatus || "";
-      const searchDivisi = req.query.searchDivisi || "";
-      const searchDivisiName = req.query.searchDivisiName || "";
+      const sortBy = req.query.sortBy || 'id';
+      const sortOrder = req.query.sortOrder || 'desc';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
+      const searchDivisi = req.query.searchDivisi || '';
+      const searchDivisiName = req.query.searchDivisiName || '';
       const offset = (page - 1) * limit;
       const result = await getJaga({
         searchName,
@@ -74,24 +74,24 @@ const jagaController = {
         200,
         true,
         result.rows,
-        "Get jaga data success",
+        'Get jaga data success',
         pagination
       );
     } catch (err) {
-      console.log("Get jaga data error", err);
-      response(res, 400, false, null, "Get jaga data failed");
+      console.log('Get jaga data error', err);
+      response(res, 400, false, null, 'Get jaga data failed');
     }
   },
   getDistinct: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "id_divisi";
-      const sortOrder = req.query.sortOrder || "desc";
-      const searchName = req.query.searchName || "";
-      const searchStatus = req.query.searchStatus || "";
-      const searchDivisi = req.query.searchDivisi || "";
-      const searchDivisiName = req.query.searchDivisiName || "";
+      const sortBy = req.query.sortBy || 'id_divisi';
+      const sortOrder = req.query.sortOrder || 'desc';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
+      const searchDivisi = req.query.searchDivisi || '';
+      const searchDivisiName = req.query.searchDivisiName || '';
       const offset = (page - 1) * limit;
       const result = await getDistictSchedule({
         searchName,
@@ -119,39 +119,39 @@ const jagaController = {
         200,
         true,
         result.rows,
-        "Get distinct schedule success",
+        'Get distinct schedule success',
         pagination
       );
     } catch (err) {
-      console.log("err", err);
-      response(res, 400, false, null, "Get distinct schedule error");
+      console.log('err', err);
+      response(res, 400, false, null, 'Get distinct schedule error');
     }
   },
   getByIdDivision: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const searchDay = req.query.searchDay || "";
-      console.log("serdei", searchDay);
+      const searchDay = req.query.searchDay || '';
+      console.log('serdei', searchDay);
       let searchDays = 0;
-      if (searchDay === "Senin") {
+      if (searchDay === 'Senin') {
         searchDays = 1;
       }
-      if (searchDay === "Selasa") {
+      if (searchDay === 'Selasa') {
         searchDays = 2;
       }
-      if (searchDay === "Rabu") {
+      if (searchDay === 'Rabu') {
         searchDays = 3;
       }
-      if (searchDay === "Kamis") {
+      if (searchDay === 'Kamis') {
         searchDays = 4;
       }
-      if (searchDay === "Jumat") {
+      if (searchDay === 'Jumat') {
         searchDays = 5;
       }
-      if (searchDay === "Sabtu") {
+      if (searchDay === 'Sabtu') {
         searchDays = 6;
       }
-      if (searchDay === "Minggu") {
+      if (searchDay === 'Minggu') {
         searchDays = 7;
       }
       const result = await getScheduleByIdDivision({
@@ -163,28 +163,28 @@ const jagaController = {
         200,
         true,
         result.rows,
-        "Get schedule by id division success"
+        'Get schedule by id division success'
       );
     } catch (err) {
-      console.log("err", err);
-      response(res, 400, false, null, "Get schedule by id division error");
+      console.log('err', err);
+      response(res, 400, false, null, 'Get schedule by id division error');
     }
   },
   getById: async (req, res, next) => {
     try {
       const result = await getJagaById(req.params.id);
-      response(res, 200, true, result.rows, "Get jaga data by ID success");
+      response(res, 200, true, result.rows, 'Get jaga data by ID success');
     } catch (err) {
-      console.log("Get jaga data by ID error", err);
-      response(res, 400, false, err, "Get jaga data by ID failed");
+      console.log('Get jaga data by ID error', err);
+      response(res, 400, false, err, 'Get jaga data by ID failed');
     }
   },
   getByIdDivisi: async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const searchStatus = req.query.searchStatus || "1";
-    const sortBy = req.query.sortBy || "id";
-    const sortOrder = req.query.sortOrder || "asc";
+    const searchStatus = req.query.searchStatus || '1';
+    const sortBy = req.query.sortBy || 'id';
+    const sortOrder = req.query.sortOrder || 'asc';
     const offset = (page - 1) * limit;
     const id = req.params.id;
     // console.log(page, limit, sortBy, sortOrder, offset, id);
@@ -213,20 +213,20 @@ const jagaController = {
         200,
         true,
         result.rows,
-        "Get jaga by ID divisi success",
+        'Get jaga by ID divisi success',
         pagination
       );
     } catch (err) {
-      console.log("Get jaga by ID divisi error", err);
-      response(res, 400, false, err, "Get jaga by ID divisi failed");
+      console.log('Get jaga by ID divisi error', err);
+      response(res, 400, false, err, 'Get jaga by ID divisi failed');
     }
   },
   getByIdKaryawan: async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const searchStatus = req.query.searchStatus || "1";
-    const sortBy = req.query.sortBy || "id";
-    const sortOrder = req.query.sortOrder || "asc";
+    const searchStatus = req.query.searchStatus || '1';
+    const sortBy = req.query.sortBy || 'id';
+    const sortOrder = req.query.sortOrder || 'asc';
     const offset = (page - 1) * limit;
     const id = req.params.id;
     // console.log(page, limit, sortBy, sortOrder, offset, id);
@@ -255,12 +255,12 @@ const jagaController = {
         200,
         true,
         result.rows,
-        "Get jaga by ID karyawan success",
+        'Get jaga by ID karyawan success',
         pagination
       );
     } catch (err) {
-      console.log("Get jaga by ID karyawan error", err);
-      response(res, 400, false, err, "Get jaga by ID karyawan failed");
+      console.log('Get jaga by ID karyawan error', err);
+      response(res, 400, false, err, 'Get jaga by ID karyawan failed');
     }
   },
   update: async (req, res, next) => {
@@ -280,35 +280,35 @@ const jagaController = {
         waktu_selesai,
       };
       await updateJaga(data);
-      response(res, 200, true, data, "Update jaga data success");
+      response(res, 200, true, data, 'Update jaga data success');
     } catch (err) {
-      console.log("Update jaga data error", err);
-      response(res, 400, false, "Update jaga data failed");
+      console.log('Update jaga data error', err);
+      response(res, 400, false, 'Update jaga data failed');
     }
   },
   archive: async (req, res, next) => {
     try {
       await archiveJaga(req.params.id);
-      return response(res, 200, true, null, "Archive jaga success");
+      return response(res, 200, true, null, 'Archive jaga success');
     } catch (err) {
-      return response(res, 400, false, err, "Archive jaga failed");
+      return response(res, 400, false, err, 'Archive jaga failed');
     }
   },
   activate: async (req, res, next) => {
     try {
       await activateJaga(req.params.id);
-      return response(res, 200, true, null, "Activate jaga success");
+      return response(res, 200, true, null, 'Activate jaga success');
     } catch (err) {
-      return response(res, 400, false, err, "Activate jaga failed");
+      return response(res, 400, false, err, 'Activate jaga failed');
     }
   },
   delete: async (req, res, next) => {
     try {
       await deleteJaga(req.params.id);
-      response(res, 200, true, null, "Delete jaga success");
+      response(res, 200, true, null, 'Delete jaga success');
     } catch (err) {
-      console.log("Delete jaga error", err);
-      response(res, 400, false, err, "Delete jaga failed");
+      console.log('Delete jaga error', err);
+      response(res, 400, false, err, 'Delete jaga failed');
     }
   },
 };

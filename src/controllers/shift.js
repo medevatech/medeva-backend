@@ -1,4 +1,4 @@
-const { response } = require("../middleware/common");
+const { response } = require('../middleware/common');
 const {
   createShift,
   countShift,
@@ -8,13 +8,13 @@ const {
   archiveShift,
   activateShift,
   deleteShift,
-} = require("../models/shift");
+} = require('../models/shift');
 
 const shiftController = {
   create: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "SHF";
+      let digits = '0123456789';
+      let id = 'SHF';
       for (let i = 0; i < 6; i++) {
         id += digits[Math.floor(Math.random() * 10)];
       }
@@ -25,20 +25,20 @@ const shiftController = {
       };
       console.log(data);
       await createShift(data);
-      response(res, 200, true, data, "Create shift success");
+      response(res, 200, true, data, 'Create shift success');
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Create shift failed");
+      response(res, 400, false, err, 'Create shift failed');
     }
   },
   get: async (req, res, next) => {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "hari";
-      const sortOrder = req.query.sortOrder || "desc";
-      const searchName = req.query.searchName || "";
-      const searchStatus = req.query.searchStatus || "";
+      const sortBy = req.query.sortBy || 'hari';
+      const sortOrder = req.query.sortOrder || 'desc';
+      const searchName = req.query.searchName || '';
+      const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
       const result = await getShift({
         searchName,
@@ -64,21 +64,21 @@ const shiftController = {
         200,
         true,
         result.rows,
-        "Get shift data success",
+        'Get shift data success',
         pagination
       );
     } catch (err) {
-      console.log("Get shift data error", err);
-      response(res, 400, false, null, "Get shift data failed");
+      console.log('Get shift data error', err);
+      response(res, 400, false, null, 'Get shift data failed');
     }
   },
   getById: async (req, res, next) => {
     try {
       const result = await getShiftById(req.params.id);
-      response(res, 200, true, result.rows, "Get shift data by ID success");
+      response(res, 200, true, result.rows, 'Get shift data by ID success');
     } catch (err) {
-      console.log("Get shift data by ID error", err);
-      response(res, 400, false, err, "Get shift data by ID failed");
+      console.log('Get shift data by ID error', err);
+      response(res, 400, false, err, 'Get shift data by ID failed');
     }
   },
   getByIdClinic: async (req, res, next) => {
@@ -89,11 +89,11 @@ const shiftController = {
         200,
         true,
         result.rows,
-        "Get shift data by ID clinic success"
+        'Get shift data by ID clinic success'
       );
     } catch (err) {
-      console.log("Get shift data by ID error", err);
-      response(res, 400, false, err, "Get shift data by ID clinic failed");
+      console.log('Get shift data by ID error', err);
+      response(res, 400, false, err, 'Get shift data by ID clinic failed');
     }
   },
   update: async (req, res, next) => {
@@ -115,35 +115,35 @@ const shiftController = {
         waktu_selesai,
       };
       await updateShift(data);
-      response(res, 200, true, data, "Update shift data success");
+      response(res, 200, true, data, 'Update shift data success');
     } catch (err) {
-      console.log("Update shift data error", err);
-      response(res, 400, false, "Update shift data failed");
+      console.log('Update shift data error', err);
+      response(res, 400, false, 'Update shift data failed');
     }
   },
   archive: async (req, res, next) => {
     try {
       await archiveShift(req.params.id);
-      return response(res, 200, true, null, "Archive shift success");
+      return response(res, 200, true, null, 'Archive shift success');
     } catch (err) {
-      return response(res, 400, false, err, "Archive shift failed");
+      return response(res, 400, false, err, 'Archive shift failed');
     }
   },
   activate: async (req, res, next) => {
     try {
       await activateShift(req.params.id);
-      return response(res, 200, true, null, "Activate shift success");
+      return response(res, 200, true, null, 'Activate shift success');
     } catch (err) {
-      return response(res, 400, false, err, "Activate shift failed");
+      return response(res, 400, false, err, 'Activate shift failed');
     }
   },
   delete: async (req, res, next) => {
     try {
       await deleteShift(req.params.id);
-      response(res, 200, true, null, "Delete shift success");
+      response(res, 200, true, null, 'Delete shift success');
     } catch (err) {
-      console.log("Delete shift error", err);
-      response(res, 400, false, err, "Delete shift failed");
+      console.log('Delete shift error', err);
+      response(res, 400, false, err, 'Delete shift failed');
     }
   },
 };
