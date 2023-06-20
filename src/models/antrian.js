@@ -16,7 +16,7 @@ const countAntrianDaily = () => {
   });
 };
 
-const countAntrianAll = ({ searchDivisi, searchStatus }) => {
+const countAntrianAll = ({ searchDivisi, searchStatus, date }) => {
   return pool.query(
     `SELECT COUNT(*) AS total
     FROM tbl_antrian
