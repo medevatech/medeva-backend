@@ -125,6 +125,9 @@ const karyawanController = {
           username: req.body.username,
           email: req.body.email,
           password,
+          is_dev: parseInt(req.body.is_dev),
+          is_manager: parseInt(req.body.is_manager),
+          is_finance: parseInt(req.body.is_finance),
           is_admin: parseInt(req.body.is_admin),
           is_resepsionis: parseInt(req.body.is_resepsionis),
           is_perawat: parseInt(req.body.is_perawat),
@@ -177,6 +180,7 @@ const karyawanController = {
             return response(res, 200, true, data, "Add karyawan success");
           }
         } catch (err) {
+          console.log(err);
           return response(res, 400, false, err, "Add karyawan failed");
         }
       }

@@ -82,6 +82,7 @@ const createKaryawan = (data) => {
     tipe,
     spesialis,
   } = data;
+  console.log(data);
   return new Promise((resolve, reject) => {
     pool.query(
       `INSERT INTO tbl_karyawan (id, nama, username, email, password, is_dev, is_manager, is_admin, is_resepsionis, is_perawat, is_dokter, is_manajemen, jenis_kelamin, nomor_kitas, tipe_izin, nomor_izin, kadaluarsa_izin, nomor_hp, tempat_lahir, tanggal_lahir, alamat, provinsi, kota, kecamatan, kelurahan, kode_pos, status_menikah, tipe, spesialis, is_active, created_at, updated_at) VALUES ('${id}', '${nama}', '${username}', '${email}', '${password}', 0, '${is_manager}', '${is_admin}', '${is_resepsionis}', '${is_perawat}', '${is_dokter}', '${is_manajemen}', '${jenis_kelamin}', '${nomor_kitas}', '${tipe_izin}', '${nomor_izin}', '${kadaluarsa_izin}', '${nomor_hp}', '${tempat_lahir}', '${tanggal_lahir}', '${alamat}', '${provinsi}', '${kota}', '${kecamatan}', '${kelurahan}', '${kode_pos}', '${status_menikah}', '${tipe}', '${spesialis}', 1, NOW(), NOW())`,
