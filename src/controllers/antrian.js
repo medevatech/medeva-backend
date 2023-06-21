@@ -38,7 +38,7 @@ const antrianController = {
         tanggal,
         no_antrian,
         prioritas: req.body.prioritas,
-        id_asuransi: req.body.id_asuransi,
+        id_peserta: req.body.id_peserta,
       };
       let isError = false;
 

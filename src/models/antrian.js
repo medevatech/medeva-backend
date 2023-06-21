@@ -47,18 +47,11 @@ const countAntrianDoctor = ({
 };
 
 const createAntrian = (data) => {
-  const {
-    id,
-    id_jaga,
-    id_pasien,
-    no_antrian,
-    tanggal,
-    prioritas,
-    id_asuransi,
-  } = data;
+  const { id, id_jaga, id_pasien, no_antrian, tanggal, prioritas, id_peserta } =
+    data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_antrian (id, id_jaga, id_pasien, tanggal, no_antrian, status, prioritas, created_at, updated_at, id_asuransi) VALUES('${id}', '${id_jaga}', '${id_pasien}', '${tanggal}', '${no_antrian}', 1, '${prioritas}', NOW(), NOW(), '${id_asuransi}')`,
+      `INSERT INTO tbl_antrian (id, id_jaga, id_pasien, tanggal, no_antrian, status, prioritas, created_at, updated_at, id_peserta) VALUES('${id}', '${id_jaga}', '${id_pasien}', '${tanggal}', '${no_antrian}', 1, '${prioritas}', NOW(), NOW(), '${id_peserta}')`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -83,12 +76,15 @@ const getAntrian = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_asuransi, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, asuransi_kelas.sistem, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
       INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
       INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id 
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id 
+      INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
+      INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
+      INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
       WHERE antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
@@ -135,12 +131,15 @@ const getQueueByScheduleId = ({
     console.log(searchDivisi);
     console.log(date);
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_asuransi, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, asuransi_kelas.sistem, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
       INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
       INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id 
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id 
+      INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
+      INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
+      INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
       WHERE jaga.id_divisi = '${searchDivisi}' AND antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' AND jaga.id_karyawan ILIKE '%${searchDoctor}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
