@@ -43,6 +43,9 @@ const karyawanController = {
           username: req.body.username,
           email: req.body.email,
           password,
+          is_dev: parseInt(req.body.is_dev),
+          is_manager: parseInt(req.body.is_manager),
+          is_finance: parseInt(req.body.is_finance),
           is_admin: parseInt(req.body.is_admin),
           is_resepsionis: parseInt(req.body.is_resepsionis),
           is_perawat: parseInt(req.body.is_perawat),
@@ -97,6 +100,9 @@ const karyawanController = {
           return response(res, 400, false, err, "Add karyawan failed");
         }
       } else if (
+        parseInt(req.body.is_dev) === 0 &&
+        parseInt(req.body.is_manager) === 0 &&
+        parseInt(req.body.is_finance) === 0 &&
         parseInt(req.body.is_admin) === 0 &&
         parseInt(req.body.is_dokter) === 0 &&
         parseInt(req.body.is_manajemen) === 0 &&
