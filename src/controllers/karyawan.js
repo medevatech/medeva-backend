@@ -186,7 +186,13 @@ const karyawanController = {
     } else {
       let validation = await argon2.verify(users.password, req.body.password);
       if (!validation) {
-        return response(res, 401, false, null, "Invalid password");
+        return response(
+          res,
+          401,
+          false,
+          null,
+          `Password yang dimasukkan untuk akun dengan username/email ${inputLogin} salah, silahkan coba lagi dengan memasukkan password yang benar`
+        );
       } else {
         delete users.password;
         let payload = {
@@ -206,7 +212,7 @@ const karyawanController = {
         let refreshToken = generateRefreshToken(payload);
         users.token = accessToken;
         users.refreshToken = refreshToken;
-        return response(res, 200, true, users, "Login karyawan success");
+        return response(res, 200, true, users, "Login karyawan berhasil");
       }
     }
   },

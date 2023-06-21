@@ -47,10 +47,18 @@ const countAntrianDoctor = ({
 };
 
 const createAntrian = (data) => {
-  const { id, id_jaga, id_pasien, no_antrian, tanggal, prioritas } = data;
+  const {
+    id,
+    id_jaga,
+    id_pasien,
+    no_antrian,
+    tanggal,
+    prioritas,
+    id_asuransi,
+  } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_antrian (id, id_jaga, id_pasien, tanggal, no_antrian, status, prioritas, created_at, updated_at) VALUES('${id}', '${id_jaga}', '${id_pasien}', '${tanggal}', '${no_antrian}', 1, '${prioritas}', NOW(), NOW())`,
+      `INSERT INTO tbl_antrian (id, id_jaga, id_pasien, tanggal, no_antrian, status, prioritas, created_at, updated_at, id_asuransi) VALUES('${id}', '${id_jaga}', '${id_pasien}', '${tanggal}', '${no_antrian}', 1, '${prioritas}', NOW(), NOW(), '${id_asuransi}')`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -75,7 +83,7 @@ const getAntrian = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_asuransi, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
       INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
@@ -127,7 +135,7 @@ const getQueueByScheduleId = ({
     console.log(searchDivisi);
     console.log(date);
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_asuransi, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
       INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
