@@ -120,7 +120,7 @@ const karyawanController = {
         const hash = await argon2.hash(req.body.password);
         const password = `${hash}`;
         let data = {
-          id: id,
+          id: uuidv4(),
           nama: req.body.nama,
           username: req.body.username,
           email: req.body.email,
