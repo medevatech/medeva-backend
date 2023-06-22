@@ -62,7 +62,7 @@ const countAllAsuransi = (search, searchStatus) => {
 const getAsuransiByIdAsuransi = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_asuransi.id, tbl_asuransi.nama, 
+      `SELECT tbl_asuransi.id, tbl_asuransi.nama, tbl_asuransi.is_active,
         tbl_asuransi.created_at,
         tbl_asuransi.updated_at
       FROM tbl_asuransi AS tbl_asuransi

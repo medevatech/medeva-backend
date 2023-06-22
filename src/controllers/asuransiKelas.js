@@ -20,7 +20,6 @@ const asuransiKelasControllers = {
         id: uuidv4(),
         id_asuransi: req.body.id_asuransi,
         nama_kelas: req.body.nama_kelas,
-        sistem: req.body.sistem,
         is_active: 1,
       };
 
@@ -119,7 +118,6 @@ const asuransiKelasControllers = {
           id,
           id_asuransi: req.body.id_asuransi,
           nama_kelas: req.body.nama_kelas,
-          sistem: req.body.sistem,
           is_active: 1,
         };
 
