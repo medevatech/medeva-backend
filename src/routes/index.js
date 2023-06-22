@@ -71,6 +71,7 @@ router.use('/harga-layanan', hargaLayananRouter);
 router.use('/asuransi-kelas', asuransiKelasRouter);
 router.use('/peserta', pesertaRouter);
 router.use('/layanan', layananRouter);
+router.use('/kerjasama', kerjasamaRouter);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
