@@ -3,6 +3,8 @@ const {
   insertKerjasama,
   allKerjasama,
   countAllKerjasama,
+  allKerjasamaDistinct,
+  countAllKerjasamaDistinct,
   getKerjasamaByIdKerjasama,
   findKerjasamaByIdKerjasama,
   getKerjasamaByIdAsuransi,
@@ -81,6 +83,66 @@ const kerjasamaControllers = {
       const {
         rows: [count],
       } = await countAllKerjasama(
+        search,
+        searchAsuransi,
+        searchAsuransiKelas,
+        searchKlinik,
+        searchTipe,
+        searchStatus
+      );
+
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        'get kerjasama success',
+        pagination
+      );
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get kerjasama failed');
+    }
+  },
+  getAllDistinct: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const sortBy = req.query.sortBy || 'created_at';
+      const sortOrder = req.query.sortOrder || 'DESC';
+      const search = req.query.search || '';
+      const searchAsuransi = req.query.searchAsuransi || '';
+      const searchAsuransiKelas = req.query.searchAsuransiKelas || '';
+      const searchKlinik = req.query.searchKlinik || '';
+      const searchTipe = req.query.searchTipe || '';
+      const searchStatus = req.query.searchStatus || '';
+      const offset = (page - 1) * limit;
+
+      const result = await allKerjasamaDistinct({
+        search,
+        searchAsuransi,
+        searchAsuransiKelas,
+        searchKlinik,
+        searchTipe,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+
+      const {
+        rows: [count],
+      } = await countAllKerjasamaDistinct(
         search,
         searchAsuransi,
         searchAsuransiKelas,

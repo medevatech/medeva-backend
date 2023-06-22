@@ -7,6 +7,7 @@ let uploaded = multer();
 
 router.post(`/`, protect, uploaded.array(), kerjasamaControllers.add);
 router.get(`/`, protect, kerjasamaControllers.getAll);
+router.get(`/distinct`, protect, kerjasamaControllers.getAllDistinct);
 router.get(`/:id`, protect, kerjasamaControllers.getById);
 router.get(
   `/asuransi/:id_asuransi`,
