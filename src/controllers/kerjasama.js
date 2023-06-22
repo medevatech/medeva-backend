@@ -1,14 +1,23 @@
 const { response } = require(`../middleware/common`);
 const {
-  insertDaftarLayanan,
-  allDaftarLayanan,
-  countAllDaftarLayanan,
-  getDaftarLayananByIdDaftarLayanan,
-  findDaftarLayananByIdDaftarLayanan,
-  editDaftarLayanan,
-  editDaftarLayananActivate,
-  editDaftarLayananArchive,
-  deleteDaftarLayanan,
+  insertKerjasama,
+  allKerjasama,
+  countAllKerjasama,
+  getKerjasamaByIdKerjasama,
+  findKerjasamaByIdKerjasama,
+  getKerjasamaByIdAsuransi,
+  findKerjasamaByIdAsuransi,
+  getKerjasamaByIdAsuransiKelas,
+  findKerjasamaByIdAsuransiKelas,
+  getKerjasamaByIdKlinik,
+  findKerjasamaByIdKlinik,
+  editKerjasama,
+  editKerjasamaActivate,
+  editKerjasamaArchive,
+  editKlinikActivate,
+  editKlinikArchive,
+  deleteKerjasama,
+  deleteKerjasamaByIdKlinik,
 } = require(`../models/kerjasama`);
 const { v4: uuidv4 } = require('uuid');
 
@@ -27,19 +36,19 @@ const kerjasamaControllers = {
       let isError = false;
 
       for (let [key, value] of Object.entries(data)) {
-        if (key === 'nama' && value === '') {
+        if (key === 'tipe' && value === '') {
           isError = true;
           response(res, 404, false, null, `Parameter ${key} wajib diisi`);
         }
       }
 
       if (isError === false) {
-        await insertDaftarLayanan(data);
-        response(res, 200, true, data, 'insert daftar layanan success');
+        await insertKerjasama(data);
+        response(res, 200, true, data, 'insert kerjasama success');
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'insert daftar layanan failed');
+      response(res, 404, false, error, 'insert kerjasama failed');
     }
   },
   getAll: async (req, res) => {
@@ -49,11 +58,19 @@ const kerjasamaControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchAsuransi = req.query.searchAsuransi || '';
+      const searchAsuransiKelas = req.query.searchAsuransiKelas || '';
+      const searchKlinik = req.query.searchKlinik || '';
+      const searchTipe = req.query.searchTipe || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
-      const result = await allDaftarLayanan({
+      const result = await allKerjasama({
         search,
+        searchAsuransi,
+        searchAsuransiKelas,
+        searchKlinik,
+        searchTipe,
         searchStatus,
         sortBy,
         sortOrder,
@@ -63,7 +80,14 @@ const kerjasamaControllers = {
 
       const {
         rows: [count],
-      } = await countAllDaftarLayanan(search, searchStatus);
+      } = await countAllKerjasama(
+        search,
+        searchAsuransi,
+        searchAsuransiKelas,
+        searchKlinik,
+        searchTipe,
+        searchStatus
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -79,40 +103,124 @@ const kerjasamaControllers = {
         200,
         true,
         result.rows,
-        'get daftar layanan success',
+        'get kerjasama success',
         pagination
       );
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get daftar layanan failed');
+      response(res, 404, false, error, 'get kerjasama failed');
     }
   },
   getById: async (req, res) => {
     try {
       const id = req.params.id;
 
-      const result = await getDaftarLayananByIdDaftarLayanan({
+      const result = await getKerjasamaByIdKerjasama({
         id,
       });
 
       const {
-        rows: [findDaftarLayanan],
-      } = await findDaftarLayananByIdDaftarLayanan(id);
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKerjasama(id);
 
-      if (findDaftarLayanan) {
-        response(res, 200, true, result.rows, 'get daftar layanan success');
+      if (findKerjasama) {
+        response(res, 200, true, result.rows, 'get kerjasama success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id daftar layanan not found, check again`
+          `id kerjasama not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get daftar layanan failed');
+      response(res, 404, false, error, 'get kerjasama failed');
+    }
+  },
+  getByIdAsuransi: async (req, res) => {
+    try {
+      const id_asuransi = req.params.id_asuransi;
+
+      const result = await getKerjasamaByIdAsuransi({
+        id_asuransi,
+      });
+
+      const {
+        rows: [findAsuransi],
+      } = await findKerjasamaByIdAsuransi(id_asuransi);
+
+      if (findAsuransi) {
+        response(res, 200, true, result.rows, 'get kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id asuransi not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get kerjasama failed');
+    }
+  },
+  getByIdAsuransiKelas: async (req, res) => {
+    try {
+      const id_asuransi_kelas = req.params.id_asuransi_kelas;
+
+      const result = await getKerjasamaByIdAsuransiKelas({
+        id_asuransi_kelas,
+      });
+
+      const {
+        rows: [findAsuransiKelas],
+      } = await findKerjasamaByIdAsuransiKelas(id_asuransi_kelas);
+
+      if (findAsuransiKelas) {
+        response(res, 200, true, result.rows, 'get kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id asuransi kelas not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get kerjasama failed');
+    }
+  },
+  getByIdKlinik: async (req, res) => {
+    try {
+      const id_klinik = req.params.id_klinik;
+
+      const result = await getKerjasamaByIdKlinik({
+        id_klinik,
+      });
+
+      const {
+        rows: [findKlinik],
+      } = await findKerjasamaByIdKlinik(id_klinik);
+
+      if (findKlinik) {
+        response(res, 200, true, result.rows, 'get kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id klinik not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get kerjasama failed');
     }
   },
   edit: async (req, res, next) => {
@@ -120,30 +228,33 @@ const kerjasamaControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findDaftarLayanan],
-      } = await findDaftarLayananByIdDaftarLayanan(id);
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKerjasama(id);
 
-      if (findDaftarLayanan) {
+      if (findKerjasama) {
         let data = {
           id,
-          nama: req.body.nama,
+          id_asuransi: req.body.id_asuransi,
+          id_asuransi_kelas: req.body.id_asuransi_kelas,
+          id_klinik: req.body.id_klinik,
+          tipe: req.body.tipe,
           is_active: 1,
         };
 
-        await editDaftarLayanan(data);
-        response(res, 200, true, data, 'edit daftar layanan success');
+        await editKerjasama(data);
+        response(res, 200, true, data, 'edit kerjasama success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id daftar layanan not found, check again`
+          `id kerjasama not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit daftar layanan failed');
+      response(res, 404, false, error, 'edit kerjasama failed');
     }
   },
   editActivate: async (req, res, next) => {
@@ -151,29 +262,29 @@ const kerjasamaControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findDaftarLayanan],
-      } = await findDaftarLayananByIdDaftarLayanan(id);
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKerjasama(id);
 
-      if (findDaftarLayanan) {
+      if (findKerjasama) {
         let data = {
           id,
           is_active: 1,
         };
 
-        await editDaftarLayananActivate(data);
-        response(res, 200, true, data, 'activate daftar layanan success');
+        await editKerjasamaActivate(data);
+        response(res, 200, true, data, 'activate kerjasama success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id daftar layanan not found, check again`
+          `id kerjasama not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'activate daftar layanan failed');
+      response(res, 404, false, error, 'activate kerjasama failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -181,29 +292,89 @@ const kerjasamaControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findDaftarLayanan],
-      } = await findDaftarLayananByIdDaftarLayanan(id);
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKerjasama(id);
 
-      if (findDaftarLayanan) {
+      if (findKerjasama) {
         let data = {
           id,
           is_active: 0,
         };
 
-        await editDaftarLayananArchive(data);
-        response(res, 200, true, data, 'archive daftar layanan success');
+        await editKerjasamaArchive(data);
+        response(res, 200, true, data, 'archive kerjasama success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id daftar layanan not found, check again`
+          `id kerjasama not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'archive daftar layanan failed');
+      response(res, 404, false, error, 'archive kerjasama failed');
+    }
+  },
+  editActivateByIdKlinik: async (req, res, next) => {
+    try {
+      const id_klinik = req.params.id_klinik;
+
+      const {
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKlinik(id_klinik);
+
+      if (findKerjasama) {
+        let data = {
+          id_klinik,
+          is_active: 1,
+        };
+
+        await editKlinikActivate(data);
+        response(res, 200, true, data, 'activate kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id klinik not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'activate kerjasama failed');
+    }
+  },
+  editArchiveByIdKlinik: async (req, res, next) => {
+    try {
+      const id_klinik = req.params.id_klinik;
+
+      const {
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKlinik(id_klinik);
+
+      if (findKerjasama) {
+        let data = {
+          id_klinik,
+          is_active: 0,
+        };
+
+        await editKlinikArchive(data);
+        response(res, 200, true, data, 'archive kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id klinik not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'archive kerjasama failed');
     }
   },
   delete: async (req, res) => {
@@ -211,28 +382,57 @@ const kerjasamaControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findDaftarLayanan],
-      } = await findDaftarLayananByIdDaftarLayanan(id);
+        rows: [findKerjasama],
+      } = await findKerjasamaByIdKerjasama(id);
 
-      if (findDaftarLayanan) {
+      if (findKerjasama) {
         let data = {
           id,
         };
 
-        await deleteDaftarLayanan(data);
-        response(res, 200, true, data, 'delete daftar layanan success');
+        await deleteKerjasama(data);
+        response(res, 200, true, data, 'delete kerjasama success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id daftar layanan not found, check again`
+          `id kerjasama not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'delete daftar layanan failed');
+      response(res, 404, false, error, 'delete kerjasama failed');
+    }
+  },
+  deleteByIdKlinik: async (req, res) => {
+    try {
+      const id_klinik = req.params.id_klinik;
+
+      const {
+        rows: [findKlinik],
+      } = await findKerjasamaByIdKlinik(id_klinik);
+
+      if (findKlinik) {
+        let data = {
+          id_klinik,
+        };
+
+        await deleteKerjasamaByIdKlinik(data);
+        response(res, 200, true, data, 'delete kerjasama success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id klinik not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'delete kerjasama failed');
     }
   },
 };
