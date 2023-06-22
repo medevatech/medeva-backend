@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertAsuransiKelas = (data) => {
-  const { id, id_asuransi, nama_kelas, sistem, is_active } = data;
+  const { id, id_asuransi, nama_kelas, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_asuransi_kelas 
-        (id,  id_asuransi, nama_kelas, sistem, is_active,
+        (id,  id_asuransi, nama_kelas, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${id_asuransi}', '${nama_kelas}', '${sistem}', ${is_active}, 
+        ('${id}', '${id_asuransi}', '${nama_kelas}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -34,7 +34,7 @@ const allAsuransiKelas = ({
     Pool.query(
       `SELECT tbl_asuransi_kelas.id, 
         tbl_asuransi_kelas.id_asuransi, tbl_asuransi.nama AS nama_asuransi,
-        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.sistem, tbl_asuransi_kelas.is_active, 
+        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.is_active, 
         tbl_asuransi_kelas.created_at, tbl_asuransi_kelas.updated_at
       FROM tbl_asuransi_kelas AS tbl_asuransi_kelas
       INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_asuransi_kelas.id_asuransi = tbl_asuransi.id
@@ -75,7 +75,7 @@ const getAsuransiKelasByIdAsuransiKelas = ({ id }) => {
     Pool.query(
       `SELECT tbl_asuransi_kelas.id, 
         tbl_asuransi_kelas.id_asuransi, tbl_asuransi.nama AS nama_asuransi,
-        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.sistem, tbl_asuransi_kelas.is_active, 
+        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.is_active, 
         tbl_asuransi_kelas.created_at, tbl_asuransi_kelas.updated_at
       FROM tbl_asuransi_kelas AS tbl_asuransi_kelas
       INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_asuransi_kelas.id_asuransi = tbl_asuransi.id
@@ -107,12 +107,12 @@ const findAsuransiKelasByIdAsuransiKelas = (id) => {
 };
 
 const editAsuransiKelas = (data) => {
-  const { id, id_asuransi, nama_kelas, sistem, is_active } = data;
+  const { id, id_asuransi, nama_kelas, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_asuransi_kelas 
       SET
-        id_asuransi='${id_asuransi}',  nama_kelas='${nama_kelas}',  sistem='${sistem}', is_active=${is_active}, 
+        id_asuransi='${id_asuransi}',  nama_kelas='${nama_kelas}', is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
@@ -131,7 +131,7 @@ const getAsuransiKelasByIdAsuransi = ({ id_asuransi }) => {
     Pool.query(
       `SELECT tbl_asuransi_kelas.id, 
         tbl_asuransi_kelas.id_asuransi, tbl_asuransi.nama AS nama_asuransi,
-        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.sistem, tbl_asuransi_kelas.is_active, 
+        tbl_asuransi_kelas.nama_kelas, tbl_asuransi_kelas.is_active, 
         tbl_asuransi_kelas.created_at, tbl_asuransi_kelas.updated_at
       FROM tbl_asuransi_kelas AS tbl_asuransi_kelas
       INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_asuransi_kelas.id_asuransi = tbl_asuransi.id
