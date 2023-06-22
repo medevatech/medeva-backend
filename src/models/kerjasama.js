@@ -99,6 +99,83 @@ const countAllKerjasama = (
     CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
+const allKerjasamaDistinct = ({
+  search,
+  searchAsuransi,
+  searchAsuransiKelas,
+  searchKlinik,
+  searchTipe,
+  searchStatus,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT DISTINCT ON (tbl_kerjasama.id_klinik) tbl_kerjasama.id, 
+          tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
+          tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
+          tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+          tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
+          tbl_kerjasama.created_at, tbl_kerjasama.updated_at
+        FROM tbl_kerjasama AS tbl_kerjasama
+        INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+        INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+        INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+        WHERE
+          tbl_kerjasama.tipe ILIKE '%${search}%' 
+        AND
+          tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
+        AND
+          tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
+        AND
+          tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+        AND
+          tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
+        AND
+          CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'
+        ORDER BY tbl_kerjasama.id_klinik ${sortOrder} 
+        LIMIT ${limit} OFFSET ${offset}`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const countAllKerjasamaDistinct = (
+  search,
+  searchAsuransi,
+  searchAsuransiKelas,
+  searchKlinik,
+  searchTipe,
+  searchStatus
+) => {
+  return Pool.query(`
+    SELECT COUNT(DISTINCT tbl_kerjasama.id_klinik) AS total
+    FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      WHERE
+      tbl_kerjasama.tipe ILIKE '%${search}%' 
+      AND
+      tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
+      AND
+      tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
+      AND
+      tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+      AND
+      tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
+      AND
+      CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
+};
+
 const getKerjasamaByIdKerjasama = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
@@ -393,6 +470,8 @@ module.exports = {
   insertKerjasama,
   allKerjasama,
   countAllKerjasama,
+  allKerjasamaDistinct,
+  countAllKerjasamaDistinct,
   getKerjasamaByIdKerjasama,
   findKerjasamaByIdKerjasama,
   getKerjasamaByIdAsuransi,
