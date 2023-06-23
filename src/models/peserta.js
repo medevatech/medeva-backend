@@ -167,11 +167,12 @@ const getPesertaByIdPasien = ({ id_pasien }) => {
         tbl_peserta.id_pasien, tbl_pasien.nama_lengkap AS nama_pasien,
         tbl_peserta.id_asuransi, tbl_asuransi.nama  AS nama_asuransi,
         tbl_peserta.nomor_asuransi, 
-        tbl_peserta.id_asuransi_kelas, tbl_peserta.is_active,
+        tbl_peserta.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas, tbl_peserta.is_active,
         tbl_peserta.created_at, tbl_peserta.updated_at
       FROM tbl_peserta AS tbl_peserta
       INNER JOIN tbl_pasien as tbl_pasien ON tbl_peserta.id_pasien = tbl_pasien.id
       INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_peserta.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_peserta.id_asuransi_kelas = tbl_asuransi_kelas.id
       WHERE tbl_peserta.id_pasien = '${id_pasien}'`,
       (err, result) => {
         if (!err) {
