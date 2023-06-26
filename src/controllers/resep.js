@@ -5,9 +5,11 @@ const {
   countAllResep,
   getResepByIdResep,
   findResepByIdResep,
-  editResep,
   getResepByIdKunjungan,
   findResepByIdKunjungan,
+  getResepByIdPasien,
+  findResepByIdPasien,
+  editResep,
   editResepActiveArchive,
   deleteResep,
 } = require(`../models/resep`);
@@ -20,6 +22,7 @@ const resepControllers = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
         id_obat: req.body.id_obat,
+        id_pasien: req.body.id_pasien,
         jumlah: req.body.jumlah,
         satuan: req.body.satuan,
         frekuensi: req.body.frekuensi,
@@ -108,6 +111,62 @@ const resepControllers = {
       response(res, 404, false, error, 'get resep failed');
     }
   },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getResepByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findResepKunjungan],
+      } = await findResepByIdKunjungan(id_kunjungan);
+
+      if (findResepKunjungan) {
+        response(res, 200, true, result.rows, 'get resep success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get resep failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getResepByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findResepPasien],
+      } = await findResepByIdPasien(id_pasien);
+
+      if (findResepPasien) {
+        response(res, 200, true, result.rows, 'get resep success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get resep failed');
+    }
+  },
   edit: async (req, res, next) => {
     try {
       const id = req.params.id;
@@ -121,6 +180,7 @@ const resepControllers = {
           id,
           id_kunjungan: req.body.id_kunjungan,
           id_obat: req.body.id_obat,
+          id_pasien: req.body.id_pasien,
           jumlah: req.body.jumlah,
           satuan: req.body.satuan,
           frekuensi: req.body.frekuensi,
@@ -149,34 +209,6 @@ const resepControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit resep failed');
-    }
-  },
-  getByIdKunjungan: async (req, res) => {
-    try {
-      const id_kunjungan = req.params.id_kunjungan;
-
-      const result = await getResepByIdKunjungan({
-        id_kunjungan,
-      });
-
-      const {
-        rows: [findResepKunjungan],
-      } = await findResepByIdKunjungan(id_kunjungan);
-
-      if (findResepKunjungan) {
-        response(res, 200, true, result.rows, 'get resep success');
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id kunjungan not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get resep failed');
     }
   },
   editActivate: async (req, res, next) => {
