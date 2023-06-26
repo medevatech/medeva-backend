@@ -31,6 +31,7 @@ const asuransiKelasRouter = require('./asuransiKelas');
 const pesertaRouter = require('./peserta');
 const layananRouter = require('./layanan');
 const kerjasamaRouter = require('./kerjasama');
+const dashboardRouter = require('./dashboard');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -72,6 +73,7 @@ router.use('/asuransi-kelas', asuransiKelasRouter);
 router.use('/peserta', pesertaRouter);
 router.use('/layanan', layananRouter);
 router.use('/kerjasama', kerjasamaRouter);
+router.use('/dashboard', dashboardRouter);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
