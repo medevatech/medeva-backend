@@ -3,8 +3,8 @@ const router = express.Router();
 const {
   pemeriksaanPenunjangControllers,
 } = require(`../controllers/pemeriksaanPenunjang`);
-const { protect } = require("../middleware/auth");
-let multer = require("multer");
+const { protect } = require('../middleware/auth');
+let multer = require('multer');
 let uploaded = multer();
 
 router.post(
@@ -15,16 +15,21 @@ router.post(
 );
 router.get(`/`, protect, pemeriksaanPenunjangControllers.getAll);
 router.get(`/:id`, protect, pemeriksaanPenunjangControllers.getById);
+router.get(
+  `/kunjungan/:id_kunjungan`,
+  protect,
+  pemeriksaanPenunjangControllers.getByIdKunjungan
+);
+router.get(
+  `/pasien/:id_pasien`,
+  protect,
+  pemeriksaanPenunjangControllers.getByIdPasien
+);
 router.put(
   `/:id`,
   protect,
   uploaded.array(),
   pemeriksaanPenunjangControllers.edit
-);
-router.get(
-  `/kunjungan/:id_kunjungan`,
-  protect,
-  pemeriksaanPenunjangControllers.getByIdKunjungan
 );
 router.put(
   `/activate/:id`,
