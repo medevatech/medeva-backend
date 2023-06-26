@@ -5,9 +5,11 @@ const {
   countAllRujukan,
   getRujukanByIdRujukan,
   findRujukanByIdRujukan,
-  editRujukan,
   getRujukanByIdKunjungan,
   findRujukanByIdKunjungan,
+  getRujukanByIdPasien,
+  findRujukanByIdPasien,
+  editRujukan,
   editRujukanActiveArchive,
   deleteRujukan,
 } = require(`../models/rujukan`);
@@ -21,6 +23,7 @@ const rujukanjControllers = {
         id_kunjungan: req.body.id_kunjungan,
         id_rs: req.body.id_rs,
         id_poli: req.body.id_poli,
+        id_pasien: req.body.id_pasien,
         anamnesis: req.body.anamnesis,
         terapi: req.body.terapi,
         catatan: req.body.catatan,
@@ -108,6 +111,62 @@ const rujukanjControllers = {
       response(res, 404, false, error, 'get rujukan failed');
     }
   },
+  getByIdKunjungan: async (req, res) => {
+    try {
+      const id_kunjungan = req.params.id_kunjungan;
+
+      const result = await getRujukanByIdKunjungan({
+        id_kunjungan,
+      });
+
+      const {
+        rows: [findRujukanKunjungan],
+      } = await findRujukanByIdKunjungan(id_kunjungan);
+
+      if (findRujukanKunjungan) {
+        response(res, 200, true, result.rows, 'get rujukan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id kunjungan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get rujukan failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getRujukanByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findRujukanPasien],
+      } = await findRujukanByIdPasien(id_pasien);
+
+      if (findRujukanPasien) {
+        response(res, 200, true, result.rows, 'get rujukan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get rujukan failed');
+    }
+  },
   edit: async (req, res, next) => {
     try {
       const id = req.params.id;
@@ -122,6 +181,7 @@ const rujukanjControllers = {
           id_kunjungan: req.body.id_kunjungan,
           id_rs: req.body.id_rs,
           id_poli: req.body.id_poli,
+          id_pasien: req.body.id_pasien,
           anamnesis: req.body.anamnesis,
           terapi: req.body.terapi,
           catatan: req.body.catatan,
@@ -150,34 +210,6 @@ const rujukanjControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'edit rujukan failed');
-    }
-  },
-  getByIdKunjungan: async (req, res) => {
-    try {
-      const id_kunjungan = req.params.id_kunjungan;
-
-      const result = await getRujukanByIdKunjungan({
-        id_kunjungan,
-      });
-
-      const {
-        rows: [findRujukanKunjungan],
-      } = await findRujukanByIdKunjungan(id_kunjungan);
-
-      if (findRujukanKunjungan) {
-        response(res, 200, true, result.rows, 'get rujukan success');
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id kunjungan not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'get rujukan failed');
     }
   },
   editActivate: async (req, res, next) => {

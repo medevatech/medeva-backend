@@ -6,6 +6,7 @@ const insertRujukan = (data) => {
     id_kunjungan,
     id_rs,
     id_poli,
+    id_pasien,
     anamnesis,
     terapi,
     catatan,
@@ -14,10 +15,10 @@ const insertRujukan = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_rujukan 
-        (id, id_kunjungan, id_rs, id_poli, anamnesis, terapi, catatan, is_active,
+        (id, id_kunjungan, id_rs, id_poli, id_pasien, anamnesis, terapi, catatan, is_active,
             created_at, updated_at) 
         VALUES
-        ('${id}', '${id_kunjungan}', '${id_rs}', '${id_poli}', '${anamnesis}', '${terapi}', '${catatan}', ${is_active},
+        ('${id}', '${id_kunjungan}', '${id_rs}', '${id_poli}', '${id_pasien}', '${anamnesis}', '${terapi}', '${catatan}', ${is_active},
             NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -44,7 +45,8 @@ const allRujukan = ({
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
+        tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -86,7 +88,8 @@ const getRujukanByIdRujukan = ({ id }) => {
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
+        tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -117,43 +120,14 @@ const findRujukanByIdRujukan = (id) => {
   );
 };
 
-const editRujukan = (data) => {
-  const {
-    id,
-    id_kunjungan,
-    id_rs,
-    id_poli,
-    anamnesis,
-    terapi,
-    catatan,
-    is_active,
-  } = data;
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `UPDATE tbl_rujukan 
-      SET
-        id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}', 
-        anamnesis='${anamnesis}', terapi='${terapi}', catatan='${catatan}', is_active=${is_active},
-        updated_at=NOW()
-      WHERE id='${id}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
 const getRujukanByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
-        tbl_rujukan.anamnesis, tbl_rujukan.terapi, tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
+        tbl_rujukan.catatan, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -173,6 +147,75 @@ const findRujukanByIdKunjungan = (id_kunjungan) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT * FROM tbl_rujukan WHERE id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const getRujukanByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_rujukan.id, tbl_rujukan.id_kunjungan, 
+        tbl_rujukan.id_rs, 
+        tbl_rujukan.id_poli, tbl_poli.nama,
+        tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
+        tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.created_at, tbl_rujukan.updated_at
+      FROM tbl_rujukan AS tbl_rujukan
+      INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
+      WHERE tbl_rujukan.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findRujukanByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_rujukan WHERE id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const editRujukan = (data) => {
+  const {
+    id,
+    id_kunjungan,
+    id_rs,
+    id_poli,
+    id_pasien,
+    anamnesis,
+    terapi,
+    catatan,
+    is_active,
+  } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_rujukan 
+      SET
+        id_kunjungan='${id_kunjungan}', id_rs='${id_rs}', id_poli='${id_poli}', id_pasien='${id_pasien}',
+        anamnesis='${anamnesis}', terapi='${terapi}', catatan='${catatan}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -223,9 +266,11 @@ module.exports = {
   countAllRujukan,
   getRujukanByIdRujukan,
   findRujukanByIdRujukan,
-  editRujukan,
   getRujukanByIdKunjungan,
   findRujukanByIdKunjungan,
+  getRujukanByIdPasien,
+  findRujukanByIdPasien,
+  editRujukan,
   editRujukanActiveArchive,
   deleteRujukan,
 };
