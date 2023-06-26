@@ -1,19 +1,20 @@
 const express = require(`express`);
 const router = express.Router();
 const { resepControllers } = require(`../controllers/resep`);
-const { protect } = require("../middleware/auth");
-let multer = require("multer");
+const { protect } = require('../middleware/auth');
+let multer = require('multer');
 let uploaded = multer();
 
 router.post(`/`, protect, uploaded.array(), resepControllers.add);
 router.get(`/`, protect, resepControllers.getAll);
 router.get(`/:id`, protect, resepControllers.getById);
-router.put(`/:id`, protect, uploaded.array(), resepControllers.edit);
 router.get(
   `/kunjungan/:id_kunjungan`,
   protect,
   resepControllers.getByIdKunjungan
 );
+router.get(`/pasien/:id_pasien`, protect, resepControllers.getByIdPasien);
+router.put(`/:id`, protect, uploaded.array(), resepControllers.edit);
 router.put(
   `/activate/:id`,
   protect,

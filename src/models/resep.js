@@ -5,6 +5,7 @@ const insertResep = (data) => {
     id,
     id_kunjungan,
     id_obat,
+    id_pasien,
     jumlah,
     satuan,
     frekuensi,
@@ -16,11 +17,11 @@ const insertResep = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_resep 
-        (id, id_kunjungan, id_obat, jumlah, satuan, 
+        (id, id_kunjungan, id_obat, id_pasien, jumlah, satuan, 
         frekuensi, periode, metode_konsumsi, aturan_pakai, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${id_kunjungan}', '${id_obat}', ${jumlah}, '${satuan}', 
+        ('${id}', '${id_kunjungan}', '${id_obat}', '${id_pasien}', ${jumlah}, '${satuan}', 
         ${frekuensi}, '${periode}', '${metode_konsumsi}', '${aturan_pakai}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
@@ -46,7 +47,7 @@ const allResep = ({
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
-        tbl_resep.id_obat, tbl_obat.nama,
+        tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
         tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
@@ -89,7 +90,7 @@ const getResepByIdResep = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
-        tbl_resep.id_obat, tbl_obat.nama,
+        tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
         tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
@@ -119,43 +120,11 @@ const findResepByIdResep = (id) => {
   );
 };
 
-const editResep = (data) => {
-  const {
-    id,
-    id_kunjungan,
-    id_obat,
-    jumlah,
-    satuan,
-    frekuensi,
-    periode,
-    metode_konsumsi,
-    aturan_pakai,
-    is_active,
-  } = data;
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `UPDATE tbl_resep 
-      SET
-        id_kunjungan='${id_kunjungan}', id_obat='${id_obat}', jumlah=${jumlah}, satuan='${satuan}',
-            frekuensi=${frekuensi}, periode='${periode}', metode_konsumsi='${metode_konsumsi}', aturan_pakai='${aturan_pakai}', is_active=${is_active},
-        updated_at=NOW()
-      WHERE id='${id}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
 const getResepByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
-        tbl_resep.id_obat, tbl_obat.nama,
+        tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
         tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
@@ -177,6 +146,76 @@ const findResepByIdKunjungan = (id_kunjungan) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT * FROM tbl_resep WHERE id_kunjungan = '${id_kunjungan}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const getResepByIdPasien = ({ id_pasien }) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
+        tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
+        tbl_resep.jumlah, tbl_resep.satuan, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
+        tbl_resep.created_at, tbl_resep.updated_at
+      FROM tbl_resep AS tbl_resep
+      INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
+      WHERE tbl_resep.id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const findResepByIdPasien = (id_pasien) => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT * FROM tbl_resep WHERE id_pasien = '${id_pasien}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const editResep = (data) => {
+  const {
+    id,
+    id_kunjungan,
+    id_obat,
+    id_pasien,
+    jumlah,
+    satuan,
+    frekuensi,
+    periode,
+    metode_konsumsi,
+    aturan_pakai,
+    is_active,
+  } = data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_resep 
+      SET
+        id_kunjungan='${id_kunjungan}', id_obat='${id_obat}', id_pasien='${id_pasien}', jumlah=${jumlah}, satuan='${satuan}',
+          frekuensi=${frekuensi}, periode='${periode}', metode_konsumsi='${metode_konsumsi}', aturan_pakai='${aturan_pakai}', is_active=${is_active},
+        updated_at=NOW()
+      WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -227,9 +266,11 @@ module.exports = {
   countAllResep,
   getResepByIdResep,
   findResepByIdResep,
-  editResep,
   getResepByIdKunjungan,
   findResepByIdKunjungan,
+  getResepByIdPasien,
+  findResepByIdPasien,
+  editResep,
   editResepActiveArchive,
   deleteResep,
 };
