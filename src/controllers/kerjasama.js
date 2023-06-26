@@ -32,6 +32,7 @@ const kerjasamaControllers = {
         id_asuransi_kelas: req.body.id_asuransi_kelas,
         id_klinik: req.body.id_klinik,
         tipe: req.body.tipe,
+        besar_klaim: req.body.besar_klaim,
         is_active: 1,
       };
 
@@ -300,6 +301,7 @@ const kerjasamaControllers = {
           id_asuransi_kelas: req.body.id_asuransi_kelas,
           id_klinik: req.body.id_klinik,
           tipe: req.body.tipe,
+          besar_klaim: req.body.besar_klaim,
           is_active: 1,
         };
 

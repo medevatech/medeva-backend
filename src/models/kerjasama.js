@@ -1,15 +1,22 @@
 const Pool = require('../config/db');
 
 const insertKerjasama = (data) => {
-  const { id, id_asuransi, id_asuransi_kelas, id_klinik, tipe, is_active } =
-    data;
+  const {
+    id,
+    id_asuransi,
+    id_asuransi_kelas,
+    id_klinik,
+    tipe,
+    besar_klaim,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_kerjasama 
-        (id,  id_asuransi, id_asuransi_kelas, id_klinik, tipe, is_active,
+        (id,  id_asuransi, id_asuransi_kelas, id_klinik, tipe, besar_klaim, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${id_asuransi}', '${id_asuransi_kelas}', '${id_klinik}', '${tipe}', ${is_active}, 
+        ('${id}', '${id_asuransi}', '${id_asuransi_kelas}', '${id_klinik}', '${tipe}', ${besar_klaim}, ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -40,7 +47,7 @@ const allKerjasama = ({
         tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
         tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
         tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
         tbl_kerjasama.created_at, tbl_kerjasama.updated_at
       FROM tbl_kerjasama AS tbl_kerjasama
       INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
@@ -82,20 +89,20 @@ const countAllKerjasama = (
   return Pool.query(`
   SELECT COUNT(*) AS total
   FROM tbl_kerjasama AS tbl_kerjasama
-    INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-    INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-    INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-    WHERE
+  INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+  INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+  INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+  WHERE
     tbl_kerjasama.tipe ILIKE '%${search}%' 
-    AND
+  AND
     tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
-    AND
+  AND
     tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
-    AND
+  AND
     tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
-    AND
+  AND
     tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
-    AND
+  AND
     CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
@@ -113,30 +120,30 @@ const allKerjasamaDistinct = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT DISTINCT ON (tbl_kerjasama.id_klinik) tbl_kerjasama.id, 
-          tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
-          tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
-          tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-          tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
-          tbl_kerjasama.created_at, tbl_kerjasama.updated_at
-        FROM tbl_kerjasama AS tbl_kerjasama
-        INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-        INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-        INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-        WHERE
-          tbl_kerjasama.tipe ILIKE '%${search}%' 
-        AND
-          tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
-        AND
-          tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
-        AND
-          tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
-        AND
-          tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
-        AND
-          CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'
-        ORDER BY tbl_kerjasama.id_klinik ${sortOrder} 
-        LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT tbl_kerjasama.id, 
+        tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
+        tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
+        tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
+        tbl_kerjasama.created_at, tbl_kerjasama.updated_at
+      FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      WHERE
+        tbl_kerjasama.tipe ILIKE '%${search}%' 
+      AND
+        tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
+      AND
+        tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
+      AND
+        tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+      AND
+        tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
+      AND
+        CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY tbl_kerjasama.id_klinik ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -159,20 +166,20 @@ const countAllKerjasamaDistinct = (
   return Pool.query(`
     SELECT COUNT(DISTINCT tbl_kerjasama.id_klinik) AS total
     FROM tbl_kerjasama AS tbl_kerjasama
-      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-      WHERE
+    INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+    INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+    INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+    WHERE
       tbl_kerjasama.tipe ILIKE '%${search}%' 
-      AND
+    AND
       tbl_asuransi.nama ILIKE '%${searchAsuransi}%' 
-      AND
+    AND
       tbl_asuransi_kelas.nama_kelas ILIKE '%${searchAsuransiKelas}%' 
-      AND
+    AND
       tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
-      AND
+    AND
       tbl_kerjasama.tipe ILIKE '%${searchTipe}%' 
-      AND
+    AND
       CAST(tbl_kerjasama.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
@@ -183,12 +190,12 @@ const getKerjasamaByIdKerjasama = ({ id }) => {
         tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
         tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
         tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
         tbl_kerjasama.created_at, tbl_kerjasama.updated_at
-        FROM tbl_kerjasama AS tbl_kerjasama
-        INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-        INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-        INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
       WHERE tbl_kerjasama.id = '${id}'`,
       (err, result) => {
         if (!err) {
@@ -220,16 +227,16 @@ const getKerjasamaByIdAsuransi = ({ id_asuransi }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_kerjasama.id, 
-          tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
-          tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
-          tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-          tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
-          tbl_kerjasama.created_at, tbl_kerjasama.updated_at
-          FROM tbl_kerjasama AS tbl_kerjasama
-          INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-          INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-          INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-        WHERE tbl_kerjasama.id_asuransi = '${id_asuransi}'`,
+        tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
+        tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
+        tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
+        tbl_kerjasama.created_at, tbl_kerjasama.updated_at
+      FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      WHERE tbl_kerjasama.id_asuransi = '${id_asuransi}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -260,16 +267,16 @@ const getKerjasamaByIdAsuransiKelas = ({ id_asuransi_kelas }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_kerjasama.id, 
-          tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
-          tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
-          tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-          tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
-          tbl_kerjasama.created_at, tbl_kerjasama.updated_at
-          FROM tbl_kerjasama AS tbl_kerjasama
-          INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-          INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-          INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-        WHERE tbl_kerjasama.id_asuransi_kelas = '${id_asuransi_kelas}'`,
+        tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
+        tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
+        tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
+        tbl_kerjasama.created_at, tbl_kerjasama.updated_at
+      FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      WHERE tbl_kerjasama.id_asuransi_kelas = '${id_asuransi_kelas}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -300,16 +307,16 @@ const getKerjasamaByIdKlinik = ({ id_klinik }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_kerjasama.id, 
-          tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
-          tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
-          tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-          tbl_kerjasama.tipe, tbl_kerjasama.is_active, 
-          tbl_kerjasama.created_at, tbl_kerjasama.updated_at
-          FROM tbl_kerjasama AS tbl_kerjasama
-          INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
-          INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
-          INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
-        WHERE tbl_kerjasama.id_klinik = '${id_klinik}'`,
+        tbl_kerjasama.id_asuransi, tbl_asuransi.nama AS nama,
+        tbl_kerjasama.id_asuransi_kelas, tbl_asuransi_kelas.nama_kelas AS nama_kelas,
+        tbl_kerjasama.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_kerjasama.tipe, tbl_kerjasama.besar_klaim, tbl_kerjasama.is_active, 
+        tbl_kerjasama.created_at, tbl_kerjasama.updated_at
+      FROM tbl_kerjasama AS tbl_kerjasama
+      INNER JOIN tbl_asuransi as tbl_asuransi ON tbl_kerjasama.id_asuransi = tbl_asuransi.id
+      INNER JOIN tbl_asuransi_kelas as tbl_asuransi_kelas ON tbl_kerjasama.id_asuransi_kelas = tbl_asuransi_kelas.id
+      INNER JOIN tbl_klinik as tbl_klinik ON tbl_kerjasama.id_klinik = tbl_klinik.id
+      WHERE tbl_kerjasama.id_klinik = '${id_klinik}'`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -337,13 +344,20 @@ const findKerjasamaByIdKlinik = (id_klinik) => {
 };
 
 const editKerjasama = (data) => {
-  const { id, id_asuransi, id_asuransi_kelas, id_klinik, tipe, is_active } =
-    data;
+  const {
+    id,
+    id_asuransi,
+    id_asuransi_kelas,
+    id_klinik,
+    tipe,
+    besar_klaim,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_kerjasama 
       SET
-        id_asuransi='${id_asuransi}', id_asuransi_kelas='${id_asuransi_kelas}', id_klinik='${id_klinik}', tipe='${tipe}', is_active=${is_active}, 
+        id_asuransi='${id_asuransi}', id_asuransi_kelas='${id_asuransi_kelas}', id_klinik='${id_klinik}', tipe='${tipe}', besar_klaim=${besar_klaim}, is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
