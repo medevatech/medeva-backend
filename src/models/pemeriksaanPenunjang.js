@@ -122,27 +122,6 @@ const findPemeriksaanPenunjangByIdPemeriksaanPenunjang = (id) => {
   );
 };
 
-const editPemeriksaanPenunjang = (data) => {
-  const { id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, is_active } =
-    data;
-  return new Promise((resolve, reject) =>
-    Pool.query(
-      `UPDATE tbl_pemeriksaan_penunjang 
-      SET
-        id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', id_kunjungan='${id_kunjungan}', id_pasien='${id_pasien}', is_active=${is_active}, 
-        updated_at=NOW()
-      WHERE id='${id}'`,
-      (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      }
-    )
-  );
-};
-
 const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
@@ -219,6 +198,27 @@ const findPemeriksaanPenunjangByIdPasien = (id_pasien) => {
   );
 };
 
+const editPemeriksaanPenunjang = (data) => {
+  const { id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, is_active } =
+    data;
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `UPDATE tbl_pemeriksaan_penunjang 
+      SET
+        id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', id_kunjungan='${id_kunjungan}', id_pasien='${id_pasien}', is_active=${is_active}, 
+        updated_at=NOW()
+      WHERE id='${id}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
 const editPemeriksaanPenunjangActiveArchive = (data) => {
   const { id, is_active } = data;
   return new Promise((resolve, reject) =>
@@ -261,11 +261,11 @@ module.exports = {
   countAllPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdPemeriksaanPenunjang,
   findPemeriksaanPenunjangByIdPemeriksaanPenunjang,
-  editPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdKunjungan,
   findPemeriksaanPenunjangByIdKunjungan,
   getPemeriksaanPenunjangByIdPasien,
   findPemeriksaanPenunjangByIdPasien,
+  editPemeriksaanPenunjang,
   editPemeriksaanPenunjangActiveArchive,
   deletePemeriksaanPenunjang,
 };

@@ -5,11 +5,11 @@ const {
   countAllPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdPemeriksaanPenunjang,
   findPemeriksaanPenunjangByIdPemeriksaanPenunjang,
-  editPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdKunjungan,
   findPemeriksaanPenunjangByIdKunjungan,
   getPemeriksaanPenunjangByIdPasien,
   findPemeriksaanPenunjangByIdPasien,
+  editPemeriksaanPenunjang,
   editPemeriksaanPenunjangActiveArchive,
   deletePemeriksaanPenunjang,
 } = require(`../models/pemeriksaanPenunjang`);
