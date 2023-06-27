@@ -49,7 +49,8 @@ const allResep = ({
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
         tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
-        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, 
+        tbl_resep.aturan_pakai, tbl_resep.status, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
       FROM tbl_resep AS tbl_resep
       INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
@@ -92,7 +93,8 @@ const getResepByIdResep = ({ id }) => {
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
         tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
-        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, 
+        tbl_resep.aturan_pakai, tbl_resep.status, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
       FROM tbl_resep AS tbl_resep
       INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
@@ -126,7 +128,8 @@ const getResepByIdKunjungan = ({ id_kunjungan }) => {
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
         tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
-        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, 
+        tbl_resep.aturan_pakai, tbl_resep.status, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
       FROM tbl_resep AS tbl_resep
       INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
@@ -163,7 +166,8 @@ const getResepByIdPasien = ({ id_pasien }) => {
       `SELECT tbl_resep.id, tbl_resep.id_kunjungan, 
         tbl_resep.id_obat, tbl_obat.nama, tbl_resep.id_pasien,
         tbl_resep.jumlah, tbl_resep.satuan, 
-        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, tbl_resep.aturan_pakai, tbl_resep.is_active, 
+        tbl_resep.frekuensi, tbl_resep.periode, tbl_resep.metode_konsumsi, 
+        tbl_resep.aturan_pakai, tbl_resep.status, tbl_resep.is_active, 
         tbl_resep.created_at, tbl_resep.updated_at
       FROM tbl_resep AS tbl_resep
       INNER JOIN tbl_obat AS tbl_obat ON tbl_resep.id_obat = tbl_obat.id
