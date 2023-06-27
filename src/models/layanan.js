@@ -35,7 +35,7 @@ const allLayanan = ({
     Pool.query(
       `SELECT tbl_layanan.id, tbl_layanan.id_kunjungan,
         tbl_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.is_active, 
+        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.status, tbl_layanan.is_active, 
         tbl_layanan.created_at, tbl_layanan.updated_at
       FROM tbl_layanan AS tbl_layanan
       INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
@@ -76,7 +76,7 @@ const getLayananByIdLayanan = ({ id }) => {
     Pool.query(
       `SELECT tbl_layanan.id, tbl_layanan.id_kunjungan,
         tbl_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.is_active, 
+        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.status, tbl_layanan.is_active, 
         tbl_layanan.created_at, tbl_layanan.updated_at
       FROM tbl_layanan AS tbl_layanan
       INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
@@ -112,7 +112,7 @@ const getLayananByIdKunjungan = ({ id_kunjungan }) => {
     Pool.query(
       `SELECT tbl_layanan.id, tbl_layanan.id_kunjungan,
         tbl_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.is_active, 
+        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.status, tbl_layanan.is_active, 
         tbl_layanan.created_at, tbl_layanan.updated_at
       FROM tbl_layanan AS tbl_layanan
       INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
@@ -148,7 +148,7 @@ const getLayananByIdPasien = ({ id_pasien }) => {
     Pool.query(
       `SELECT tbl_layanan.id, tbl_layanan.id_kunjungan,
         tbl_layanan.id_daftar_layanan, tbl_daftar_layanan.nama,
-        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.is_active, 
+        tbl_layanan.id_pasien, tbl_layanan.catatan, tbl_layanan.status, tbl_layanan.is_active, 
         tbl_layanan.created_at, tbl_layanan.updated_at
       FROM tbl_layanan AS tbl_layanan
       INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
