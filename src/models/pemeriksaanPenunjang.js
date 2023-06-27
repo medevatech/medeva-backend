@@ -37,7 +37,7 @@ const allPemeriksaanPenunjang = ({
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -90,7 +90,7 @@ const getPemeriksaanPenunjangByIdPemeriksaanPenunjang = ({ id }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -128,7 +128,7 @@ const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -166,7 +166,7 @@ const getPemeriksaanPenunjangByIdPasien = ({ id_pasien }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
