@@ -31,7 +31,7 @@ const asuransiKelasRouter = require('./asuransiKelas');
 const pesertaRouter = require('./peserta');
 const layananRouter = require('./layanan');
 const kerjasamaRouter = require('./kerjasama');
-const dashboardRouter = require('./dashboard');
+const dashboardRouter = require('./dashboard.js');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
