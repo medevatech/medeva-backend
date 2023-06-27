@@ -46,7 +46,7 @@ const allRujukan = ({
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
-        tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.catatan, tbl_rujukan.status, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -89,7 +89,7 @@ const getRujukanByIdRujukan = ({ id }) => {
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
-        tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.catatan, tbl_rujukan.status, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -127,7 +127,7 @@ const getRujukanByIdKunjungan = ({ id_kunjungan }) => {
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
-        tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.catatan, tbl_rujukan.status, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
@@ -165,7 +165,7 @@ const getRujukanByIdPasien = ({ id_pasien }) => {
         tbl_rujukan.id_rs, 
         tbl_rujukan.id_poli, tbl_poli.nama,
         tbl_rujukan.id_pasien, tbl_rujukan.anamnesis, tbl_rujukan.terapi, 
-        tbl_rujukan.catatan, tbl_rujukan.is_active,
+        tbl_rujukan.catatan, tbl_rujukan.status, tbl_rujukan.is_active,
         tbl_rujukan.created_at, tbl_rujukan.updated_at
       FROM tbl_rujukan AS tbl_rujukan
       INNER JOIN tbl_poli AS tbl_poli ON tbl_rujukan.id_poli = tbl_poli.id
