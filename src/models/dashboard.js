@@ -117,7 +117,7 @@ const tableAS02 = () => {
           COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas) AS produk,
           COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama) AS asuransi,
           SUM(tbl_klaim.besar_klaim)::int AS total_klaim,
-          SUM(CASE WHEN tbl_klaim.status_klaim = 'DITERIMA' THEN tbl_klaim.besar_klaim ELSE 0 END) AS total_klaim_diterima,
+          SUM(CASE WHEN tbl_klaim.status_klaim = 'DITERIMA' THEN tbl_klaim.besar_klaim ELSE 0 END)::int AS total_klaim_diterima,
           COALESCE(tbl_pendapatan_pps.pendapatan, 0) AS pendapatan
       FROM tbl_klaim
       LEFT JOIN tbl_asuransi_kelas AS tbl_klaim_produk ON tbl_klaim.id_asuransi_kelas = tbl_klaim_produk.id
