@@ -48,6 +48,8 @@ const dashboardController = {
       //table
       let table = await tableAS02();
 
+      table = table.rows;
+
       //   GENERATE RESULT   //
       const result = {
         total_klaim: {
@@ -65,7 +67,7 @@ const dashboardController = {
           b: klaim_berhasil_b,
           result: totalKlaimBerhasil,
         },
-        tabel: {},
+        tabel: { result: table },
       };
 
       response(res, 200, true, result, 'get dashboard a-02 success');
