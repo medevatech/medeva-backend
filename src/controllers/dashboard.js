@@ -6,6 +6,7 @@ const {
   totalPendapatanPPS,
   klaimBerhasilA,
   klaimBerhasilB,
+  countAllTableAS02,
   tableAS02,
   totalPendapatanByIdAsuransiAndAsuransiKelas,
   totalKunjunganByIdAsuransiKelas,
@@ -45,8 +46,25 @@ const dashboardController = {
       const totalKlaimBerhasil =
         (klaim_berhasil_a.count / klaim_berhasil_b.count) * 100;
 
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+
+      const {
+        rows: [count],
+      } = await countAllTableAS02();
+
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+
       //table
-      let table = await tableAS02();
+      let table = await tableAS02({ limit, offset });
 
       table = table.rows;
 
@@ -67,7 +85,7 @@ const dashboardController = {
           b: klaim_berhasil_b,
           result: totalKlaimBerhasil,
         },
-        tabel: { result: table },
+        tabel: { result: table, pagination: pagination },
       };
 
       response(res, 200, true, result, 'get dashboard a-02 success');
