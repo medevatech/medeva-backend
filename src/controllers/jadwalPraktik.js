@@ -8,7 +8,6 @@ const {
   deletePracticeSchedule,
 } = require("../models/jadwalPraktik");
 const { v4: uuidv4 } = require("uuid");
-const moment = require("moment");
 
 const practiceScheduleController = {
   create: async (req, res, next) => {
