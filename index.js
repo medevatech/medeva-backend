@@ -29,14 +29,6 @@ app.use(morgan('dev'));
 
 app.use('/api/v1/', mainRouter);
 
-// app.all('*', (res, next) => {
-//   res.status(404).json({
-//     status: 'error',
-//     statusCode: 404,
-//     message: 'check again your endpoint',
-//   });
-// });
-
 app.use('/', (req, res, next) => {
   res.status(200).json({ status: 'success', statusCode: 200 });
 });
