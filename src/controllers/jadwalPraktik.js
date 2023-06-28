@@ -1,5 +1,8 @@
 const { response } = require("../middleware/common");
-const { createPracticeSchedule } = require("../models/jadwalPraktik");
+const {
+  createPracticeSchedule,
+  getPracticeSchedule,
+} = require("../models/jadwalPraktik");
 const { v4: uuidv4 } = require("uuid");
 
 const practiceScheduleController = {
@@ -9,7 +12,7 @@ const practiceScheduleController = {
         id: uuidv4(),
         id_clinic: req.body.id_clinic,
         id_division: req.body.id_division,
-        id_employee: req.body.id_employee,
+        id_doctor: req.body.id_doctor,
         date: req.body.date,
         start_time: req.body.start_time,
         end_time: req.body.end_time,
@@ -19,6 +22,15 @@ const practiceScheduleController = {
     } catch (err) {
       console.log(err);
       response(res, 400, false, err, "Create schedule failed");
+    }
+  },
+  get: async (req, res, next) => {
+    try {
+      const result = await getPracticeSchedule();
+      response(res, 200, true, result.rows, "Get jadwal praktik success");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Get jadwal praktik failed");
     }
   },
 };

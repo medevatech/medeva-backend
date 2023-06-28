@@ -5,9 +5,11 @@ const {
   countAllLayanan,
   getLayananByIdLayanan,
   findLayananByIdLayanan,
-  editLayanan,
   getLayananByIdKunjungan,
   findLayananByIdKunjungan,
+  getLayananByIdPasien,
+  findLayananByIdPasien,
+  editLayanan,
   editLayananActiveArchive,
   deleteLayanan,
 } = require(`../models/layanan`);
@@ -20,6 +22,7 @@ const layananControllers = {
         id: uuidv4(),
         id_kunjungan: req.body.id_kunjungan,
         id_daftar_layanan: req.body.id_daftar_layanan,
+        id_pasien: req.body.id_pasien,
         catatan: req.body.catatan,
         is_active: 1,
       };
@@ -111,47 +114,6 @@ const layananControllers = {
       response(res, 404, false, error, 'get layanan failed');
     }
   },
-  edit: async (req, res, next) => {
-    try {
-      const id = req.params.id;
-
-      const {
-        rows: [findLayanan],
-      } = await findLayananByIdLayanan(id);
-
-      if (findLayanan) {
-        let data = {
-          id,
-          id_kunjungan: req.body.id_kunjungan,
-          id_daftar_layanan: req.body.id_daftar_layanan,
-          catatan: req.body.catatan,
-          is_active: 1,
-        };
-
-        if (data.id_kunjungan == '') {
-          await deleteLayanan(data);
-          response(res, 200, true, data, 'delete layanan success');
-        } else if (data.id_daftar_layanan == '') {
-          await deleteLayanan(data);
-          response(res, 200, true, data, 'delete layanan success');
-        } else {
-          await editLayanan(data);
-          response(res, 200, true, data, 'edit layanan success');
-        }
-      } else {
-        return response(
-          res,
-          404,
-          false,
-          null,
-          `id layanan not found, check again`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      response(res, 404, false, error, 'edit layanan failed');
-    }
-  },
   getByIdKunjungan: async (req, res) => {
     try {
       const id_kunjungan = req.params.id_kunjungan;
@@ -178,6 +140,76 @@ const layananControllers = {
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get layanan failed');
+    }
+  },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getLayananByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findLayananPasien],
+      } = await findLayananByIdPasien(id_pasien);
+
+      if (findLayananPasien) {
+        response(res, 200, true, result.rows, 'get layanan success');
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get layanan failed');
+    }
+  },
+  edit: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+
+      const {
+        rows: [findLayanan],
+      } = await findLayananByIdLayanan(id);
+
+      if (findLayanan) {
+        let data = {
+          id,
+          id_kunjungan: req.body.id_kunjungan,
+          id_daftar_layanan: req.body.id_daftar_layanan,
+          id_pasien: req.body.id_pasien,
+          catatan: req.body.catatan,
+          is_active: 1,
+        };
+
+        if (data.id_kunjungan == '') {
+          await deleteLayanan(data);
+          response(res, 200, true, data, 'delete layanan success');
+        } else if (data.id_daftar_layanan == '') {
+          await deleteLayanan(data);
+          response(res, 200, true, data, 'delete layanan success');
+        } else {
+          await editLayanan(data);
+          response(res, 200, true, data, 'edit layanan success');
+        }
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id layanan not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'edit layanan failed');
     }
   },
   editActivate: async (req, res, next) => {

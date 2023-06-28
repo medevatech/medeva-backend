@@ -5,9 +5,11 @@ const {
   countAllPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdPemeriksaanPenunjang,
   findPemeriksaanPenunjangByIdPemeriksaanPenunjang,
-  editPemeriksaanPenunjang,
   getPemeriksaanPenunjangByIdKunjungan,
   findPemeriksaanPenunjangByIdKunjungan,
+  getPemeriksaanPenunjangByIdPasien,
+  findPemeriksaanPenunjangByIdPasien,
+  editPemeriksaanPenunjang,
   editPemeriksaanPenunjangActiveArchive,
   deletePemeriksaanPenunjang,
 } = require(`../models/pemeriksaanPenunjang`);
@@ -21,6 +23,7 @@ const pemeriksaanPenunjangControllers = {
         id_pemeriksaan: req.body.id_pemeriksaan,
         id_lab: req.body.id_lab,
         id_kunjungan: req.body.id_kunjungan,
+        id_pasien: req.body.id_pasien,
         is_active: 1,
       };
 
@@ -165,6 +168,40 @@ const pemeriksaanPenunjangControllers = {
       response(res, 404, false, error, 'get pemeriksaan penunjang failed');
     }
   },
+  getByIdPasien: async (req, res) => {
+    try {
+      const id_pasien = req.params.id_pasien;
+
+      const result = await getPemeriksaanPenunjangByIdPasien({
+        id_pasien,
+      });
+
+      const {
+        rows: [findPemeriksaanPenunjangPasien],
+      } = await findPemeriksaanPenunjangByIdPasien(id_pasien);
+
+      if (findPemeriksaanPenunjangPasien) {
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'get pemeriksaan penunjang success'
+        );
+      } else {
+        return response(
+          res,
+          404,
+          false,
+          null,
+          `id pasien not found, check again`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get pemeriksaan penunjang failed');
+    }
+  },
   edit: async (req, res, next) => {
     try {
       const id = req.params.id;
@@ -179,6 +216,7 @@ const pemeriksaanPenunjangControllers = {
           id_pemeriksaan: req.body.id_pemeriksaan,
           id_lab: req.body.id_lab,
           id_kunjungan: req.body.id_kunjungan,
+          id_pasien: req.body.id_pasien,
           is_active: 1,
         };
 
