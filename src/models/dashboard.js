@@ -154,6 +154,7 @@ const tableAS02 = ({ limit, offset }) => {
         tbl_klaim.id_asuransi AS id_asuransi,
         COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas) AS produk,
         tbl_klaim.id_asuransi_kelas AS id_asuransi_kelas,
+        tbl_kerjasama.tipe AS tipe,
         COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama) AS asuransi,
         SUM(tbl_klaim.besar_klaim)::int AS total_klaim,
         SUM(CASE WHEN tbl_klaim.status_klaim = 'DITERIMA' THEN tbl_klaim.besar_klaim ELSE 0 END)::int AS total_klaim_diterima,
@@ -167,7 +168,7 @@ const tableAS02 = ({ limit, offset }) => {
       LEFT JOIN tbl_asuransi AS tbl_pendapatan_asuransi ON tbl_pendapatan_pps.id_asuransi = tbl_pendapatan_asuransi.id
       WHERE (tbl_kerjasama.tipe = 'FFSP' OR tbl_kerjasama.tipe = 'FFSNP')
           OR (tbl_kerjasama.tipe = 'PPST' OR tbl_kerjasama.tipe = 'PPSK')
-      GROUP BY COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), tbl_pendapatan_pps.pendapatan, tbl_klaim.id_asuransi, tbl_klaim.id_asuransi_kelas
+      GROUP BY COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), tbl_pendapatan_pps.pendapatan, tbl_klaim.id_asuransi, tbl_klaim.id_asuransi_kelas, tbl_kerjasama.tipe
       ORDER BY pendapatan
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -193,6 +194,26 @@ const totalPendapatanByIdAsuransiAndAsuransiKelas = ({
         tbl_pendapatan_pps.id_asuransi = '${id_asuransi}'
       AND
         tbl_pendapatan_pps.id_asuransi_kelas = '${id_asuransi_kelas}'`,
+      (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      }
+    )
+  );
+};
+
+const kunjunganSales = () => {
+  return new Promise((resolve, reject) =>
+    Pool.query(
+      `SELECT tbl_penyakit.nama_penyakit, AVG(tbl_klaim.besar_klaim), SUM(tbl_klaim.besar_klaim)
+      FROM tbl_kunjungan_sales 
+      LEFT JOIN tbl_klaim ON tbl_kunjungan_sales.id_sales = tbl_klaim.id_sales
+      LEFT JOIN tbl_diagnosis ON tbl_kunjungan_sales.id_kunjungan = tbl_diagnosis.id_kunjungan
+      LEFT JOIN tbl_penyakit ON tbl_diagnosis.id_penyakit = tbl_penyakit.id
+      GROUP BY tbl_penyakit.id;`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -255,6 +276,7 @@ module.exports = {
   countAllTableAS02,
   tableAS02,
   totalPendapatanByIdAsuransiAndAsuransiKelas,
+  kunjunganSales,
   totalKunjunganByIdAsuransiKelas,
   totalTipeKunjunganByIdAsuransiKelas,
 };

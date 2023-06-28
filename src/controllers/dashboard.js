@@ -9,6 +9,7 @@ const {
   countAllTableAS02,
   tableAS02,
   totalPendapatanByIdAsuransiAndAsuransiKelas,
+  kunjunganSales,
   totalKunjunganByIdAsuransiKelas,
   totalTipeKunjunganByIdAsuransiKelas,
 } = require('../models/dashboard.js');
@@ -46,6 +47,7 @@ const dashboardController = {
       const totalKlaimBerhasil =
         (klaim_berhasil_a.count / klaim_berhasil_b.count) * 100;
 
+      //table
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
@@ -63,7 +65,6 @@ const dashboardController = {
         totalPage,
       };
 
-      //table
       let table = await tableAS02({ limit, offset });
 
       table = table.rows;
@@ -96,7 +97,6 @@ const dashboardController = {
   },
   getAS03: async (req, res) => {
     try {
-      //pendapatan
       const id_asuransi = req.query.id_asuransi || '';
       const id_asuransi_kelas = req.query.id_asuransi_kelas || '';
 
@@ -105,6 +105,7 @@ const dashboardController = {
         id_asuransi_kelas: id_asuransi_kelas,
       };
 
+      //pendapatan
       let total_pendapatan = await totalPendapatanByIdAsuransiAndAsuransiKelas({
         id_asuransi,
         id_asuransi_kelas,
@@ -112,31 +113,39 @@ const dashboardController = {
 
       total_pendapatan = total_pendapatan.rows[0].sum;
 
-      //kunjungan
-      let total_kunjungan = await totalKunjunganByIdAsuransiKelas({
-        id_asuransi_kelas,
-      });
+      //kunjungan_sales
+      let kunjungan_sales = await kunjunganSales();
 
-      total_kunjungan = total_kunjungan.rows[0].sum;
+      kunjungan_sales = kunjungan_sales.rows;
 
-      //tipe_kunjungan
-      let tipe_kunjungan = await totalTipeKunjunganByIdAsuransiKelas({
-        id_asuransi_kelas,
-      });
+      // //kunjungan
+      // let total_kunjungan = await totalKunjunganByIdAsuransiKelas({
+      //   id_asuransi_kelas,
+      // });
 
-      tipe_kunjungan = tipe_kunjungan.rows[0].sum;
+      // total_kunjungan = total_kunjungan.rows[0].sum;
+
+      // //tipe_kunjungan
+      // let tipe_kunjungan = await totalTipeKunjunganByIdAsuransiKelas({
+      //   id_asuransi_kelas,
+      // });
+
+      // tipe_kunjungan = tipe_kunjungan.rows[0].sum;
 
       //   GENERATE RESULT   //
       const result = {
         pendapatan: {
           result: total_pendapatan,
         },
-        kunjungan: {
-          result: total_kunjungan,
+        kunjungan_sales: {
+          result: kunjungan_sales,
         },
-        tipe_kunjungan: {
-          result: tipe_kunjungan,
-        },
+        // kunjungan: {
+        //   result: total_kunjungan,
+        // },
+        // tipe_kunjungan: {
+        //   result: tipe_kunjungan,
+        // },
       };
 
       let isError = false;
