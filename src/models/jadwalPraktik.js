@@ -34,7 +34,79 @@ const getPracticeSchedule = () => {
   });
 };
 
+const updatePracticeSchedule = (data) => {
+  const { id, id_doctor, date, start_time, end_time } = data;
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE tbl_jadwal_praktik
+      SET id_dokter = '${id_doctor}', tanggal = '${date}', waktu_mulai = '${start_time}', waktu_selesai = '${end_time}', updated_at = NOW()
+      WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const archivePracticeSchedule = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE tbl_jadwal_praktik
+      SET is_active = 0
+      WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const activatePracticeSchedule = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `UPDATE tbl_jadwal_praktik
+      SET is_active = 1
+      WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const deletePracticeSchedule = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `DELETE FROM tbl_jadwal_praktik
+      WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createPracticeSchedule,
   getPracticeSchedule,
+  updatePracticeSchedule,
+  archivePracticeSchedule,
+  activatePracticeSchedule,
+  deletePracticeSchedule,
 };
