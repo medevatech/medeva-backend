@@ -8,18 +8,26 @@ const {
   deletePracticeSchedule,
 } = require("../models/jadwalPraktik");
 const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
 const practiceScheduleController = {
   create: async (req, res, next) => {
     try {
+      const date = req.body.date;
+      const start_time = req.body.start_time;
+      const end_time = req.body.end_time;
+      // const tempSt = moment(start_time).format("HH:mm:ss");
+      // const tempEt = moment(end_time).format("HH:mm:ss");
+      const startTime = date + "T" + start_time + ":00.000";
+      const endTime = date + "T" + end_time + ":00.000";
       const data = {
         id: uuidv4(),
         id_clinic: req.body.id_clinic,
         id_division: req.body.id_division,
         id_doctor: req.body.id_doctor,
         date: req.body.date,
-        start_time: req.body.start_time,
-        end_time: req.body.end_time,
+        start_time: startTime,
+        end_time: endTime,
       };
       await createPracticeSchedule(data);
       response(res, 200, true, data, "Create schedule success");
