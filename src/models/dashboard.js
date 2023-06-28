@@ -151,25 +151,17 @@ const tableAS02 = ({ limit, offset }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT 
-        tbl_klaim.id_asuransi AS id_asuransi,
-        COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas) AS produk,
-        tbl_klaim.id_asuransi_kelas AS id_asuransi_kelas,
-        tbl_kerjasama.tipe AS tipe,
-        COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama) AS asuransi,
-        SUM(tbl_klaim.besar_klaim)::int AS total_klaim,
-        SUM(CASE WHEN tbl_klaim.status_klaim = 'DITERIMA' THEN tbl_klaim.besar_klaim ELSE 0 END)::int AS total_klaim_diterima,
-        COALESCE(tbl_pendapatan_pps.pendapatan, 0) AS pendapatan
-      FROM tbl_klaim
-      LEFT JOIN tbl_asuransi_kelas AS tbl_klaim_produk ON tbl_klaim.id_asuransi_kelas = tbl_klaim_produk.id
-      LEFT JOIN tbl_asuransi AS tbl_klaim_asuransi ON tbl_klaim.id_asuransi = tbl_klaim_asuransi.id
-      LEFT JOIN tbl_kerjasama ON tbl_klaim.id_asuransi = tbl_kerjasama.id_asuransi AND tbl_klaim.id_asuransi_kelas = tbl_kerjasama.id_asuransi_kelas
-      LEFT JOIN tbl_pendapatan_pps ON tbl_klaim.id_asuransi_kelas = tbl_pendapatan_pps.id_asuransi_kelas AND tbl_klaim.id_asuransi = tbl_pendapatan_pps.id_asuransi
-      LEFT JOIN tbl_asuransi_kelas AS tbl_pendapatan_produk ON tbl_pendapatan_pps.id_asuransi_kelas = tbl_pendapatan_produk.id
-      LEFT JOIN tbl_asuransi AS tbl_pendapatan_asuransi ON tbl_pendapatan_pps.id_asuransi = tbl_pendapatan_asuransi.id
-      WHERE (tbl_kerjasama.tipe = 'FFSP' OR tbl_kerjasama.tipe = 'FFSNP')
-          OR (tbl_kerjasama.tipe = 'PPST' OR tbl_kerjasama.tipe = 'PPSK')
-      GROUP BY COALESCE(tbl_klaim_produk.nama_kelas, tbl_pendapatan_produk.nama_kelas), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), COALESCE(tbl_klaim_asuransi.nama, tbl_pendapatan_asuransi.nama), tbl_pendapatan_pps.pendapatan, tbl_klaim.id_asuransi, tbl_klaim.id_asuransi_kelas, tbl_kerjasama.tipe
-      ORDER BY pendapatan
+        uuid_generate_v4() AS id,
+        dashboard_as02_klaim.id_asuransi, 
+        dashboard_as02_klaim.produk, 
+        dashboard_as02_klaim.id_asuransi_kelas, 
+        dashboard_as02_klaim.asuransi, 
+        dashboard_as02_klaim.total_klaim, 
+        dashboard_as02_klaim.total_klaim_diterima, 
+        dashboard_as02_pendapatan_pps.pendapatan
+      FROM dashboard_as02_klaim AS dashboard_as02_klaim
+      LEFT JOIN dashboard_as02_pendapatan_pps AS dashboard_as02_pendapatan_pps 
+        ON dashboard_as02_klaim.id_asuransi = dashboard_as02_pendapatan_pps.id_asuransi AND dashboard_as02_klaim.id_asuransi_kelas = dashboard_as02_pendapatan_pps.id_asuransi_kelas
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
         if (!err) {
