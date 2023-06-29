@@ -275,9 +275,9 @@ const dashboardController = {
           totalData: 6,
           totalPage: 1,
         },
-        biaya_layanan: [{ high: 35, medium: 35, low: 30 }],
+        biaya_layanan: { high: 35, medium: 35, low: 30 },
 
-        komponen_layanan: [{ bhp: 77, nmhp: 100, medis: 542 }],
+        komponen_layanan: { bhp: 77, nmhp: 100, medis: 542 },
         analisa_biaya_penyakit: [
           {
             penyakit: 'Flu',
