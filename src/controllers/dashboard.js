@@ -431,7 +431,20 @@ const dashboardController = {
       // ) {
       //   GENERATE RESULT   //
       const result = {
-        total_pendapatan: 950,
+        total_pendapatan: {
+          januari: 1500,
+          februari: 2450,
+          maret: 1345,
+          april: 2500,
+          mei: 1256,
+          juni: 3456,
+          juli: 4567,
+          agustus: 1234,
+          september: 3321,
+          oktober: 4552,
+          november: 1050,
+          desember: 2145,
+        },
         total_kunjungan: {
           januari: 30,
           februari: 20,
@@ -446,7 +459,6 @@ const dashboardController = {
           november: 250,
           desember: 210,
         },
-
         total_klaim: 9401245673,
         total_klaim_ditolak: 23428934,
         jumlah_anggota: 12453,
