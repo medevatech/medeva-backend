@@ -449,7 +449,7 @@ const dashboardController = {
 
         total_klaim: 9401245673,
         total_klaim_ditolak: 23428934,
-        junlah_anggota: 12453,
+        jumlah_anggota: 12453,
         status_klaim: {
           ditolak: 25,
           diterima: 25,
