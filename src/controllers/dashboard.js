@@ -191,7 +191,8 @@ const dashboardController = {
       //   GENERATE RESULT   //
       const result = {
         peserta: 950,
-        pendapatan: total_pendapatan,
+        pendapatan: 257039382,
+        total_biaya_layanan: 123131,
         kunjungan: [
           {
             januari: 50,
@@ -291,6 +292,7 @@ const dashboardController = {
           totalPage: 1,
         },
         biaya_layanan: [{ high: 35, medium: 35, low: 30 }],
+
         komponen_layanan: [{ bhp: 77, nmhp: 100, medis: 542 }],
         analisa_biaya_penyakit: [
           {
