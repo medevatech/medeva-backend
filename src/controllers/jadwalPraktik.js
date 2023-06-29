@@ -58,16 +58,22 @@ const practiceScheduleController = {
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
+      const id_clinic = req.body.id_clinic;
+      const id_division = req.body.id_division;
       const id_doctor = req.body.id_doctor;
       const date = req.body.date;
       const start_time = req.body.start_time;
       const end_time = req.body.end_time;
+      const startTime = date + "T" + start_time + ":00.000";
+      const endTime = date + "T" + end_time + ":00.000";
       const data = {
         id,
+        id_clinic,
+        id_division,
         id_doctor,
         date,
-        start_time,
-        end_time,
+        start_time: startTime,
+        end_time: endTime,
       };
       await updatePracticeSchedule(data);
       response(res, 200, true, data, "Update practice schedule success");
