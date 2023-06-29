@@ -330,6 +330,12 @@ const dashboardController = {
             biaya: 11,
           },
         ],
+        pagination: {
+          currentPage: 1,
+          limit: 10,
+          totalData: 6,
+          totalPage: 1,
+        },
       };
       // kunjungan: {
       //   result: total_kunjungan,
