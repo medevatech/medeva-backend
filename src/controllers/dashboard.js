@@ -284,7 +284,7 @@ const dashboardController = {
           { id: '456', dokter: 'Lorem Ipsum 5', jumlah_rrns: 96 },
           { id: '876', dokter: 'Lorem Ipsum 6', jumlah_rrns: 13 },
         ],
-        pagination: {
+        pagination_ar: {
           currentPage: 1,
           limit: 10,
           totalData: 6,
@@ -330,7 +330,7 @@ const dashboardController = {
             biaya: 11,
           },
         ],
-        pagination: {
+        pagination_ab: {
           currentPage: 1,
           limit: 10,
           totalData: 6,
