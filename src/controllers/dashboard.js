@@ -422,92 +422,102 @@ const dashboardController = {
   },
   getAS04: async (req, res) => {
     try {
-      //   GENERATE RESULT   //
-      const result = {
-        total_pendapatan: 950,
-        total_kunjungan: {
-          januari: 30,
-          februari: 20,
-          maret: 11,
-          april: 18,
-          mei: 21,
-          juni: 51,
-          juli: 40,
-          agustus: 149,
-          september: 30,
-          oktober: 130,
-          november: 250,
-          desember: 210,
-        },
+      const id_asuransi = req.query.id_asuransi || '';
+      const id_asuransi_kelas = req.query.id_asuransi_kelas || '';
 
-        total_klaim: 9401245673,
-        total_klaim_ditolak: 23428934,
-        junlah_anggota: 12453,
-        status_klaim: {
-          ditolak: 25,
-          diterima: 25,
-          dipertimbangkan: 50,
-        },
-        alasan_penolakan: {
-          berkas_tidak_lengkap: 10,
-          penanganan_tidak_tepat: 22,
-          diagnosa_tidak_tepat: 30,
-          tidak_ditanggung: 22,
-          lainnya: 10,
-        },
-        layanan_terklaim: {
-          tambal_gigi: 101213213,
-          penanganan_luka: 1000,
-          suntik_vitamin: 22122455,
-        },
-        biaya_layanan: {
-          low: 23,
-          medium: 17,
-          high: 60,
-        },
-        komponen_layanan: { bhp: 12, bnmhp: 45, jasa_medis: 134 },
-        analisa_unit_cost: [
-          {
-            id: '123',
-            layanan: 'Layanan ZYX',
-            harga_jual: 124232335,
-            unit_cost: 3241310,
-            persen_unit_cost: 35,
+      if (
+        id_asuransi == '9f71051a-b83d-402a-8700-dafa8afefdcc' &&
+        id_asuransi_kelas == 'ce96afc1-c736-4fba-ac0a-88977bd4da8d'
+      ) {
+        //   GENERATE RESULT   //
+        const result = {
+          total_pendapatan: 950,
+          total_kunjungan: {
+            januari: 30,
+            februari: 20,
+            maret: 11,
+            april: 18,
+            mei: 21,
+            juni: 51,
+            juli: 40,
+            agustus: 149,
+            september: 30,
+            oktober: 130,
+            november: 250,
+            desember: 210,
           },
-          {
-            id: '345',
-            layanan: 'Layanan ABC',
-            harga_jual: 341314,
-            unit_cost: 458223,
-            persen_unit_cost: 12,
-          },
-          {
-            id: '456',
-            layanan: 'Layanan UUU',
-            harga_jual: 121312313,
-            unit_cost: 123414112,
-            persen_unit_cost: 34,
-          },
-          {
-            id: '994',
-            layanan: 'Layanan QWERTY',
-            harga_jual: 34141123,
-            unit_cost: 111111,
-            persen_unit_cost: 11,
-          },
-        ],
-        pagination: {
-          currentPage: 1,
-          limit: 10,
-          totalData: 4,
-          totalPage: 1,
-        },
-      };
 
-      response(res, 200, true, result, 'get dashboard a-03 success');
+          total_klaim: 9401245673,
+          total_klaim_ditolak: 23428934,
+          junlah_anggota: 12453,
+          status_klaim: {
+            ditolak: 25,
+            diterima: 25,
+            dipertimbangkan: 50,
+          },
+          alasan_penolakan: {
+            berkas_tidak_lengkap: 10,
+            penanganan_tidak_tepat: 22,
+            diagnosa_tidak_tepat: 30,
+            tidak_ditanggung: 22,
+            lainnya: 10,
+          },
+          layanan_terklaim: {
+            tambal_gigi: 101213213,
+            penanganan_luka: 1000,
+            suntik_vitamin: 22122455,
+          },
+          biaya_layanan: {
+            low: 23,
+            medium: 17,
+            high: 60,
+          },
+          komponen_layanan: { bhp: 12, bnmhp: 45, jasa_medis: 134 },
+          analisa_unit_cost: [
+            {
+              id: '123',
+              layanan: 'Layanan ZYX',
+              harga_jual: 124232335,
+              unit_cost: 3241310,
+              persen_unit_cost: 35,
+            },
+            {
+              id: '345',
+              layanan: 'Layanan ABC',
+              harga_jual: 341314,
+              unit_cost: 458223,
+              persen_unit_cost: 12,
+            },
+            {
+              id: '456',
+              layanan: 'Layanan UUU',
+              harga_jual: 121312313,
+              unit_cost: 123414112,
+              persen_unit_cost: 34,
+            },
+            {
+              id: '994',
+              layanan: 'Layanan QWERTY',
+              harga_jual: 34141123,
+              unit_cost: 111111,
+              persen_unit_cost: 11,
+            },
+          ],
+          pagination: {
+            currentPage: 1,
+            limit: 10,
+            totalData: 4,
+            totalPage: 1,
+          },
+        };
+
+        response(res, 200, true, result, 'get dashboard a-04 success');
+      } else {
+        return response(res, 200, false, 'get dashboard a-04 failed');
+      }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get dashboard a-03 failed');
+      response(res, 404, false, error, 'get dashboard a-04 failed');
     }
   },
 };
