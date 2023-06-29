@@ -434,6 +434,107 @@ const dashboardController = {
       response(res, 404, false, error, 'get dashboard a-03 failed');
     }
   },
+  getAS04: async (req, res) => {
+    try {
+      //   GENERATE RESULT   //
+      const result = {
+        total_pendapatan: 950,
+        total_kunjunagan: [
+          {
+            januari: 30,
+            februari: 20,
+            maret: 11,
+            april: 18,
+            mei: 21,
+            juni: 51,
+            juli: 40,
+            agustus: 149,
+            september: 30,
+            oktober: 130,
+            november: 250,
+            desember: 210,
+          },
+        ],
+        total_klaim: 9401245673,
+        total_klaim_ditolak: 23428934,
+        junlah_anggota: 12453,
+        status_klaim: [
+          {
+            ditolak: 25,
+            diterima: 25,
+            dipertimbangkan: 50,
+          },
+        ],
+        alasan_penolakan: [
+          {
+            dokumen_tidak_lengkap: 10,
+            dianggap_mampu: 22,
+            tidak_membayar_asuransi: 30,
+          },
+        ],
+        layanan_terklaim: [
+          {
+            melayani_separuh_hari: 101213213,
+            melayani_setengah_mati: 1000,
+            melayani_setiap_hari: 22122455,
+          },
+        ],
+        biaya_layanan: [
+          {
+            low: 23,
+            medium: 17,
+            high: 60,
+          },
+        ],
+        komponen_layanan: [
+          { id: '123', bhp: 12 },
+          { id: '234', nmhp: 45 },
+          { id: '567', medis: 134 },
+        ],
+        analisa_unit_cost: [
+          {
+            id: '123',
+            layanan: 'Layanan ZYX',
+            harga_jual: 124232335,
+            unit_cost: 3241310,
+            persen_unit_cost: 35,
+          },
+          {
+            id: '345',
+            layanan: 'Layanan ABC',
+            harga_jual: 341314,
+            unit_cost: 458223,
+            persen_unit_cost: 12,
+          },
+          {
+            id: '456',
+            layanan: 'Layanan UUU',
+            harga_jual: 121312313,
+            unit_cost: 123414112,
+            persen_unit_cost: 34,
+          },
+          {
+            id: '994',
+            layanan: 'Layanan QWERTY',
+            harga_jual: 34141123,
+            unit_cost: 111111,
+            persen_unit_cost: 11,
+          },
+        ],
+        pagination: {
+          currentPage: 1,
+          limit: 10,
+          totalData: 4,
+          totalPage: 1,
+        },
+      };
+
+      response(res, 200, true, result, 'get dashboard a-03 success');
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get dashboard a-03 failed');
+    }
+  },
 };
 
 exports.dashboardController = dashboardController;

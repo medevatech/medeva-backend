@@ -9,5 +9,6 @@ router.get(
   '/as-03/analisa-rujukan/567',
   dashboardController.getAS03AnalisaRujukan
 );
+router.get('/as-04', dashboardController.getAS04);
 
 module.exports = router;
