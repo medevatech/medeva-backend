@@ -5,5 +5,10 @@ const { protect } = require('../middleware/auth.js');
 
 router.get('/as-02', protect, dashboardController.getAS02);
 router.get('/as-03', dashboardController.getAS03);
+router.get(
+  '/as-03/analisa-rujukan/567',
+  dashboardController.getAS03AnalisaRujukan
+);
+router.get('/as-04', dashboardController.getAS04);
 
 module.exports = router;
