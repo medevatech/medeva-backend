@@ -275,9 +275,9 @@ const dashboardController = {
           totalData: 6,
           totalPage: 1,
         },
-        biaya_layanan: [{ high: 35, medium: 35, low: 30 }],
+        biaya_layanan: { high: 35, medium: 35, low: 30 },
 
-        komponen_layanan: [{ bhp: 77, nmhp: 100, medis: 542 }],
+        komponen_layanan: { bhp: 44, bnmhp: 41, jasa_medis: 125 },
         analisa_biaya_penyakit: [
           {
             penyakit: 'Flu',
@@ -358,7 +358,7 @@ const dashboardController = {
   },
   getAS03AnalisaRujukan: async (req, res) => {
     try {
-      // const id_asuransi = req.query.id_asuransi || '';
+      const id_dokter = req.query.id_dokter || '';
 
       //   GENERATE RESULT   //
       const result = [
@@ -422,10 +422,30 @@ const dashboardController = {
   },
   getAS04: async (req, res) => {
     try {
+      const id_asuransi = req.query.id_asuransi || '';
+      const id_asuransi_kelas = req.query.id_asuransi_kelas || '';
+
+      // if (
+      //   id_asuransi == '9f71051a-b83d-402a-8700-dafa8afefdcc' &&
+      //   id_asuransi_kelas == 'ce96afc1-c736-4fba-ac0a-88977bd4da8d'
+      // ) {
       //   GENERATE RESULT   //
       const result = {
-        total_pendapatan: 950,
-        total_kunjunagan: {
+        total_pendapatan: {
+          januari: 1500,
+          februari: 2450,
+          maret: 1345,
+          april: 2500,
+          mei: 1256,
+          juni: 3456,
+          juli: 4567,
+          agustus: 1234,
+          september: 3321,
+          oktober: 4552,
+          november: 1050,
+          desember: 2145,
+        },
+        total_kunjungan: {
           januari: 30,
           februari: 20,
           maret: 11,
@@ -439,10 +459,9 @@ const dashboardController = {
           november: 250,
           desember: 210,
         },
-
         total_klaim: 9401245673,
         total_klaim_ditolak: 23428934,
-        junlah_anggota: 12453,
+        jumlah_anggota: 12453,
         status_klaim: {
           ditolak: 25,
           diterima: 25,
@@ -504,10 +523,13 @@ const dashboardController = {
         },
       };
 
-      response(res, 200, true, result, 'get dashboard a-03 success');
+      response(res, 200, true, result, 'get dashboard a-04 success');
+      // } else {
+      //   return response(res, 200, false, 'get dashboard a-04 failed');
+      // }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get dashboard a-03 failed');
+      response(res, 404, false, error, 'get dashboard a-04 failed');
     }
   },
 };
