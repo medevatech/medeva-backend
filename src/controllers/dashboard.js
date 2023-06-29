@@ -349,8 +349,7 @@ const dashboardController = {
         biaya_layanan: {
           result: [{ high: 35, medium: 35, low: 30 }],
         },
-        komponen_layanan,
-        layanan: {
+        komponen_layanan: {
           result: [{ bhp: 77, nmhp: 100, medis: 542 }],
         },
         analisa_biaya_penyakit: {
