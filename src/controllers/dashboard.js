@@ -84,6 +84,7 @@ const dashboardController = {
             tipe: 'PPST',
             klaim: 15000,
             pendapatan: 3000,
+            kunjungan: 11,
           },
           {
             id: '102fc009-44b2-4503-8d82-6b81b485173e',
@@ -94,6 +95,7 @@ const dashboardController = {
             tipe: 'PPST',
             klaim: 5000,
             pendapatan: 6000,
+            kunjungan: 120,
           },
           {
             id: '71f034f4-ec3a-438e-b6da-279d5d631a33',
@@ -104,6 +106,7 @@ const dashboardController = {
             tipe: 'PPST',
             klaim: 78000,
             pendapatan: 30000,
+            kunjungan: 30,
           },
           {
             id: 'a0129604-188e-4ae8-b905-f9f22ec1f1a3',
@@ -114,6 +117,7 @@ const dashboardController = {
             tipe: 'FFSP',
             klaim: 10000,
             pendapatan: 63000,
+            kunjungan: 400,
           },
           {
             id: '35e6a1f4-bb3a-4f89-9b4a-832b220a2bb6',
@@ -124,6 +128,7 @@ const dashboardController = {
             tipe: 'FFSP',
             klaim: 11000,
             pendapatan: 93000,
+            kunjungan: 44,
           },
           {
             id: '1cec3024-d62b-4815-a51a-f3580672d7c0',
@@ -134,6 +139,7 @@ const dashboardController = {
             tipe: 'FFSP',
             klaim: 15000,
             pendapatan: 3000,
+            kunjungan: 34,
           },
         ],
         pagination: pagination,
@@ -271,13 +277,19 @@ const dashboardController = {
           },
         ],
         analisa_rujukan: [
-          { dokter: 'Lorem Ipsum 1', jumlah_rrns: 10 },
-          { dokter: 'Lorem Ipsum 2', jumlah_rrns: 11 },
-          { dokter: 'Lorem Ipsum 3', jumlah_rrns: 90 },
-          { dokter: 'Lorem Ipsum 4', jumlah_rrns: 45 },
-          { dokter: 'Lorem Ipsum 5', jumlah_rrns: 96 },
-          { dokter: 'Lorem Ipsum 6', jumlah_rrns: 13 },
+          { id: '123', dokter: 'Lorem Ipsum 1', jumlah_rrns: 10 },
+          { id: '234', dokter: 'Lorem Ipsum 2', jumlah_rrns: 11 },
+          { id: '567', dokter: 'Lorem Ipsum 3', jumlah_rrns: 90 },
+          { id: '891', dokter: 'Lorem Ipsum 4', jumlah_rrns: 45 },
+          { id: '456', dokter: 'Lorem Ipsum 5', jumlah_rrns: 96 },
+          { id: '876', dokter: 'Lorem Ipsum 6', jumlah_rrns: 13 },
         ],
+        pagination: {
+          currentPage: 1,
+          limit: 10,
+          totalData: 6,
+          totalPage: 1,
+        },
         biaya_layanan: [{ high: 35, medium: 35, low: 30 }],
         komponen_layanan: [{ bhp: 77, nmhp: 100, medis: 542 }],
         analisa_biaya_penyakit: [
@@ -347,6 +359,70 @@ const dashboardController = {
       if (isError === false) {
         response(res, 200, true, result, 'get dashboard a-03 success');
       }
+    } catch (error) {
+      console.log(error);
+      response(res, 404, false, error, 'get dashboard a-03 failed');
+    }
+  },
+  getAS03AnalisaRujukan: async (req, res) => {
+    try {
+      // const id_asuransi = req.query.id_asuransi || '';
+
+      //   GENERATE RESULT   //
+      const result = [
+        {
+          id: '111',
+          tanggal: '2023-06-28',
+          diagnosis: 'Sakit kepala',
+          alasan: 'Kurang tidur',
+        },
+        {
+          id: '112',
+          tanggal: '2023-12-01',
+          diagnosis: 'Sakit gigi',
+          alasan: 'Kebanyakan makan manis',
+        },
+        {
+          id: '113',
+          tanggal: '2023-07-08',
+          diagnosis: 'Sakit demam',
+          alasan: 'Cuaca tidak menentu',
+        },
+        {
+          id: '114',
+          tanggal: '2023-04-29',
+          diagnosis: 'Batuk',
+          alasan: 'Minum es',
+        },
+        {
+          id: '115',
+          tanggal: '2023-04-11',
+          diagnosis: 'Flu',
+          alasan: 'Minum es',
+        },
+        {
+          id: '116',
+          tanggal: '2023-03-18',
+          diagnosis: 'Sakit gigi',
+          alasan: 'Kebanyakan makan manis',
+        },
+      ];
+
+      const pagination = {
+        currentPage: 1,
+        limit: 10,
+        totalData: 6,
+        totalPage: 1,
+      };
+
+      response(
+        res,
+        200,
+        true,
+        result,
+        'get dashboard a-03 success',
+        pagination
+      );
     } catch (error) {
       console.log(error);
       response(res, 404, false, error, 'get dashboard a-03 failed');
