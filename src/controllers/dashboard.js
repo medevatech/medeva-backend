@@ -425,7 +425,7 @@ const dashboardController = {
       //   GENERATE RESULT   //
       const result = {
         total_pendapatan: 950,
-        total_kunjunagan: {
+        total_kunjungan: {
           januari: 30,
           februari: 20,
           maret: 11,
