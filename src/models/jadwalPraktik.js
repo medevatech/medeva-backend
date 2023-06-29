@@ -34,6 +34,23 @@ const getPracticeSchedule = () => {
   });
 };
 
+const getPracticeScheduleById = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT jp.id, jp.id_klinik, jp.id_divisi, jp.id_dokter, kry.nama, jp.tanggal, jp.waktu_mulai, jp.waktu_selesai FROM tbl_jadwal_praktik as jp
+      INNER JOIN tbl_karyawan as kry ON jp.id_dokter = kry.id
+      WHERE jp.id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const updatePracticeSchedule = (data) => {
   const { id, id_doctor, date, start_time, end_time } = data;
   return new Promise((resolve, reject) => {
@@ -105,6 +122,7 @@ const deletePracticeSchedule = (id) => {
 module.exports = {
   createPracticeSchedule,
   getPracticeSchedule,
+  getPracticeScheduleById,
   updatePracticeSchedule,
   archivePracticeSchedule,
   activatePracticeSchedule,

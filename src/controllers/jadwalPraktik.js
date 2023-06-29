@@ -6,6 +6,7 @@ const {
   archivePracticeSchedule,
   activatePracticeSchedule,
   deletePracticeSchedule,
+  getPracticeScheduleById,
 } = require("../models/jadwalPraktik");
 const { v4: uuidv4 } = require("uuid");
 
@@ -42,6 +43,16 @@ const practiceScheduleController = {
     } catch (err) {
       console.log(err);
       response(res, 400, false, null, "Get jadwal praktik failed");
+    }
+  },
+  getById: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getPracticeScheduleById(id);
+      response(res, 200, true, result.rows, "Get jadwal praktik by id success");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Get jadwal praktik by id failed");
     }
   },
   update: async (req, res, next) => {

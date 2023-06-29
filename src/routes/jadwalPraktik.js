@@ -4,6 +4,7 @@ const { practiceScheduleController } = require("../controllers/jadwalPraktik");
 
 router.post("/", practiceScheduleController.create);
 router.get("/", practiceScheduleController.get);
+router.get("/:id", practiceScheduleController.getById);
 router.put("/:id", practiceScheduleController.update);
 router.put("/archive/:id", practiceScheduleController.archive);
 router.put("/activate/:id", practiceScheduleController.activate);
