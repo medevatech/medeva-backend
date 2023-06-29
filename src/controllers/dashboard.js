@@ -193,38 +193,34 @@ const dashboardController = {
         peserta: 950,
         pendapatan: 257039382,
         total_biaya_layanan: 123131,
-        kunjungan: [
-          {
-            januari: 50,
-            februari: 50,
-            maret: 100,
-            april: 10,
-            mei: 10,
-            juni: 15,
-            juli: 100,
-            agustus: 100,
-            september: 90,
-            oktober: 11,
-            november: 150,
-            desember: 200,
-          },
-        ],
-        tipe_kunjungan: [
-          {
-            januari: [{ jalan: 5, inap: 10, promotif: 10, prefentif: 10 }],
-            februari: [{ jalan: 15, inap: 20, promotif: 30, prefentif: 40 }],
-            maret: [{ jalan: 25, inap: 30, promotif: 40, prefentif: 50 }],
-            april: [{ jalan: 35, inap: 40, promotif: 50, prefentif: 60 }],
-            mei: [{ jalan: 11, inap: 13, promotif: 14, prefentif: 11 }],
-            juni: [{ jalan: 55, inap: 100, promotif: 110, prefentif: 110 }],
-            juli: [{ jalan: 15, inap: 11, promotif: 12, prefentif: 12 }],
-            agustus: [{ jalan: 65, inap: 160, promotif: 190, prefentif: 70 }],
-            september: [{ jalan: 6, inap: 39, promotif: 45, prefentif: 67 }],
-            oktober: [{ jalan: 54, inap: 24, promotif: 45, prefentif: 12 }],
-            november: [{ jalan: 67, inap: 189, promotif: 11, prefentif: 15 }],
-            desember: [{ jalan: 34, inap: 122, promotif: 12, prefentif: 19 }],
-          },
-        ],
+        kunjungan: {
+          januari: 50,
+          februari: 50,
+          maret: 100,
+          april: 10,
+          mei: 10,
+          juni: 15,
+          juli: 100,
+          agustus: 100,
+          september: 90,
+          oktober: 11,
+          november: 150,
+          desember: 200,
+        },
+        tipe_kunjungan: {
+          januari: { jalan: 5, inap: 10, promotif: 10, prefentif: 10 },
+          februari: { jalan: 15, inap: 20, promotif: 30, prefentif: 40 },
+          maret: { jalan: 25, inap: 30, promotif: 40, prefentif: 50 },
+          april: { jalan: 35, inap: 40, promotif: 50, prefentif: 60 },
+          mei: { jalan: 11, inap: 13, promotif: 14, prefentif: 11 },
+          juni: { jalan: 55, inap: 100, promotif: 110, prefentif: 110 },
+          juli: { jalan: 15, inap: 11, promotif: 12, prefentif: 12 },
+          agustus: { jalan: 65, inap: 160, promotif: 190, prefentif: 70 },
+          september: { jalan: 6, inap: 39, promotif: 45, prefentif: 67 },
+          oktober: { jalan: 54, inap: 24, promotif: 45, prefentif: 12 },
+          november: { jalan: 67, inap: 189, promotif: 11, prefentif: 15 },
+          desember: { jalan: 34, inap: 122, promotif: 12, prefentif: 19 },
+        },
         total_rujukan: [
           {
             januari: 10,
@@ -241,42 +237,32 @@ const dashboardController = {
             desember: 100,
           },
         ],
-        tipe_rujukan: [
-          {
-            januari: [{ spesifik: 5, non_spesifik: 10 }],
-            februari: [{ spesifik: 15, non_spesifik: 20 }],
-            maret: [{ spesifik: 25, non_spesifik: 30 }],
-            april: [{ spesifik: 35, non_spesifik: 40 }],
-            mei: [{ spesifik: 11, non_spesifik: 13 }],
-            juni: [
-              {
-                spesifik: 55,
-                non_spesifik: 100,
-              },
-            ],
-            juli: [{ spesifik: 105, non_spesifik: 110 }],
-            agustus: [
-              {
-                spesifik: 65,
-                non_spesifik: 160,
-              },
-            ],
-            september: [{ spesifik: 6, non_spesifik: 39 }],
-            oktober: [{ spesifik: 54, non_spesifik: 24 }],
-            november: [
-              {
-                spesifik: 67,
-                non_spesifik: 189,
-              },
-            ],
-            desember: [
-              {
-                spesifik: 34,
-                non_spesifik: 122,
-              },
-            ],
+        tipe_rujukan: {
+          januari: { spesifik: 5, non_spesifik: 10 },
+          februari: { spesifik: 15, non_spesifik: 20 },
+          maret: { spesifik: 25, non_spesifik: 30 },
+          april: { spesifik: 35, non_spesifik: 40 },
+          mei: { spesifik: 11, non_spesifik: 13 },
+          juni: {
+            spesifik: 55,
+            non_spesifik: 100,
           },
-        ],
+          juli: { spesifik: 105, non_spesifik: 110 },
+          agustus: {
+            spesifik: 65,
+            non_spesifik: 160,
+          },
+          september: { spesifik: 6, non_spesifik: 39 },
+          oktober: { spesifik: 54, non_spesifik: 24 },
+          november: {
+            spesifik: 67,
+            non_spesifik: 189,
+          },
+          desember: {
+            spesifik: 34,
+            non_spesifik: 122,
+          },
+        },
         analisa_rujukan: [
           { id: '123', dokter: 'Lorem Ipsum 1', jumlah_rrns: 10 },
           { id: '234', dokter: 'Lorem Ipsum 2', jumlah_rrns: 11 },
@@ -441,58 +427,47 @@ const dashboardController = {
       //   GENERATE RESULT   //
       const result = {
         total_pendapatan: 950,
-        total_kunjunagan: [
-          {
-            januari: 30,
-            februari: 20,
-            maret: 11,
-            april: 18,
-            mei: 21,
-            juni: 51,
-            juli: 40,
-            agustus: 149,
-            september: 30,
-            oktober: 130,
-            november: 250,
-            desember: 210,
-          },
-        ],
+        total_kunjunagan: {
+          januari: 30,
+          februari: 20,
+          maret: 11,
+          april: 18,
+          mei: 21,
+          juni: 51,
+          juli: 40,
+          agustus: 149,
+          september: 30,
+          oktober: 130,
+          november: 250,
+          desember: 210,
+        },
+
         total_klaim: 9401245673,
         total_klaim_ditolak: 23428934,
         junlah_anggota: 12453,
-        status_klaim: [
-          {
-            ditolak: 25,
-            diterima: 25,
-            dipertimbangkan: 50,
-          },
-        ],
-        alasan_penolakan: [
-          {
-            dokumen_tidak_lengkap: 10,
-            dianggap_mampu: 22,
-            tidak_membayar_asuransi: 30,
-          },
-        ],
-        layanan_terklaim: [
-          {
-            melayani_separuh_hari: 101213213,
-            melayani_setengah_mati: 1000,
-            melayani_setiap_hari: 22122455,
-          },
-        ],
-        biaya_layanan: [
-          {
-            low: 23,
-            medium: 17,
-            high: 60,
-          },
-        ],
-        komponen_layanan: [
-          { id: '123', bhp: 12 },
-          { id: '234', nmhp: 45 },
-          { id: '567', medis: 134 },
-        ],
+        status_klaim: {
+          ditolak: 25,
+          diterima: 25,
+          dipertimbangkan: 50,
+        },
+        alasan_penolakan: {
+          berkas_tidak_lengkap: 10,
+          penanganan_tidak_tepat: 22,
+          diagnosa_tidak_tepat: 30,
+          tidak_ditanggung: 22,
+          lainnya: 10,
+        },
+        layanan_terklaim: {
+          tambal_gigi: 101213213,
+          penanganan_luka: 1000,
+          suntik_vitamin: 22122455,
+        },
+        biaya_layanan: {
+          low: 23,
+          medium: 17,
+          high: 60,
+        },
+        komponen_layanan: { bhp: 12, bnmhp: 45, jasa_medis: 134 },
         analisa_unit_cost: [
           {
             id: '123',
