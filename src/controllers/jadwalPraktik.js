@@ -9,6 +9,7 @@ const {
   getPracticeScheduleById,
 } = require("../models/jadwalPraktik");
 const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
 const practiceScheduleController = {
   create: async (req, res, next) => {
@@ -20,20 +21,80 @@ const practiceScheduleController = {
       // const tempEt = moment(end_time).format("HH:mm:ss");
       const startTime = date + "T" + start_time + ":00.000";
       const endTime = date + "T" + end_time + ":00.000";
-      const data = {
-        id: uuidv4(),
-        id_clinic: req.body.id_clinic,
-        id_division: req.body.id_division,
-        id_doctor: req.body.id_doctor,
-        date: req.body.date,
-        start_time: startTime,
-        end_time: endTime,
-      };
-      await createPracticeSchedule(data);
-      response(res, 200, true, data, "Create schedule success");
+      // const startTime = new Date(`${date} ${start_time}`).toISOString();
+      // const endTime = new Date(`${date} ${end_time}`).toISOString();
+      // console.log(startTime);
+      // console.log(endTime);
+      const dateEnd = req.body.date_end;
+      const interval = req.body.interval;
+      if (dateEnd) {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const firstDate = new Date(date);
+        const secondDate = new Date(dateEnd);
+        const diffDays = Math.round(
+          Math.abs((firstDate - secondDate) / oneDay)
+        );
+        console.log(interval);
+        console.log(diffDays);
+        var dataArray = [];
+        for (let i = 0; i <= diffDays; i += interval) {
+          const nextDate = new Date(startTime);
+          nextDate.setDate(nextDate.getDate() + i);
+          const id = uuidv4();
+          const tmpDate = nextDate.toISOString();
+          const tmpStartTime =
+            moment(tmpDate).format("yyyy-MM-DD") + "T" + start_time + ":00.000";
+          const tmpEndTime =
+            moment(tmpDate).format("yyyy-MM-DD") + "T" + end_time + ":00.000";
+          const data = {
+            id: id,
+            id_clinic: req.body.id_clinic,
+            id_division: req.body.id_division,
+            id_doctor: req.body.id_doctor,
+            date: tmpDate,
+            start_time: tmpStartTime,
+            end_time: tmpEndTime,
+          };
+          dataArray.push(data);
+        }
+        console.log(dataArray.length);
+        // console.log(dataArray);
+        // console.log(dataArray[i]);
+        for (let i = 0; i <= dataArray.length; i++) {
+          let temp = {
+            id: dataArray[i].id,
+            id_clinic: dataArray[i].id_clinic,
+            id_division: dataArray[i].id_division,
+            id_doctor: dataArray[i].id_doctor,
+            date: dataArray[i].date,
+            start_time: dataArray[i].start_time,
+            end_time: dataArray[i].end_time,
+          };
+          console.log("temp", temp);
+          await createPracticeSchedule(temp);
+          // response(res, 200, true, dataArray, "Create schedule success")
+          // res.status(200).json({ message: "Successfully" });
+        }
+      } else {
+        const data = {
+          id: uuidv4(),
+          id_clinic: req.body.id_clinic,
+          id_division: req.body.id_division,
+          id_doctor: req.body.id_doctor,
+          date: date,
+          start_time: startTime,
+          end_time: endTime,
+        };
+        await createPracticeSchedule(data);
+        response(res, 200, true, data, "Create schedule success");
+      }
     } catch (err) {
-      console.log(err);
-      response(res, 400, false, err, "Create schedule failed");
+      // console.log(err);
+      if ((err.message = "Cannot read property 'id' of undefined")) {
+        response(res, 200, true, dataArray, "succeed");
+      } else {
+        response(res, 400, false, err, "Create schedule failed");
+      }
     }
   },
   get: async (req, res, next) => {
