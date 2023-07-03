@@ -127,6 +127,7 @@ const practiceScheduleController = {
       const end_time = req.body.end_time;
       const startTime = date + "T" + start_time + ":00.000";
       const endTime = date + "T" + end_time + ":00.000";
+      const id_subtitute = req.body.id_subtitute;
       const data = {
         id,
         id_clinic,
@@ -135,6 +136,7 @@ const practiceScheduleController = {
         date,
         start_time: startTime,
         end_time: endTime,
+        id_subtitute,
       };
       await updatePracticeSchedule(data);
       response(res, 200, true, data, "Update practice schedule success");

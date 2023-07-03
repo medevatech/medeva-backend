@@ -111,22 +111,47 @@ const getPracticeScheduleById = (id) => {
 };
 
 const updatePracticeSchedule = (data) => {
-  const { id, id_clinic, id_division, id_doctor, date, start_time, end_time } =
-    data;
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `UPDATE tbl_jadwal_praktik
-      SET id_klinik = '${id_clinic}', id_divisi = '${id_division}', id_dokter = '${id_doctor}', tanggal = '${date}', waktu_mulai = '${start_time}', waktu_selesai = '${end_time}', updated_at = NOW()
-      WHERE id = '${id}'`,
-      (err, res) => {
-        if (!err) {
-          resolve(res);
-        } else {
-          reject(err);
+  const {
+    id,
+    id_clinic,
+    id_division,
+    id_doctor,
+    date,
+    start_time,
+    end_time,
+    id_subtitute,
+  } = data;
+  if (id_subtitution) {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE tbl_jadwal_praktik
+          SET id_klinik = '${id_clinic}', id_divisi = '${id_division}', id_dokter = '${id_doctor}', tanggal = '${date}', waktu_mulai = '${start_time}', waktu_selesai = '${end_time}', updated_at = NOW(), id_pengganti = '${id_subtitute}'
+          WHERE id = '${id}'`,
+        (err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE tbl_jadwal_praktik
+          SET id_klinik = '${id_clinic}', id_divisi = '${id_division}', id_dokter = '${id_doctor}', tanggal = '${date}', waktu_mulai = '${start_time}', waktu_selesai = '${end_time}', updated_at = NOW()
+          WHERE id = '${id}'`,
+        (err, res) => {
+          if (!err) {
+            resolve(res);
+          } else {
+            reject(err);
+          }
+        }
+      );
+    });
+  }
 };
 
 const archivePracticeSchedule = (id) => {
