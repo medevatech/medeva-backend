@@ -96,7 +96,7 @@ const getPracticeSchedule = () => {
 const getPracticeScheduleById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jp.id, jp.id_klinik, jp.id_divisi, jp.id_dokter, kry.nama, jp.tanggal, jp.waktu_mulai, jp.waktu_selesai FROM tbl_jadwal_praktik as jp
+      `SELECT jp.id, jp.id_klinik, jp.id_divisi, jp.id_dokter, kry.nama, jp.tanggal, jp.waktu_mulai, jp.waktu_selesai, jp.id_pengganti FROM tbl_jadwal_praktik as jp
       INNER JOIN tbl_karyawan as kry ON jp.id_dokter = kry.id
       WHERE jp.id = '${id}'`,
       (err, res) => {
