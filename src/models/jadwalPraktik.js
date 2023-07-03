@@ -121,7 +121,7 @@ const updatePracticeSchedule = (data) => {
     end_time,
     id_subtitute,
   } = data;
-  if (id_subtitution) {
+  if (id_subtitute) {
     return new Promise((resolve, reject) => {
       pool.query(
         `UPDATE tbl_jadwal_praktik
