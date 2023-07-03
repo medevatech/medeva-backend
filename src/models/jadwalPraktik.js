@@ -80,7 +80,7 @@ const createPracticeSchedule = (data) => {
 const getPracticeSchedule = () => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jp.id, jp.id_klinik, jp.id_divisi, jp.id_dokter, kry.nama as title, jp.tanggal, jp.waktu_mulai as start, jp.waktu_selesai as end, jp.is_active FROM tbl_jadwal_praktik as jp
+      `SELECT jp.id, jp.id_klinik, jp.id_divisi, jp.id_dokter, kry.nama as title, jp.tanggal, jp.waktu_mulai as start, jp.waktu_selesai as end, jp.is_active, jp.id_pengganti FROM tbl_jadwal_praktik as jp
     INNER JOIN tbl_karyawan as kry ON jp.id_dokter = kry.id`,
       (err, res) => {
         if (!err) {
