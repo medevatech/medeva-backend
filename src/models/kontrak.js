@@ -22,7 +22,7 @@ const getContract = () => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
-            FROM tbl_klinik as kt
+            FROM tbl_kontrak as kt
             INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
             INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id`,
       (err, res) => {
@@ -40,7 +40,7 @@ const getContractById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
-                  FROM tbl_klinik as kt
+                  FROM tbl_kontrak as kt
                   INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
                   INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id
                   WHERE kt.id = '${id}'`,
