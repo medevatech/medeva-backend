@@ -91,11 +91,6 @@ router.use('/laboratorium', laboratoriumRouter);
 router.use('/layanan-laboratorium', layananLaboratoriumRouter);
 router.use('/jbl', jblRouter);
 
-<<<<<<< HEAD
-router.use("/praktik", practiceScheduleRouter);
-router.use("/kontrak", contractRouter);
-=======
 router.use('/praktik', practiceScheduleRouter);
->>>>>>> feature/modul-akuntansi
 
 module.exports = router;
