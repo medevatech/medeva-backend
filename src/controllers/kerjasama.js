@@ -36,6 +36,10 @@ const kerjasamaControllers = {
         is_active: 1,
       };
 
+      if (req.body.besar_klaim === '') {
+        data.besar_klaim = 0;
+      }
+
       let isError = false;
 
       for (let [key, value] of Object.entries(data)) {

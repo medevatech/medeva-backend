@@ -13,7 +13,7 @@ const insertKerjasama = (data) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_kerjasama 
-        (id,  id_asuransi, id_asuransi_kelas, id_klinik, tipe, besar_klaim, is_active,
+        (id, id_asuransi, id_asuransi_kelas, id_klinik, tipe, besar_klaim, is_active,
         created_at, updated_at) 
       VALUES
         ('${id}', '${id_asuransi}', '${id_asuransi_kelas}', '${id_klinik}', '${tipe}', ${besar_klaim}, ${is_active}, 
