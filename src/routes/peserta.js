@@ -1,8 +1,8 @@
 const express = require(`express`);
 const router = express.Router();
 const { pesertaControllers } = require(`../controllers/peserta`);
-const { protect } = require("../middleware/auth");
-let multer = require("multer");
+const { protect } = require('../middleware/auth');
+let multer = require('multer');
 let uploaded = multer();
 
 router.post(`/`, protect, uploaded.array(), pesertaControllers.add);
