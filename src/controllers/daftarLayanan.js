@@ -18,6 +18,7 @@ const daftarLayananControllers = {
       let data = {
         id: uuidv4(),
         nama: req.body.nama,
+        tipe: req.body.tipe,
         is_active: 1,
       };
 
@@ -46,11 +47,13 @@ const daftarLayananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchTipe = req.query.searchTipe || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allDaftarLayanan({
         search,
+        searchTipe,
         searchStatus,
         sortBy,
         sortOrder,
@@ -60,7 +63,7 @@ const daftarLayananControllers = {
 
       const {
         rows: [count],
-      } = await countAllDaftarLayanan(search, searchStatus);
+      } = await countAllDaftarLayanan(search, searchTipe, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -124,6 +127,7 @@ const daftarLayananControllers = {
         let data = {
           id,
           nama: req.body.nama,
+          tipe: req.body.tipe,
           is_active: 1,
         };
 

@@ -1,14 +1,14 @@
 const Pool = require('../config/db');
 
 const insertDaftarLayanan = (data) => {
-  const { id, nama, is_active } = data;
+  const { id, nama, tipe, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_daftar_layanan 
-        (id,  nama, is_active,
+        (id,  nama, tipe, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${nama}', ${is_active}, 
+        ('${id}', '${nama}', '${tipe}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -23,6 +23,7 @@ const insertDaftarLayanan = (data) => {
 
 const allDaftarLayanan = ({
   search,
+  searchTipe,
   searchStatus,
   sortBy,
   sortOrder,
@@ -32,11 +33,13 @@ const allDaftarLayanan = ({
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_daftar_layanan.id, tbl_daftar_layanan.nama, 
-        tbl_daftar_layanan.is_active, 
+        tbl_daftar_layanan.tipe, tbl_daftar_layanan.is_active, 
         tbl_daftar_layanan.created_at, tbl_daftar_layanan.updated_at
       FROM tbl_daftar_layanan AS tbl_daftar_layanan
       WHERE
-        tbl_daftar_layanan.nama ILIKE '%${search}%' 
+        tbl_daftar_layanan.nama ILIKE '%${search}%'
+      AND
+        tbl_daftar_layanan.tipe ILIKE '%${searchTipe}%' 
       AND
         CAST(tbl_daftar_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_daftar_layanan.${sortBy} ${sortOrder} 
@@ -52,12 +55,14 @@ const allDaftarLayanan = ({
   );
 };
 
-const countAllDaftarLayanan = (search, searchStatus) => {
+const countAllDaftarLayanan = (search, searchTipe, searchStatus) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
   FROM tbl_daftar_layanan AS tbl_daftar_layanan
   WHERE
     tbl_daftar_layanan.nama ILIKE '%${search}%' 
+  AND
+    tbl_daftar_layanan.tipe ILIKE '%%${searchTipe}'
   AND
     CAST(tbl_daftar_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
@@ -66,7 +71,7 @@ const getDaftarLayananByIdDaftarLayanan = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT tbl_daftar_layanan.id, tbl_daftar_layanan.nama, 
-        tbl_daftar_layanan.is_active, 
+        tbl_daftar_layanan.tipe, tbl_daftar_layanan.is_active, 
         tbl_daftar_layanan.created_at, tbl_daftar_layanan.updated_at
       FROM tbl_daftar_layanan AS tbl_daftar_layanan
       WHERE tbl_daftar_layanan.id = '${id}'`,
@@ -97,12 +102,12 @@ const findDaftarLayananByIdDaftarLayanan = (id) => {
 };
 
 const editDaftarLayanan = (data) => {
-  const { id, nama, is_active } = data;
+  const { id, nama, tipe, is_active } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_daftar_layanan 
       SET
-        nama='${nama}', is_active=${is_active}, 
+        nama='${nama}', tipe='${tipe}', is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
