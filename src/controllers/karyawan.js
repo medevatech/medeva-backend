@@ -133,6 +133,7 @@ const karyawanController = {
           is_perawat: parseInt(req.body.is_perawat),
           is_dokter: parseInt(req.body.is_dokter),
           is_manajemen: parseInt(req.body.is_manajemen),
+          is_cashier: parseInt(req.body.is_cashier),
           jenis_kelamin: req.body.jenis_kelamin,
           nomor_kitas: req.body.nomor_kitas,
           tipe_izin: req.body.tipe_izin,
@@ -217,6 +218,8 @@ const karyawanController = {
           is_perawat: users.is_perawat,
           is_dokter: users.is_dokter,
           is_manajemen: users.is_manajemen,
+          is_finance: users.is_finance,
+          is_cashier: users.is_cashier,
         };
         let accessToken = generateToken(payload);
         let refreshToken = generateRefreshToken(payload);
@@ -304,6 +307,8 @@ const karyawanController = {
         is_perawat: parseInt(req.body.is_perawat),
         is_dokter: parseInt(req.body.is_dokter),
         is_manajemen: parseInt(req.body.is_manajemen),
+        is_finance: parseInt(req.body.is_finance),
+        is_cashier: parseInt(req.body.is_cashier),
         jenis_kelamin: req.body.jenis_kelamin,
         nomor_kitas: req.body.nomor_kitas,
         tipe_izin: req.body.tipe_izin,
