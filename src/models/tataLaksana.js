@@ -136,7 +136,7 @@ const updateStatusPemeriksaanPenunjangByIdPasien = (data) => {
     Pool.query(
       `UPDATE tbl_pemeriksaan_penunjang 
       SET
-        status=${status}
+        status='${status}'
       WHERE
         id_pasien = '${id_pasien}'`,
       (err, result) => {
@@ -156,7 +156,7 @@ const updateStatusResepByIdPasien = (data) => {
     Pool.query(
       `UPDATE tbl_resep 
         SET
-          status=${status}
+          status='${status}'
         WHERE
           id_pasien = '${id_pasien}'`,
       (err, result) => {
@@ -176,7 +176,7 @@ const updateStatusLayananByIdPasien = (data) => {
     Pool.query(
       `UPDATE tbl_layanan 
           SET
-            status=${status}
+            status='${status}'
           WHERE
             id_pasien = '${id_pasien}'`,
       (err, result) => {
@@ -196,7 +196,7 @@ const updateStatusRujukanByIdPasien = (data) => {
     Pool.query(
       `UPDATE tbl_rujukan 
           SET
-            status=${status}
+            status='${status}'
           WHERE
             id_pasien = '${id_pasien}'`,
       (err, result) => {
