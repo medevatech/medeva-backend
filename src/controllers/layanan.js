@@ -24,8 +24,13 @@ const layananControllers = {
         id_daftar_layanan: req.body.id_daftar_layanan,
         id_pasien: req.body.id_pasien,
         catatan: req.body.catatan,
+        status: req.body.status,
         is_active: 1,
       };
+
+      req.body.status === ''
+        ? (data.status = 'BELUM SELESAI')
+        : req.body.status;
 
       if (data.id_kunjungan == '') {
         response(res, 200, true, data, 'insert layanan but id_kunjungan null');
@@ -55,12 +60,14 @@ const layananControllers = {
       const search = req.query.search || '';
       const searchDaftarLayanan = req.query.searchDaftarLayanan || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchActive = req.query.searchActive || '';
       const offset = (page - 1) * limit;
 
       const result = await allLayanan({
         search,
         searchDaftarLayanan,
         searchStatus,
+        searchActive,
         sortBy,
         sortOrder,
         limit,
@@ -69,7 +76,12 @@ const layananControllers = {
 
       const {
         rows: [count],
-      } = await countAllLayanan(search, searchDaftarLayanan, searchStatus);
+      } = await countAllLayanan(
+        search,
+        searchDaftarLayanan,
+        searchStatus,
+        searchActive
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -185,8 +197,13 @@ const layananControllers = {
           id_daftar_layanan: req.body.id_daftar_layanan,
           id_pasien: req.body.id_pasien,
           catatan: req.body.catatan,
+          status: req.body.status,
           is_active: 1,
         };
+
+        req.body.status === ''
+          ? (data.status = 'BELUM SELESAI')
+          : req.body.status;
 
         if (data.id_kunjungan == '') {
           await deleteLayanan(data);

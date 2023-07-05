@@ -1,7 +1,7 @@
 const express = require(`express`);
 const router = express.Router();
-const { layananControllers } = require(`../controllers/layanan`);
-const { protect } = require('../middleware/auth');
+const { layananControllers } = require(`../controllers/layanan.js`);
+const { protect } = require('../middleware/auth.js');
 let multer = require('multer');
 let uploaded = multer();
 
