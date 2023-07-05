@@ -66,8 +66,6 @@ const tataLaksanaController = {
         rows: [findTataLaksana],
       } = await findTataLaksanaByIdPasien({ id_pasien });
 
-      console.log(id_pasien);
-
       if (findTataLaksana) {
         let data = {
           id_pasien,

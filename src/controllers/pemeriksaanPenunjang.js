@@ -24,8 +24,17 @@ const pemeriksaanPenunjangControllers = {
         id_lab: req.body.id_lab,
         id_kunjungan: req.body.id_kunjungan,
         id_pasien: req.body.id_pasien,
+        status: req.body.status,
         is_active: 1,
       };
+
+      req.body.status === ''
+        ? (data.status = 'BELUM SELESAI')
+        : req.body.status;
+
+      data.status === undefined
+        ? (data.status = 'BELUM SELESAI')
+        : req.body.status;
 
       if (data.id_kunjungan == '') {
         response(
@@ -56,6 +65,7 @@ const pemeriksaanPenunjangControllers = {
       const searchPemeriksaan = req.query.searchPemeriksaan || '';
       const searchLab = req.query.searchLab || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchDone = req.query.searchDone || '';
       const offset = (page - 1) * limit;
 
       const result = await allPemeriksaanPenunjang({
@@ -63,6 +73,7 @@ const pemeriksaanPenunjangControllers = {
         searchPemeriksaan,
         searchLab,
         searchStatus,
+        searchDone,
         sortBy,
         sortOrder,
         limit,
@@ -75,7 +86,8 @@ const pemeriksaanPenunjangControllers = {
         search,
         searchPemeriksaan,
         searchLab,
-        searchStatus
+        searchStatus,
+        searchDone
       );
 
       const totalData = parseInt(count.total);
@@ -217,8 +229,17 @@ const pemeriksaanPenunjangControllers = {
           id_lab: req.body.id_lab,
           id_kunjungan: req.body.id_kunjungan,
           id_pasien: req.body.id_pasien,
+          status: req.body.status,
           is_active: 1,
         };
+
+        req.body.status === ''
+          ? (data.status = 'BELUM SELESAI')
+          : req.body.status;
+
+        data.status === undefined
+          ? (data.status = 'BELUM SELESAI')
+          : req.body.status;
 
         if (data.id_kunjungan == '') {
           await deletePemeriksaanPenunjang(data);
