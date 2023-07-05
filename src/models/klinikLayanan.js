@@ -33,6 +33,7 @@ const allKlinikLayanan = ({
   searchNamaKlinik,
   searchNamaDaftarLayanan,
   searchStatus,
+  searchTipeDaftarLayanan,
   sortBy,
   sortOrder,
   limit,
@@ -42,7 +43,7 @@ const allKlinikLayanan = ({
     Pool.query(
       `SELECT tbl_klinik_layanan.id, 
         tbl_klinik_layanan.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_layanan,
+        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_daftar_layanan, tbl_daftar_layanan.tipe,
         tbl_klinik_layanan.harga_jasa, tbl_klinik_layanan.harga_jual, tbl_klinik_layanan.is_active, 
         tbl_klinik_layanan.created_at, tbl_klinik_layanan.updated_at
       FROM tbl_klinik_layanan AS tbl_klinik_layanan
@@ -54,6 +55,8 @@ const allKlinikLayanan = ({
         tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
       AND
         tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
+      AND
+        tbl_daftar_layanan.tipe ILIKE '%${searchTipeDaftarLayanan}%' 
       AND
         CAST(tbl_klinik_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_klinik_layanan.${sortBy} ${sortOrder} 
@@ -73,7 +76,8 @@ const countAllKlinikLayanan = (
   search,
   searchNamaKlinik,
   searchNamaDaftarLayanan,
-  searchStatus
+  searchStatus,
+  searchTipeDaftarLayanan
 ) => {
   return Pool.query(
     `SELECT COUNT(*) AS total 
@@ -87,6 +91,8 @@ const countAllKlinikLayanan = (
     AND
         tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
     AND
+        tbl_daftar_layanan.tipe ILIKE '%${searchTipeDaftarLayanan}%' 
+    AND
         CAST(tbl_klinik_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`
   );
 };
@@ -96,7 +102,7 @@ const getKlinikLayananByIdKlinikLayanan = ({ id }) => {
     Pool.query(
       `SELECT tbl_klinik_layanan.id, 
         tbl_klinik_layanan.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_layanan,
+        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_daftar_layanan, tbl_daftar_layanan.tipe,
         tbl_klinik_layanan.harga_jasa, tbl_klinik_layanan.harga_jual, tbl_klinik_layanan.is_active, 
         tbl_klinik_layanan.created_at, tbl_klinik_layanan.updated_at
       FROM tbl_klinik_layanan AS tbl_klinik_layanan
@@ -134,7 +140,7 @@ const getKlinikLayananByIdKlinik = ({ id_klinik }) => {
     Pool.query(
       `SELECT tbl_klinik_layanan.id, 
         tbl_klinik_layanan.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_layanan,
+        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_daftar_layanan, tbl_daftar_layanan.tipe,
         tbl_klinik_layanan.harga_jasa, tbl_klinik_layanan.harga_jual, tbl_klinik_layanan.is_active, 
         tbl_klinik_layanan.created_at, tbl_klinik_layanan.updated_at
       FROM tbl_klinik_layanan AS tbl_klinik_layanan
@@ -172,7 +178,7 @@ const getKlinikLayananByIdDaftarLayanan = ({ id_daftar_layanan }) => {
     Pool.query(
       `SELECT tbl_klinik_layanan.id, 
         tbl_klinik_layanan.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
-        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_layanan,
+        tbl_klinik_layanan.id_daftar_layanan, tbl_daftar_layanan.nama AS nama_daftar_layanan, tbl_daftar_layanan.tipe,
         tbl_klinik_layanan.harga_jasa, tbl_klinik_layanan.harga_jual, tbl_klinik_layanan.is_active, 
         tbl_klinik_layanan.created_at, tbl_klinik_layanan.updated_at
       FROM tbl_klinik_layanan AS tbl_klinik_layanan

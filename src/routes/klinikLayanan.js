@@ -14,7 +14,7 @@ router.get(
   klinikLayananControllers.getByIdKlinik
 );
 router.get(
-  `/daftar_layanan/:id_daftar_layanan`,
+  `/daftar-layanan/:id_daftar_layanan`,
   protect,
   klinikLayananControllers.getByIdDaftarLayanan
 );

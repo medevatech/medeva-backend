@@ -59,6 +59,7 @@ const klinikLayananControllers = {
       const searchNamaKlinik = req.query.searchNamaKlinik || '';
       const searchNamaDaftarLayanan = req.query.searchNamaDaftarLayanan || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchTipeDaftarLayanan = req.query.searchTipeDaftarLayanan || '';
       const offset = (page - 1) * limit;
 
       const result = await allKlinikLayanan({
@@ -66,6 +67,7 @@ const klinikLayananControllers = {
         searchNamaKlinik,
         searchNamaDaftarLayanan,
         searchStatus,
+        searchTipeDaftarLayanan,
         sortBy,
         sortOrder,
         limit,
@@ -78,7 +80,8 @@ const klinikLayananControllers = {
         search,
         searchNamaKlinik,
         searchNamaDaftarLayanan,
-        searchStatus
+        searchStatus,
+        searchTipeDaftarLayanan
       );
 
       const totalData = parseInt(count.total);
