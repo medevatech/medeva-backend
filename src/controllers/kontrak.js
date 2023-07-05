@@ -7,6 +7,7 @@ const {
   archiveContract,
   activateContract,
   deleteContract,
+  getContractByIdEmployee,
 } = require("../models/kontrak");
 const { v4: uuidv4 } = require("uuid");
 
@@ -50,6 +51,28 @@ const contractController = {
     } catch (err) {
       console.log(err);
       response(ress, 400, false, null, "Get data kontrak berdasarkan id gagal");
+    }
+  },
+  getByIdEmployee: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getContractByIdEmployee(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get data kontrak berdasarkan id karyawan berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get data kontrak berdasarkan id karyawan gagal"
+      );
     }
   },
   update: async (req, res, next) => {

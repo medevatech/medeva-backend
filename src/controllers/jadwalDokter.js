@@ -1,17 +1,17 @@
 const { response } = require("../middleware/common");
 const {
-  createPracticeSchedule,
-  getPracticeSchedule,
-  updatePracticeSchedule,
-  archivePracticeSchedule,
-  activatePracticeSchedule,
-  deletePracticeSchedule,
-  getPracticeScheduleById,
-} = require("../models/jadwalPraktik");
+  createDoctorSchedule,
+  getDoctorSchedule,
+  updateDoctorSchedule,
+  archiveDoctorSchedule,
+  activateDoctorSchedule,
+  deleteDoctorSchedule,
+  getDoctorScheduleById,
+} = require("../models/jadwalDokter");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 
-const practiceScheduleController = {
+const doctorScheduleController = {
   create: async (req, res, next) => {
     try {
       const date = req.body.date;
@@ -85,35 +85,41 @@ const practiceScheduleController = {
           start_time: startTime,
           end_time: endTime,
         };
-        await createPracticeSchedule(data);
-        response(res, 200, true, data, "Create schedule success");
+        await createDoctorSchedule(data);
+        response(res, 200, true, data, "Tambah jadwal dokter berhasil");
       }
     } catch (err) {
       // console.log(err);
       if ((err.message = "Cannot read property 'id' of undefined")) {
-        response(res, 200, true, dataArray, "succeed");
+        response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
       } else {
-        response(res, 400, false, err, "Create schedule failed");
+        response(res, 400, false, err, "Tambah jadwal dokter gagal");
       }
     }
   },
   get: async (req, res, next) => {
     try {
-      const result = await getPracticeSchedule();
-      response(res, 200, true, result.rows, "Get jadwal praktik success");
+      const result = await getDoctorSchedule();
+      response(res, 200, true, result.rows, "Get jadwal dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, null, "Get jadwal praktik failed");
+      response(res, 400, false, null, "Get jadwal dokter berhasil");
     }
   },
   getById: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const result = await getPracticeScheduleById(id);
-      response(res, 200, true, result.rows, "Get jadwal praktik by id success");
+      const result = await getDoctorScheduleById(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal dokter berdasarkan id berhasil"
+      );
     } catch (err) {
       console.log(err);
-      response(res, 400, false, null, "Get jadwal praktik by id failed");
+      response(res, 400, false, null, "Get jadwal dokter berdasarkan id gagal");
     }
   },
   update: async (req, res, next) => {
@@ -138,43 +144,43 @@ const practiceScheduleController = {
         end_time: endTime,
         id_subtitute,
       };
-      await updatePracticeSchedule(data);
-      response(res, 200, true, data, "Update practice schedule success");
+      await updateDoctorSchedule(data);
+      response(res, 200, true, data, "Edit jadwal dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, "Update practice schedule failed");
+      response(res, 400, false, "Edit jadwal dokter gagal");
     }
   },
   archive: async (req, res, next) => {
     try {
       const id = req.params.id;
-      await archivePracticeSchedule(id);
-      response(res, 200, true, null, "Archive practice schedule success");
+      await archiveDoctorSchedule(id);
+      response(res, 200, true, null, "Arsip jadwal dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Archive practice schedule failed");
+      response(res, 400, false, err, "Arsip jadwal dokter gagal");
     }
   },
   activate: async (req, res, next) => {
     try {
       const id = req.params.id;
-      await activatePracticeSchedule(id);
-      response(res, 200, true, null, "Activate practice schedule success");
+      await activateDoctorSchedule(id);
+      response(res, 200, true, null, "Aktivasi jadwal dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Activate practice schedule failed");
+      response(res, 400, false, err, "Aktivasi jadwal dokter gagal");
     }
   },
   delete: async (req, res, next) => {
     try {
       const id = req.params.id;
-      await deletePracticeSchedule(id);
-      response(res, 200, true, null, "Delete practice schedule success");
+      await deleteDoctorSchedule(id);
+      response(res, 200, true, null, "Hapus jadwal dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, "Delete practice schedule failed");
+      response(res, 400, false, err, "Hapus jadwal dokter gagal");
     }
   },
 };
 
-exports.practiceScheduleController = practiceScheduleController;
+exports.doctorScheduleController = doctorScheduleController;
