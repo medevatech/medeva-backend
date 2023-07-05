@@ -56,6 +56,7 @@ const pemeriksaanPenunjangControllers = {
       const searchPemeriksaan = req.query.searchPemeriksaan || '';
       const searchLab = req.query.searchLab || '';
       const searchStatus = req.query.searchStatus || '';
+      const searchDone = req.query.searchDone || '';
       const offset = (page - 1) * limit;
 
       const result = await allPemeriksaanPenunjang({
@@ -63,6 +64,7 @@ const pemeriksaanPenunjangControllers = {
         searchPemeriksaan,
         searchLab,
         searchStatus,
+        searchDone,
         sortBy,
         sortOrder,
         limit,
@@ -75,7 +77,8 @@ const pemeriksaanPenunjangControllers = {
         search,
         searchPemeriksaan,
         searchLab,
-        searchStatus
+        searchStatus,
+        searchDone
       );
 
       const totalData = parseInt(count.total);

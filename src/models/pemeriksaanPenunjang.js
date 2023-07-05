@@ -27,6 +27,7 @@ const allPemeriksaanPenunjang = ({
   searchPemeriksaan,
   searchLab,
   searchStatus,
+  searchDone,
   sortBy,
   sortOrder,
   limit,
@@ -50,6 +51,8 @@ const allPemeriksaanPenunjang = ({
         tbl_laboratorium.nama ILIKE '%${searchLab}%'
       AND
         CAST(tbl_pemeriksaan_penunjang.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      AND
+        CAST(tbl_pemeriksaan_penunjang.status AS TEXT) ILIKE '%${searchDone}%'
       ORDER BY tbl_pemeriksaan_penunjang.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -67,7 +70,8 @@ const countAllPemeriksaanPenunjang = (
   search,
   searchPemeriksaan,
   searchLab,
-  searchStatus
+  searchStatus,
+  searchDone
 ) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
@@ -81,7 +85,9 @@ const countAllPemeriksaanPenunjang = (
   AND
     tbl_laboratorium.nama ILIKE '%${searchLab}%'
   AND
-    CAST(tbl_pemeriksaan_penunjang.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
+    CAST(tbl_pemeriksaan_penunjang.is_active AS TEXT) ILIKE '%${searchStatus}%'
+  AND
+    CAST(tbl_pemeriksaan_penunjang.status AS TEXT) ILIKE '%${searchDone}%'`);
 };
 
 const getPemeriksaanPenunjangByIdPemeriksaanPenunjang = ({ id }) => {
