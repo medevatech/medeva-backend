@@ -3,10 +3,10 @@ const router = express.Router();
 const { klinikController } = require("../controllers/klinik");
 const { protect } = require("../middleware/auth");
 
-router.post("/", protect, klinikController.create);
-router.get("/", protect, klinikController.get);
-router.get("/:id", protect, klinikController.getById);
-router.put("/:id", protect, klinikController.update);
-router.delete("/:id", protect, klinikController.delete);
+router.post("/", klinikController.create);
+router.get("/", klinikController.get);
+router.get("/:id", klinikController.getById);
+router.put("/:id", klinikController.update);
+router.delete("/:id", klinikController.delete);
 
 module.exports = router;
