@@ -30,10 +30,10 @@ const findUsername = (username) => {
   });
 };
 
-const findLogin = (input_login) => {
+const findLogin = (input_login, id_klinik) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * from tbl_karyawan WHERE email = '${input_login}' OR username = '${input_login}'`,
+      `SELECT * from tbl_karyawan WHERE (email = '${input_login}' OR username = '${input_login}') AND id_klinik = '${id_klinik}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
