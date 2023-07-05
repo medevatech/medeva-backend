@@ -189,6 +189,7 @@ const karyawanController = {
   },
   login: async (req, res, next) => {
     let inputLogin = req.body.input_login;
+    var idClinic = req.body.id_klinik;
     let {
       rows: [users],
     } = await findLogin(inputLogin);
@@ -220,12 +221,50 @@ const karyawanController = {
           is_manajemen: users.is_manajemen,
           is_finance: users.is_finance,
           is_cashier: users.is_cashier,
+          id_klinik: idClinic,
         };
         let accessToken = generateToken(payload);
         let refreshToken = generateRefreshToken(payload);
-        users.token = accessToken;
-        users.refreshToken = refreshToken;
-        return response(res, 200, true, users, "Login karyawan berhasil");
+        const resData = {
+          id: users.id,
+          id_klinik: idClinic,
+          nama: users.nama,
+          email: users.email,
+          username: users.username,
+          is_dev: users.is_dev,
+          is_manager: users.is_manager,
+          is_admin: users.is_admin,
+          is_resepsionis: users.is_resepsionis,
+          is_perawat: users.is_perawat,
+          is_dokter: users.is_dokter,
+          is_manajemen: users.is_manajemen,
+          is_finance: users.is_finance,
+          is_cashier: users.is_cashier,
+          jenis_kelamin: users.jenis_kelamin,
+          nomor_kitas: users.nomor_kitas,
+          tipe_izin: users.tipe_izin,
+          nomor_izin: users.nomor_izin,
+          kadaluarsa_izin: users.kadaluarsa_izin,
+          nomor_hp: users.nomor_hp,
+          tempat_lahir: users.tempat_lahir,
+          tanggal_lahir: users.tanggal_lahir,
+          alamat: users.alamat,
+          provinsi: users.provinsi,
+          kota: users.kota,
+          kecamatan: users.kecamatan,
+          kelurahan: users.kelurahan,
+          kode_pos: users.kode_pos,
+          status_menikah: users.status_menikah,
+          foto: users.foto,
+          tipe: users.tipe,
+          spesialis: users.spesialis,
+          is_active: users.is_active,
+          created_at: users.created_at,
+          updated_at: users.updated_at,
+          token: accessToken,
+          refreshToken: refreshToken,
+        };
+        return response(res, 200, true, resData, "Login karyawan berhasil");
       }
     }
   },
