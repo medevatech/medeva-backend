@@ -33,7 +33,7 @@ const allLayanan = ({
   search,
   searchDaftarLayanan,
   searchStatus,
-  searchActive,
+  searchDone,
   sortBy,
   sortOrder,
   limit,
@@ -52,9 +52,9 @@ const allLayanan = ({
       AND
         tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%'
       AND
-        tbl_layanan.status ILIKE '%${searchStatus}%'
+        tbl_layanan.status ILIKE '%${searchDone}%'
       AND
-        CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchActive}%'
+        CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_layanan.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
       (err, result) => {
@@ -72,7 +72,7 @@ const countAllLayanan = (
   search,
   searchDaftarLayanan,
   searchStatus,
-  searchActive
+  searchDone
 ) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
@@ -83,9 +83,9 @@ const countAllLayanan = (
   AND
     tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%'
   AND
-    tbl_layanan.status ILIKE '%${searchStatus}%'
+    tbl_layanan.status ILIKE '%${searchDone}%'
   AND
-    CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchActive}%'`);
+    CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
 
 const getLayananByIdLayanan = ({ id }) => {

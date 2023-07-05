@@ -60,14 +60,14 @@ const layananControllers = {
       const search = req.query.search || '';
       const searchDaftarLayanan = req.query.searchDaftarLayanan || '';
       const searchStatus = req.query.searchStatus || '';
-      const searchActive = req.query.searchActive || '';
+      const searchDone = req.query.searchDone || '';
       const offset = (page - 1) * limit;
 
       const result = await allLayanan({
         search,
         searchDaftarLayanan,
         searchStatus,
-        searchActive,
+        searchDone,
         sortBy,
         sortOrder,
         limit,
@@ -80,7 +80,7 @@ const layananControllers = {
         search,
         searchDaftarLayanan,
         searchStatus,
-        searchActive
+        searchDone
       );
 
       const totalData = parseInt(count.total);
