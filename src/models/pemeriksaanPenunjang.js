@@ -1,15 +1,22 @@
 const Pool = require('../config/db');
 
 const insertPemeriksaanPenunjang = (data) => {
-  const { id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, is_active } =
-    data;
+  const {
+    id,
+    id_pemeriksaan,
+    id_lab,
+    id_kunjungan,
+    id_pasien,
+    status,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `INSERT INTO tbl_pemeriksaan_penunjang 
-        (id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, is_active,
+        (id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, status, is_active,
         created_at, updated_at)  
       VALUES
-        ('${id}', '${id_pemeriksaan}', '${id_lab}', '${id_kunjungan}', '${id_pasien}', ${is_active}, 
+        ('${id}', '${id_pemeriksaan}', '${id_lab}', '${id_kunjungan}', '${id_pasien}', '${status}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
         if (!err) {
@@ -38,7 +45,8 @@ const allPemeriksaanPenunjang = ({
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, 
+        tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -96,7 +104,8 @@ const getPemeriksaanPenunjangByIdPemeriksaanPenunjang = ({ id }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, 
+        tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -134,7 +143,8 @@ const getPemeriksaanPenunjangByIdKunjungan = ({ id_kunjungan }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, 
+        tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -172,7 +182,8 @@ const getPemeriksaanPenunjangByIdPasien = ({ id_pasien }) => {
       `SELECT tbl_pemeriksaan_penunjang.id, 
         tbl_pemeriksaan_penunjang.id_pemeriksaan, tbl_pemeriksaan.nama AS nama_pemeriksaan,
         tbl_pemeriksaan_penunjang.id_lab, tbl_laboratorium.nama AS nama_laboratorium,
-        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
+        tbl_pemeriksaan_penunjang.id_kunjungan, tbl_pemeriksaan_penunjang.id_pasien, 
+        tbl_pemeriksaan_penunjang.status, tbl_pemeriksaan_penunjang.is_active,
         tbl_pemeriksaan_penunjang.created_at, tbl_pemeriksaan_penunjang.updated_at
       FROM tbl_pemeriksaan_penunjang AS tbl_pemeriksaan_penunjang
       INNER JOIN tbl_pemeriksaan AS tbl_pemeriksaan ON tbl_pemeriksaan_penunjang.id_pemeriksaan = tbl_pemeriksaan.id
@@ -205,13 +216,22 @@ const findPemeriksaanPenunjangByIdPasien = (id_pasien) => {
 };
 
 const editPemeriksaanPenunjang = (data) => {
-  const { id, id_pemeriksaan, id_lab, id_kunjungan, id_pasien, is_active } =
-    data;
+  const {
+    id,
+    id_pemeriksaan,
+    id_lab,
+    id_kunjungan,
+    id_pasien,
+    status,
+    is_active,
+  } = data;
   return new Promise((resolve, reject) =>
     Pool.query(
       `UPDATE tbl_pemeriksaan_penunjang 
       SET
-        id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', id_kunjungan='${id_kunjungan}', id_pasien='${id_pasien}', is_active=${is_active}, 
+        id_pemeriksaan='${id_pemeriksaan}', id_lab='${id_lab}', 
+        id_kunjungan='${id_kunjungan}', id_pasien='${id_pasien}', 
+        status='${status}', is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {

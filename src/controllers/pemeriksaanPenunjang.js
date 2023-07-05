@@ -24,8 +24,17 @@ const pemeriksaanPenunjangControllers = {
         id_lab: req.body.id_lab,
         id_kunjungan: req.body.id_kunjungan,
         id_pasien: req.body.id_pasien,
+        status: req.body.status,
         is_active: 1,
       };
+
+      req.body.status === ''
+        ? (data.status = 'BELUM SELESAI')
+        : req.body.status;
+
+      data.status === undefined
+        ? (data.status = 'BELUM SELESAI')
+        : req.body.status;
 
       if (data.id_kunjungan == '') {
         response(
@@ -220,8 +229,17 @@ const pemeriksaanPenunjangControllers = {
           id_lab: req.body.id_lab,
           id_kunjungan: req.body.id_kunjungan,
           id_pasien: req.body.id_pasien,
+          status: req.body.status,
           is_active: 1,
         };
+
+        req.body.status === ''
+          ? (data.status = 'BELUM SELESAI')
+          : req.body.status;
+
+        data.status === undefined
+          ? (data.status = 'BELUM SELESAI')
+          : req.body.status;
 
         if (data.id_kunjungan == '') {
           await deletePemeriksaanPenunjang(data);
