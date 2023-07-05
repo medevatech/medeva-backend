@@ -30,7 +30,7 @@ const insertKlinikLayanan = (data) => {
 
 const allKlinikLayanan = ({
   search,
-  searchNamaKlinik,
+  searchKlinik,
   searchNamaDaftarLayanan,
   searchStatus,
   searchTipeDaftarLayanan,
@@ -52,7 +52,7 @@ const allKlinikLayanan = ({
       WHERE
         CAST(tbl_klinik_layanan.harga_jual AS TEXT) ILIKE '%${search}%' 
       AND
-        tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
+        tbl_klinik_layanan.id_klinik ILIKE '%${searchKlinik}%' 
       AND
         tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
       AND
@@ -74,7 +74,7 @@ const allKlinikLayanan = ({
 
 const countAllKlinikLayanan = (
   search,
-  searchNamaKlinik,
+  searchKlinik,
   searchNamaDaftarLayanan,
   searchStatus,
   searchTipeDaftarLayanan
@@ -85,9 +85,9 @@ const countAllKlinikLayanan = (
     INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_layanan.id_klinik = tbl_klinik.id
     INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_klinik_layanan.id_daftar_layanan = tbl_daftar_layanan.id
     WHERE
-        CAST(tbl_klinik_layanan.harga_jual AS TEXT) ILIKE '%${search}%' 
+      CAST(tbl_klinik_layanan.harga_jual AS TEXT) ILIKE '%${search}%' 
     AND
-        tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
+      tbl_klinik_layanan.id_klinik ILIKE '%${searchKlinik}%' 
     AND
         tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
     AND

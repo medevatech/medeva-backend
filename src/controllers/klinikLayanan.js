@@ -56,7 +56,7 @@ const klinikLayananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchNamaKlinik = req.query.searchNamaKlinik || '';
+      const searchKlinik = req.query.searchKlinik || '';
       const searchNamaDaftarLayanan = req.query.searchNamaDaftarLayanan || '';
       const searchStatus = req.query.searchStatus || '';
       const searchTipeDaftarLayanan = req.query.searchTipeDaftarLayanan || '';
@@ -64,7 +64,7 @@ const klinikLayananControllers = {
 
       const result = await allKlinikLayanan({
         search,
-        searchNamaKlinik,
+        searchKlinik,
         searchNamaDaftarLayanan,
         searchStatus,
         searchTipeDaftarLayanan,
@@ -78,7 +78,7 @@ const klinikLayananControllers = {
         rows: [count],
       } = await countAllKlinikLayanan(
         search,
-        searchNamaKlinik,
+        searchKlinik,
         searchNamaDaftarLayanan,
         searchStatus,
         searchTipeDaftarLayanan
