@@ -56,12 +56,14 @@ const klinikBHPControllers = {
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
       const searchNamaKlinik = req.query.searchNamaKlinik || '';
+      const searchTipe = req.query.searchTipe || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allKlinikBHP({
         search,
         searchNamaKlinik,
+        searchTipe,
         searchStatus,
         sortBy,
         sortOrder,
@@ -71,7 +73,12 @@ const klinikBHPControllers = {
 
       const {
         rows: [count],
-      } = await countAllKlinikBHP(search, searchNamaKlinik, searchStatus);
+      } = await countAllKlinikBHP(
+        search,
+        searchNamaKlinik,
+        searchTipe,
+        searchStatus
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);

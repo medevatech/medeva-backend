@@ -25,6 +25,7 @@ const insertKlinikBHP = (data) => {
 const allKlinikBHP = ({
   search,
   searchNamaKlinik,
+  searchTipe,
   searchStatus,
   sortBy,
   sortOrder,
@@ -45,6 +46,8 @@ const allKlinikBHP = ({
       AND
         tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
       AND
+        tbl_klinik_bhp.tipe ILIKE '%${searchTipe}%' 
+      AND
         CAST(tbl_klinik_bhp.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_klinik_bhp.${sortBy} ${sortOrder} 
       LIMIT ${limit} OFFSET ${offset}`,
@@ -59,7 +62,12 @@ const allKlinikBHP = ({
   );
 };
 
-const countAllKlinikBHP = (search, searchNamaKlinik, searchStatus) => {
+const countAllKlinikBHP = (
+  search,
+  searchNamaKlinik,
+  searchTipe,
+  searchStatus
+) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
   FROM tbl_klinik_bhp AS tbl_klinik_bhp
@@ -68,6 +76,8 @@ const countAllKlinikBHP = (search, searchNamaKlinik, searchStatus) => {
     tbl_klinik_bhp.satuan ILIKE '%${search}%' 
   AND
     tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
+  AND
+    tbl_klinik_bhp.tipe ILIKE '%${searchTipe}%' 
   AND
     CAST(tbl_klinik_bhp.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
