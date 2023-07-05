@@ -46,7 +46,7 @@ const laboratoriumRouter = require('./laboratorium');
 const layananLaboratoriumRouter = require('./layananLaboratorium');
 const jblRouter = require('./jadwalBukaLaboratorium');
 
-const practiceScheduleRouter = require('./jadwalPraktik');
+const doctorScheduleRouter = require('./jadwalDokter');
 const contractRouter = require('./kontrak');
 
 router.use('/pasien', pasienRouter);
@@ -94,7 +94,7 @@ router.use('/laboratorium', laboratoriumRouter);
 router.use('/layanan-laboratorium', layananLaboratoriumRouter);
 router.use('/jbl', jblRouter);
 
-router.use('/praktik', practiceScheduleRouter);
+router.use('/jadwal-dokter', doctorScheduleRouter);
 router.use('/kontrak', contractRouter);
 
 module.exports = router;

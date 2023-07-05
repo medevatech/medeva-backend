@@ -55,6 +55,25 @@ const getContractById = (id) => {
   });
 };
 
+const getContractByIdEmployee = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
+            FROM tbl_kontrak as kt
+            INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
+            INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id
+            WHERE id_karyawan = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const updateContract = (id, data) => {
   const { id_clinic, id_employee } = data;
   return new Promise((resolve, reject) => {
@@ -128,6 +147,7 @@ module.exports = {
   createContract,
   getContract,
   getContractById,
+  getContractByIdEmployee,
   updateContract,
   archiveContract,
   activateContract,
