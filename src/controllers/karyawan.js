@@ -192,7 +192,7 @@ const karyawanController = {
     var idClinic = req.body.id_klinik;
     let {
       rows: [users],
-    } = await findLogin(inputLogin);
+    } = await findLogin(inputLogin, idClinic);
     if (!users) {
       return response(res, 400, false, null, "Akun tidak ditemukan");
     } else {
@@ -227,7 +227,7 @@ const karyawanController = {
         let refreshToken = generateRefreshToken(payload);
         const resData = {
           id: users.id,
-          id_klinik: idClinic,
+          id_klinik: users.id_klinik,
           nama: users.nama,
           email: users.email,
           username: users.username,
