@@ -7,6 +7,8 @@ const {
   activateDoctorSchedule,
   deleteDoctorSchedule,
   getDoctorScheduleById,
+  getDoctorScheduleByIdDivision,
+  getDoctorScheduleByIdDoctor,
 } = require("../models/jadwalDokter");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
@@ -34,8 +36,8 @@ const doctorScheduleController = {
         const diffDays = Math.round(
           Math.abs((firstDate - secondDate) / oneDay)
         );
-        console.log(interval);
-        console.log(diffDays);
+        // console.log(interval);
+        // console.log(diffDays);
         var dataArray = [];
         for (let i = 0; i <= diffDays; i += interval) {
           const nextDate = new Date(startTime);
@@ -57,7 +59,7 @@ const doctorScheduleController = {
           };
           dataArray.push(data);
         }
-        console.log(dataArray.length);
+        // console.log(dataArray.length);
         // console.log(dataArray);
         // console.log(dataArray[i]);
         for (let i = 0; i <= dataArray.length; i++) {
@@ -70,7 +72,7 @@ const doctorScheduleController = {
             start_time: dataArray[i].start_time,
             end_time: dataArray[i].end_time,
           };
-          console.log("temp", temp);
+          // console.log("temp", temp);
           await createPracticeSchedule(temp);
           // response(res, 200, true, dataArray, "Create schedule success")
           // res.status(200).json({ message: "Successfully" });
@@ -120,6 +122,50 @@ const doctorScheduleController = {
     } catch (err) {
       console.log(err);
       response(res, 400, false, null, "Get jadwal dokter berdasarkan id gagal");
+    }
+  },
+  getByIdDivision: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getDoctorScheduleByIdDivision(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal dokter berdasarkan id divisi berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get jadwal dokter berdasarkan id divisi gagal"
+      );
+    }
+  },
+  getByIdDoctor: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getDoctorScheduleByIdDoctor(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal dokter berdasarkan id dokter berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get jadwal dokter berdasarkan id dokter gagal"
+      );
     }
   },
   update: async (req, res, next) => {

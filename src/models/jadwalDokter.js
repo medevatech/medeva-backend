@@ -55,12 +55,13 @@ const getDoctorScheduleById = (id) => {
 const getDoctorScheduleByIdDivision = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.nama AS nama_divisi, kry.nama AS nama_karyawan, sub.nama AS nama_pengganti
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
       FROM tbl_jadwal_dokter AS jd
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
-      INNER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
-      WHERE jd.id_divisi = '${id}'`,
+      FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
+      WHERE jd.id_divisi = '${id}'
+      AND kry.is_dokter = 1`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -75,12 +76,21 @@ const getDoctorScheduleByIdDivision = (id) => {
 const getDoctorScheduleByIdDoctor = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.nama AS nama_divisi, kry.nama AS nama_karyawan, sub.nama AS nama_pengganti
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
       FROM tbl_jadwal_dokter AS jd
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
-      INNER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
-      WHERE jd.id_dokter = '${id}'`
+      FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
+      WHERE jd.id_dokter = '${id}'
+      AND kry.is_dokter = 1
+      `,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
     );
   });
 };

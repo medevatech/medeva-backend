@@ -21,10 +21,10 @@ const createContract = (data) => {
 const getContract = () => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
-            FROM tbl_kontrak as kt
-            INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
-            INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id`,
+      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama AS nama_karyawan
+            FROM tbl_kontrak AS kt
+            INNER JOIN tbl_klinik AS kln ON kt.id_klinik = kln.id
+            INNER JOIN tbl_karyawan AS kry ON kt.id_karyawan = kry.id`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -39,10 +39,10 @@ const getContract = () => {
 const getContractById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
-                  FROM tbl_kontrak as kt
-                  INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
-                  INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id
+      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama AS nama_karyawan
+                  FROM tbl_kontrak AS kt
+                  INNER JOIN tbl_klinik AS kln ON kt.id_klinik = kln.id
+                  INNER JOIN tbl_karyawan AS kry ON kt.id_karyawan = kry.id
                   WHERE kt.id = '${id}'`,
       (err, res) => {
         if (!err) {
@@ -58,11 +58,11 @@ const getContractById = (id) => {
 const getContractByIdEmployee = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama as nama_karyawan
-            FROM tbl_kontrak as kt
-            INNER JOIN tbl_klinik as kln ON kt.id_klinik = kln.id
-            INNER JOIN tbl_karyawan as kry ON kt.id_karyawan = kry.id
-            WHERE id_karyawan = '${id}'`,
+      `SELECT kt.id, kt.id_klinik, kt.id_karyawan, kln.nama_klinik, kry.nama AS nama_karyawan
+            FROM tbl_kontrak AS kt
+            INNER JOIN tbl_klinik AS kln ON kt.id_klinik = kln.id
+            INNER JOIN tbl_karyawan AS kry ON kt.id_karyawan = kry.id
+            WHERE kt.id_karyawan = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);

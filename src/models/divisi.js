@@ -15,8 +15,15 @@ const findDivisi = (tipe) => {
   });
 };
 
-const countDivisi = () => {
-  return pool.query(`SELECT COUNT(*) AS total FROM tbl_divisi`);
+const countDivisi = ({ searchName, searchKlinik, searchStatus }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total
+      FROM tbl_divisi
+      INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
+      WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      AND tbl_klinik.id ILIKE '%${searchKlinik}%'
+      AND tbl_divisi.tipe ILIKE '%${searchName}%'`
+  );
 };
 
 const createDivisi = (data) => {

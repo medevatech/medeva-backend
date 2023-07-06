@@ -62,8 +62,10 @@ const divisiController = {
       });
       const {
         rows: [count],
-      } = await countDivisi();
+      } = await countDivisi({ searchName, searchKlinik, searchStatus });
+      console.log({ count });
       const totalData = parseInt(count.total);
+      console.log(totalData);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
         currentPage: page,
