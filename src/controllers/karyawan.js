@@ -103,6 +103,7 @@ const karyawanController = {
         parseInt(req.body.is_dev) === 0 &&
         parseInt(req.body.is_manager) === 0 &&
         parseInt(req.body.is_finance) === 0 &&
+        parseInt(req.body.is_cashier) === 0 &&
         parseInt(req.body.is_admin) === 0 &&
         parseInt(req.body.is_dokter) === 0 &&
         parseInt(req.body.is_manajemen) === 0 &&
