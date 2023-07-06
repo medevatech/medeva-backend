@@ -190,7 +190,7 @@ const dashboardController = {
 
       //   GENERATE RESULT   //
       const result = {
-        peserta: 950,
+        peserta: 25876,
         pendapatan: 257039382,
         total_biaya_layanan: 123131000,
         kunjungan: {
