@@ -63,7 +63,7 @@ const doctorScheduleController = {
         // console.log(dataArray);
         // console.log(dataArray[i]);
         for (let i = 0; i <= dataArray.length; i++) {
-          let temp = {
+          var temp = {
             id: dataArray[i].id,
             id_clinic: dataArray[i].id_clinic,
             id_division: dataArray[i].id_division,
@@ -93,7 +93,7 @@ const doctorScheduleController = {
     } catch (err) {
       // console.log(err);
       if ((err.message = "Cannot read property 'id' of undefined")) {
-        response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
+        response(res, 200, true, temp, "Tambah jadwal dokter berhasil");
       } else {
         response(res, 400, false, err, "Tambah jadwal dokter gagal");
       }
