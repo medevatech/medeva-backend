@@ -11,6 +11,7 @@ const {
   deleteDivisi,
   getDivisiByIdClinic,
   getDistictDivision,
+  countDivisiDisticnt,
 } = require("../models/divisi");
 const { v4: uuidv4 } = require("uuid");
 
@@ -90,14 +91,14 @@ const divisiController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || "created_at";
+      const sortBy = req.query.sortBy || "tipe";
       const sortOrder = req.query.sortOrder || "desc";
       const searchName = req.query.searchName || "";
       const searchStatus = req.query.searchStatus || "";
       const searchKlinik = req.query.searchKlinik || "";
       const searchDivisi = req.query.searchDivisi || "";
       const offset = (page - 1) * limit;
-      const result = await getDivisi({
+      const result = await getDistictDivision({
         searchName,
         searchStatus,
         searchDivisi,
@@ -109,7 +110,7 @@ const divisiController = {
       });
       const {
         rows: [count],
-      } = await countDivisi();
+      } = await countDivisiDisticnt({ searchName, searchKlinik, searchStatus });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

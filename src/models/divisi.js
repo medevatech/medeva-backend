@@ -26,6 +26,17 @@ const countDivisi = ({ searchName, searchKlinik, searchStatus }) => {
   );
 };
 
+const countDivisiDisticnt = ({ searchName, searchKlinik, searchStatus }) => {
+  return pool.query(
+    `SELECT COUNT(DISTINCT (tbl_divisi.id, tbl_divisi.tipe)) AS total
+      FROM tbl_divisi
+      INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
+      WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      AND tbl_klinik.id ILIKE '%${searchKlinik}%'
+      AND tbl_divisi.tipe ILIKE '%${searchName}%'`
+  );
+};
+
 const createDivisi = (data) => {
   const { id, id_klinik, tipe } = data;
   return new Promise((resolve, reject) => {
@@ -203,6 +214,7 @@ module.exports = {
   createDivisi,
   findDivisi,
   countDivisi,
+  countDivisiDisticnt,
   getDivisi,
   getDistictDivision,
   getDivisiById,
