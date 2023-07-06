@@ -236,11 +236,11 @@ const dashboardController = {
           desember: 100,
         },
         tipe_rujukan: {
-          januari: { spesialistik: 5, non_spesialistik: 95 },
-          februari: { spesialistik: 80, non_spesialistik: 20 },
-          maret: { spesialistik: 25, non_spesialistik: 75 },
-          april: { spesialistik: 35, non_spesialistik: 65 },
-          mei: { spesialistik: 11, non_spesialistik: 89 },
+          januari: { spesialistik: 5, non_spesialistik: 0.3 },
+          februari: { spesialistik: 80, non_spesialistik: 2 },
+          maret: { spesialistik: 25, non_spesialistik: 0.9 },
+          april: { spesialistik: 35, non_spesialistik: 18 },
+          mei: { spesialistik: 11, non_spesialistik: 15 },
           juni: {
             spesialistik: 55,
             non_spesialistik: 45,
