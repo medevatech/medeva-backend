@@ -4,12 +4,10 @@ const { nonDoctorController } = require("../controllers/jadwalNonDokter");
 // const { protect } = require("../middleware/auth");
 
 router.post("/", nonDoctorController.create);
-// router.get("/", protect, shiftController.get);
-// router.get("/:id", protect, shiftController.getById);
-// router.get("/clinic/:id", protect, shiftController.getByIdClinic);
-// router.put("/:id", protect, shiftController.update);
-// router.put("/archive/:id", protect, shiftController.archive);
-// router.put("/activate/:id", protect, shiftController.activate);
-// router.delete("/:id", protect, shiftController.delete);
-
+router.get("/", nonDoctorController.get);
+router.get("/:id", nonDoctorController.getById);
+router.get("/divisi/:id", nonDoctorController.getByIdDivision);
+router.get("/karyawan/:id", nonDoctorController.getByIdEmployee);
+router.put("/:id", nonDoctorController.update);
+router.put("/archive/:id", nonDoctorController.archive);
 module.exports = router;
