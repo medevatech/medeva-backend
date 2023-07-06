@@ -63,17 +63,15 @@ const doctorScheduleController = {
         // console.log(dataArray);
         // console.log(dataArray[i]);
         for (let i = 0; i <= dataArray.length; i++) {
-          var temp = [
-            {
-              id: dataArray[i].id,
-              id_clinic: dataArray[i].id_clinic,
-              id_division: dataArray[i].id_division,
-              id_doctor: dataArray[i].id_doctor,
-              date: dataArray[i].date,
-              start_time: dataArray[i].start_time,
-              end_time: dataArray[i].end_time,
-            },
-          ];
+          var temp = {
+            id: dataArray[i].id,
+            id_clinic: dataArray[i].id_clinic,
+            id_division: dataArray[i].id_division,
+            id_doctor: dataArray[i].id_doctor,
+            date: dataArray[i].date,
+            start_time: dataArray[i].start_time,
+            end_time: dataArray[i].end_time,
+          };
           // console.log("temp", temp);
           await createPracticeSchedule(temp);
           // response(res, 200, true, dataArray, "Create schedule success")
@@ -95,7 +93,7 @@ const doctorScheduleController = {
     } catch (err) {
       // console.log(err);
       if ((err.message = "Cannot read property 'id' of undefined")) {
-        response(res, 200, true, temp, "Tambah jadwal dokter berhasil");
+        response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
       } else {
         response(res, 400, false, err, "Tambah jadwal dokter gagal");
       }
