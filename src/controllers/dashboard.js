@@ -245,16 +245,16 @@ const dashboardController = {
             spesialistik: 55,
             non_spesialistik: 45,
           },
-          juli: { spesialistik: 18, non_spesialistik: 82 },
+          juli: { spesialistik: 18, non_spesialistik: 12 },
           agustus: {
             spesialistik: 63,
-            non_spesialistik: 37,
+            non_spesialistik: 7,
           },
-          september: { spesialistik: 44, non_spesialistik: 56 },
-          oktober: { spesialistik: 29, non_spesialistik: 71 },
+          september: { spesialistik: 44, non_spesialistik: 6 },
+          oktober: { spesialistik: 29, non_spesialistik: 11 },
           november: {
             spesialistik: 22,
-            non_spesialistik: 78,
+            non_spesialistik: 18,
           },
           desember: {
             spesialistik: 88,
