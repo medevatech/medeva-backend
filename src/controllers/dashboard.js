@@ -208,8 +208,8 @@ const dashboardController = {
           desember: 200,
         },
         tipe_kunjungan: {
-          januari: { jalan: 15, inap: 10, promotif: 25, preventif: 25 },
-          februari: { jalan: 5, inap: 19, promotif: 60, preventif: 26 },
+          januari: { jalan: 15, inap: 10, promotif: 50, preventif: 25 },
+          februari: { jalan: 5, inap: 19, promotif: 60, preventif: 16 },
           maret: { jalan: 20, inap: 10, promotif: 14, preventif: 56 },
           april: { jalan: 29, inap: 36, promotif: 15, preventif: 20 },
           mei: { jalan: 17, inap: 16, promotif: 36, preventif: 31 },
