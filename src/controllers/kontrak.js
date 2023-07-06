@@ -14,12 +14,12 @@ const { v4: uuidv4 } = require("uuid");
 const contractController = {
   create: async (req, res, next) => {
     try {
-      const { id_clinic, id_employee } = req.body;
+      const { id_klinik, id_karyawan } = req.body;
       const id = uuidv4();
       const data = {
         id: id,
-        id_clinic: id_clinic,
-        id_employee: id_employee,
+        id_clinic: id_klinik,
+        id_employee: id_karyawan,
       };
       await createContract(data);
       response(res, 200, true, data, "Tambah kontrak berhasil");
