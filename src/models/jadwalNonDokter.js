@@ -5,7 +5,7 @@ const createNonDoctorSchedule = (data) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `INSERT INTO tbl_jadwal_non_dokter
-        (id, id_karyawan, id_pengganti, id_jadwal_dokter, is_active, created_at, updated_at)
+        (id, id_karyawan, id_jadwal_dokter, is_active, created_at, updated_at)
         VALUES ('${id}', '${id_employee}', '${id_doctor_schedule}', 1, NOW(), NOW())`,
       (err, res) => {
         if (!err) {
