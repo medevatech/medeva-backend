@@ -192,7 +192,7 @@ const dashboardController = {
       const result = {
         peserta: 950,
         pendapatan: 257039382,
-        total_biaya_layanan: 123131,
+        total_biaya_layanan: 123131000,
         kunjungan: {
           januari: 50,
           februari: 50,
@@ -287,8 +287,8 @@ const dashboardController = {
           totalData: 6,
           totalPage: 1,
         },
-        biaya_layanan: { high: 35, medium: 35, low: 30 },
-
+        // biaya_layanan: { high: 35, medium: 35, low: 30 },
+        biaya_layanan: { biaya: 40, pendapatan: 100 },
         komponen_layanan: { bhp: 950000, bnmhp: 856000, jasa_medis: 450000 },
         analisa_biaya_penyakit: [
           {
@@ -491,11 +491,7 @@ const dashboardController = {
           penanganan_luka: 1000,
           suntik_vitamin: 22122455,
         },
-        biaya_layanan: {
-          low: 23,
-          medium: 17,
-          high: 60,
-        },
+        biaya_layanan: { biaya: 40, pendapatan: 100 },
         komponen_layanan: { bhp: 12, bnmhp: 45, jasa_medis: 134 },
         analisa_unit_cost: [
           {
