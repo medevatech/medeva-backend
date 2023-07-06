@@ -30,10 +30,26 @@ const findUsername = (username) => {
   });
 };
 
-const findLogin = (input_login, id_klinik) => {
+const findLogin = (input_login) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * from tbl_karyawan WHERE (email = '${input_login}' OR username = '${input_login}') AND id_klinik = '${id_klinik}'`,
+      `SELECT * from tbl_karyawan WHERE email = '${input_login}' OR username = '${input_login}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const findContract = (idClinic) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT * FROM tbl_kontrak
+      WHERE id_klinik = '${idClinic}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -275,6 +291,7 @@ module.exports = {
   findEmail,
   findUsername,
   findLogin,
+  findContract,
   countKaryawan,
   createKaryawan,
   getKaryawan,

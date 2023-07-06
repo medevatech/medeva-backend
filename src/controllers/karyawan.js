@@ -13,6 +13,7 @@ const {
   archiveKaryawan,
   activateKaryawan,
   deleteKaryawan,
+  findContract,
 } = require("../models/karyawan");
 const argon2 = require("argon2");
 const { generateToken, generateRefreshToken } = require("../helpers/auth");
@@ -194,8 +195,13 @@ const karyawanController = {
     var idClinic = req.body.id_klinik;
     let {
       rows: [users],
-    } = await findLogin(inputLogin, idClinic);
-    if (!users) {
+    } = await findLogin(inputLogin);
+    let {
+      rows: [contract],
+    } = await findContract(idClinic);
+    console.log(users);
+    console.log(contract);
+    if (!users || !contract) {
       return response(res, 400, false, null, "Akun tidak ditemukan");
     } else {
       let validation = await argon2.verify(users.password, req.body.password);
