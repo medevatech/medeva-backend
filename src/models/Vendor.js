@@ -49,7 +49,7 @@ const allVendor = ({
       `SELECT tbl_vendor.id, 
         tbl_vendor.nama, tbl_vendor.telepon, tbl_vendor.whatsapp, 
         tbl_vendor.website, tbl_vendor.instagram, tbl_vendor.facebook, 
-        tbl_vendor.email, tbl_vendor.alamat, 
+        tbl_vendor.email, tbl_vendor.alamat, tbl_vendor.is_active, 
         tbl_vendor.created_at, tbl_vendor.updated_at
       FROM tbl_vendor AS tbl_vendor
       WHERE
@@ -74,9 +74,9 @@ const countAllVendor = (search, searchStatus) => {
     `SELECT COUNT(*) AS total
     FROM tbl_vendor AS tbl_vendor
     WHERE
-        tbl_vendor.nama ILIKE '%${search}%' 
+      tbl_vendor.nama ILIKE '%${search}%' 
     AND
-        CAST(tbl_vendor.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      CAST(tbl_vendor.is_active AS TEXT) ILIKE '%${searchStatus}%'
     `
   );
 };
@@ -87,7 +87,7 @@ const getVendorByIdVendor = ({ id }) => {
       `SELECT tbl_vendor.id, 
         tbl_vendor.nama, tbl_vendor.telepon, tbl_vendor.whatsapp, 
         tbl_vendor.website, tbl_vendor.instagram, tbl_vendor.facebook, 
-        tbl_vendor.email, tbl_vendor.alamat, 
+        tbl_vendor.email, tbl_vendor.alamat, tbl_vendor.is_active, 
         tbl_vendor.created_at, tbl_vendor.updated_at
       FROM tbl_vendor AS tbl_vendor
       WHERE tbl_vendor.id = '${id}'`,
