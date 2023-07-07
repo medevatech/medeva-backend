@@ -70,11 +70,13 @@ const pasienControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchKlinik = req.query.searchKlinik || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allPasien({
         search,
+        searchKlinik,
         searchStatus,
         sortBy,
         sortOrder,
