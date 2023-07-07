@@ -1,9 +1,9 @@
 const express = require(`express`);
 const router = express.Router();
 const { pasienControllers } = require(`../controllers/pasien`);
-const { protect } = require("../middleware/auth");
-const { cache } = require("../middleware/redis");
-let multer = require("multer");
+const { protect } = require('../middleware/auth');
+const { cache } = require('../middleware/redis');
+let multer = require('multer');
 let uploaded = multer();
 
 router.post(`/`, protect, uploaded.array(), pasienControllers.add);

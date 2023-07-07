@@ -86,7 +86,7 @@ const pasienControllers = {
 
       const {
         rows: [count],
-      } = await countAllPasien(search, searchStatus);
+      } = await countAllPasien(search, searchKlinik, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
