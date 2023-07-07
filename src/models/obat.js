@@ -52,6 +52,12 @@ const allObat = ({
       FROM tbl_obat AS tbl_obat
       WHERE
         tbl_obat.nama ILIKE '%${search}%'
+      OR
+        tbl_obat.produsen ILIKE '%${search}%'
+      OR
+        tbl_obat.deskripsi ILIKE '%${search}%'
+      OR
+        tbl_obat.indikasi ILIKE '%${search}%'
       AND
         CAST (tbl_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_obat.${sortBy} ${sortOrder} 
@@ -73,6 +79,12 @@ const countAllObat = (search, searchStatus) => {
   FROM tbl_obat AS tbl_obat
   WHERE
     tbl_obat.nama ILIKE '%${search}%'
+  OR
+    tbl_obat.produsen ILIKE '%${search}%'
+  OR
+    tbl_obat.deskripsi ILIKE '%${search}%'
+  OR
+    tbl_obat.indikasi ILIKE '%${search}%'
   AND
     CAST (tbl_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
