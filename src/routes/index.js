@@ -40,6 +40,7 @@ const layananBHPRouter = require('./layananBHP.js');
 const klinikPaketRouter = require('./klinikPaket.js');
 const paketBHPRouter = require('./paketBHP.js');
 const vendorRouter = require('./vendor.js');
+const klinikPasienRouter = require('./klinikPasien.js');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -93,6 +94,7 @@ router.use('/layanan-bhp', layananBHPRouter);
 router.use('/klinik-paket', klinikPaketRouter);
 router.use('/paket-bhp', paketBHPRouter);
 router.use('/vendor', vendorRouter);
+router.use('/klinik-pasien', klinikPasienRouter);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
