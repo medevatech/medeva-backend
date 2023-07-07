@@ -31,9 +31,8 @@ const insertKlinikLayanan = (data) => {
 const allKlinikLayanan = ({
   search,
   searchKlinik,
-  searchNamaDaftarLayanan,
   searchStatus,
-  searchTipeDaftarLayanan,
+  searchTipe,
   sortBy,
   sortOrder,
   limit,
@@ -50,13 +49,11 @@ const allKlinikLayanan = ({
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_layanan.id_klinik = tbl_klinik.id
       INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_klinik_layanan.id_daftar_layanan = tbl_daftar_layanan.id
       WHERE
-        CAST(tbl_klinik_layanan.harga_jual AS TEXT) ILIKE '%${search}%' 
+        tbl_daftar_layanan.nama ILIKE '%${search}%' 
       AND
         tbl_klinik_layanan.id_klinik ILIKE '%${searchKlinik}%' 
       AND
-        tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
-      AND
-        tbl_daftar_layanan.tipe ILIKE '%${searchTipeDaftarLayanan}%' 
+        tbl_daftar_layanan.tipe ILIKE '%${searchTipe}%' 
       AND
         CAST(tbl_klinik_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_klinik_layanan.${sortBy} ${sortOrder} 
@@ -75,9 +72,8 @@ const allKlinikLayanan = ({
 const countAllKlinikLayanan = (
   search,
   searchKlinik,
-  searchNamaDaftarLayanan,
   searchStatus,
-  searchTipeDaftarLayanan
+  searchTipe
 ) => {
   return Pool.query(
     `SELECT COUNT(*) AS total 
@@ -85,15 +81,13 @@ const countAllKlinikLayanan = (
     INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_layanan.id_klinik = tbl_klinik.id
     INNER JOIN tbl_daftar_layanan as tbl_daftar_layanan ON tbl_klinik_layanan.id_daftar_layanan = tbl_daftar_layanan.id
     WHERE
-      CAST(tbl_klinik_layanan.harga_jual AS TEXT) ILIKE '%${search}%' 
+      tbl_daftar_layanan.nama ILIKE '%${search}%' 
     AND
       tbl_klinik_layanan.id_klinik ILIKE '%${searchKlinik}%' 
     AND
-        tbl_daftar_layanan.nama ILIKE '%${searchNamaDaftarLayanan}%' 
+      tbl_daftar_layanan.tipe ILIKE '%${searchTipe}%' 
     AND
-        tbl_daftar_layanan.tipe ILIKE '%${searchTipeDaftarLayanan}%' 
-    AND
-        CAST(tbl_klinik_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`
+      CAST(tbl_klinik_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'`
   );
 };
 
