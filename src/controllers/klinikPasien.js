@@ -128,15 +128,15 @@ const klinikPasienControllers = {
   },
   getByIdKlinik: async (req, res) => {
     try {
-      const id_klinik_bhp = req.params.id_klinik_bhp;
+      const id_klinik = req.params.id_klinik;
 
       const result = await getKlinikPasienByIdKlinik({
-        id_klinik_bhp,
+        id_klinik,
       });
 
       const {
         rows: [findKlinik],
-      } = await findKlinikPasienByIdKlinik(id_klinik_bhp);
+      } = await findKlinikPasienByIdKlinik(id_klinik);
 
       if (findKlinik) {
         response(res, 200, true, result.rows, 'get klinik pasien success');
@@ -146,7 +146,7 @@ const klinikPasienControllers = {
           404,
           false,
           null,
-          `id klinik bhp (${id_klinik_bhp}) not found, check again`
+          `id klinik (${id_klinik}) not found, check again`
         );
       }
     } catch (error) {
@@ -156,15 +156,15 @@ const klinikPasienControllers = {
   },
   getByIdPasien: async (req, res) => {
     try {
-      const id_klinik_layanan = req.params.id_klinik_layanan;
+      const id_pasien = req.params.id_pasien;
 
       const result = await getKlinikPasienByIdPasien({
-        id_klinik_layanan,
+        id_pasien,
       });
 
       const {
         rows: [findPasien],
-      } = await findKlinikPasienByIdPasien(id_klinik_layanan);
+      } = await findKlinikPasienByIdPasien(id_pasien);
 
       if (findPasien) {
         response(res, 200, true, result.rows, 'get klinik pasien success');
@@ -174,7 +174,7 @@ const klinikPasienControllers = {
           404,
           false,
           null,
-          `id klinik layanan (${id_klinik_layanan}) not found, check again`
+          `id klinik layanan (${id_pasien}) not found, check again`
         );
       }
     } catch (error) {
