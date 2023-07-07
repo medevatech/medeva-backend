@@ -58,14 +58,12 @@ const layananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchDaftarLayanan = req.query.searchDaftarLayanan || '';
       const searchStatus = req.query.searchStatus || '';
       const searchDone = req.query.searchDone || '';
       const offset = (page - 1) * limit;
 
       const result = await allLayanan({
         search,
-        searchDaftarLayanan,
         searchStatus,
         searchDone,
         sortBy,

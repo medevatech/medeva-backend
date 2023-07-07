@@ -31,7 +31,6 @@ const insertLayanan = (data) => {
 
 const allLayanan = ({
   search,
-  searchDaftarLayanan,
   searchStatus,
   searchDone,
   sortBy,
@@ -48,9 +47,7 @@ const allLayanan = ({
       FROM tbl_layanan AS tbl_layanan
       INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
       WHERE
-        tbl_layanan.id ILIKE '%${search}%' 
-      AND
-        tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%'
+        tbl_daftar_layanan.nama ILIKE '%${search}%' 
       AND
         CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND
@@ -68,20 +65,13 @@ const allLayanan = ({
   );
 };
 
-const countAllLayanan = (
-  search,
-  searchDaftarLayanan,
-  searchStatus,
-  searchDone
-) => {
+const countAllLayanan = (search, searchStatus, searchDone) => {
   return Pool.query(`
   SELECT COUNT(*) AS total
   FROM tbl_layanan AS tbl_layanan
   INNER JOIN tbl_daftar_layanan AS tbl_daftar_layanan ON tbl_layanan.id_daftar_layanan = tbl_daftar_layanan.id
   WHERE
-    tbl_layanan.id ILIKE '%${search}%' 
-  AND
-    tbl_daftar_layanan.nama ILIKE '%${searchDaftarLayanan}%'
+    tbl_daftar_layanan.nama ILIKE '%${search}%' 
   AND
     CAST(tbl_layanan.is_active AS TEXT) ILIKE '%${searchStatus}%'
   AND
