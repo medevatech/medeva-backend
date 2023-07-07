@@ -56,15 +56,11 @@ const klinikObatControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
-      const searchNamaKlinik = req.query.searchNamaKlinik || '';
-      const searchNamaObat = req.query.searchNamaObat || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
       const result = await allKlinikObat({
         search,
-        searchNamaKlinik,
-        searchNamaObat,
         searchStatus,
         sortBy,
         sortOrder,
@@ -74,12 +70,7 @@ const klinikObatControllers = {
 
       const {
         rows: [count],
-      } = await countAllKlinikObat(
-        search,
-        searchNamaKlinik,
-        searchNamaObat,
-        searchStatus
-      );
+      } = await countAllKlinikObat(search, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);

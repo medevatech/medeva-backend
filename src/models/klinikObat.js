@@ -23,8 +23,6 @@ const insertKlinikObat = (data) => {
 
 const allKlinikObat = ({
   search,
-  searchNamaKlinik,
-  searchNamaObat,
   searchStatus,
   sortBy,
   sortOrder,
@@ -42,11 +40,9 @@ const allKlinikObat = ({
       INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_obat.id_klinik = tbl_klinik.id
       INNER JOIN tbl_obat as tbl_obat ON tbl_klinik_obat.id_obat = tbl_obat.id
       WHERE
-        tbl_klinik.nama_klinik ILIKE '%${search}%' 
-      AND
-        tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
-      AND
-        tbl_obat.nama ILIKE '%${searchNamaObat}%' 
+        tbl_klinik.nama_klinik ILIKE '%${search}%'
+      OR
+        tbl_obat.nama ILIKE '%${search}%' 
       AND
         CAST(tbl_klinik_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_klinik_obat.${sortBy} ${sortOrder} 
@@ -62,25 +58,20 @@ const allKlinikObat = ({
   );
 };
 
-const countAllKlinikObat = (
-  search,
-  searchNamaKlinik,
-  searchNamaObat,
-  searchStatus
-) => {
-  return Pool.query(`
-  SELECT COUNT(*) AS total
-  FROM tbl_klinik_obat AS tbl_klinik_obat
-  INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_obat.id_klinik = tbl_klinik.id
-  INNER JOIN tbl_obat as tbl_obat ON tbl_klinik_obat.id_obat = tbl_obat.id
-  WHERE
-    tbl_klinik.nama_klinik ILIKE '%${search}%' 
-  AND
-    tbl_klinik.nama_klinik ILIKE '%${searchNamaKlinik}%' 
-  AND
-    tbl_obat.nama ILIKE '%${searchNamaObat}%' 
-  AND
-    CAST(tbl_klinik_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
+const countAllKlinikObat = (search, searchStatus) => {
+  return Pool.query(
+    `SELECT COUNT(*) AS total
+    FROM tbl_klinik_obat AS tbl_klinik_obat
+    INNER JOIN tbl_klinik as tbl_klinik ON tbl_klinik_obat.id_klinik = tbl_klinik.id
+    INNER JOIN tbl_obat as tbl_obat ON tbl_klinik_obat.id_obat = tbl_obat.id
+    WHERE
+      tbl_klinik.nama_klinik ILIKE '%${search}%'
+    OR
+      tbl_obat.nama ILIKE '%${search}%' 
+    AND
+      CAST(tbl_klinik_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'
+  `
+  );
 };
 
 const getKlinikObatByIdKlinikObat = ({ id }) => {
