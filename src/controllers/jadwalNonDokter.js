@@ -9,6 +9,7 @@ const {
   archiveNonDoctorSchedule,
   activateNonDoctorSchedule,
   deleteNonDoctorSchedule,
+  getNonDoctorScheduleByIdDoctorSchedule,
 } = require("../models/jadwalNonDokter");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
@@ -106,6 +107,28 @@ const nonDoctorController = {
         false,
         err,
         "Get jadwal non dokter berdasarkan id karyawan gagal"
+      );
+    }
+  },
+  getByIdDoctorSchedule: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getNonDoctorScheduleByIdDoctorSchedule(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal non dokter berdasarkan id jadwal jaga berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        err,
+        "Get jadwal non dokter berdasarkan id jadwal jaga gagal"
       );
     }
   },
