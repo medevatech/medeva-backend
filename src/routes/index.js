@@ -106,7 +106,7 @@ router.use("/laboratorium", laboratoriumRouter);
 router.use("/layanan-laboratorium", layananLaboratoriumRouter);
 router.use("/jbl", jblRouter);
 
-router.use("/jadwal-dokter", jagaRouter);
+router.use("/jadwal-jaga", jagaRouter);
 router.use("/kontrak", contractRouter);
 
 module.exports = router;
