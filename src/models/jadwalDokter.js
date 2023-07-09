@@ -37,7 +37,7 @@ const getDoctorSchedule = () => {
 const getDoctorScheduleById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, kry.nama, jd.tanggal, jd.waktu_mulai, jd.waktu_selesai, jd.id_pengganti
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, kry.nama, jd.tanggal, jd.waktu_mulai, jd.waktu_selesai, jd.id_pengganti, jd.is_active
       FROM tbl_jadwal_dokter AS jd
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
       WHERE jd.id = '${id}'`,
@@ -55,7 +55,7 @@ const getDoctorScheduleById = (id) => {
 const getDoctorScheduleByIdDivision = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
       FROM tbl_jadwal_dokter AS jd
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
@@ -75,7 +75,7 @@ const getDoctorScheduleByIdDivision = (id) => {
 const getDoctorScheduleByIdDoctor = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
       FROM tbl_jadwal_dokter AS jd
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
