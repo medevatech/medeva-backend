@@ -114,7 +114,7 @@ const getDoctorScheduleByIdDoctor = (id) => {
 const getDistinctSchedule = ({ search }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT DISTINCT ON(jd.id_divisi) jd.id, jd.id_klinik, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
+      `SELECT DISTINCT ON(jd.id_divisi) jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
       FROM tbl_jadwal_jaga AS jd
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
