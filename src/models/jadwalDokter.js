@@ -60,8 +60,7 @@ const getDoctorScheduleByIdDivision = (id) => {
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
       FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
-      WHERE jd.id_divisi = '${id}'
-      AND kry.is_dokter = 1`,
+      WHERE jd.id_divisi = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -82,7 +81,6 @@ const getDoctorScheduleByIdDoctor = (id) => {
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
       FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
       WHERE jd.id_dokter = '${id}'
-      AND kry.is_dokter = 1
       `,
       (err, res) => {
         if (!err) {
