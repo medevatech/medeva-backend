@@ -54,7 +54,7 @@ const createDivisi = (data) => {
 };
 
 const getDivisi = ({
-  searchName,
+  search,
   searchStatus,
   searchKlinik,
   searchDivisi,
@@ -68,7 +68,7 @@ const getDivisi = ({
       `SELECT divisi.id, divisi.id_klinik, divisi.tipe, klinik.nama_klinik as nama_klinik, divisi.is_active
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
-        WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE divisi.tipe ILIKE ('%${search}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
@@ -82,7 +82,7 @@ const getDivisi = ({
 };
 
 const getDistictDivision = ({
-  searchName,
+  search,
   searchStatus,
   searchKlinik,
   searchDivisi,
@@ -96,7 +96,7 @@ const getDistictDivision = ({
       `SELECT DISTINCT ON(divisi.id, divisi.tipe) divisi.id, divisi.tipe, divisi.id_klinik, klinik.nama_klinik
       FROM tbl_divisi as divisi
       INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
-      WHERE divisi.tipe ILIKE ('%${searchName}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE divisi.tipe ILIKE ('%${search}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);

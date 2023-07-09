@@ -35,11 +35,11 @@ const createKlinik = (data) => {
   });
 };
 
-const getKlinik = ({ searchName, sortBy, sortOrder, limit, offset }) => {
+const getKlinik = ({ search, sortBy, sortOrder, limit, offset }) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT * FROM tbl_klinik
-              WHERE tbl_klinik.nama_klinik ILIKE ('%${searchName}%')
+              WHERE tbl_klinik.nama_klinik ILIKE ('%${search}%')
               ORDER BY tbl_klinik.${sortBy} ${sortOrder}
               LIMIT ${limit}
               OFFSET ${offset}`,

@@ -66,7 +66,7 @@ const antrianController = {
     try {
       const page = req.query.page || 1;
       const limit = req.query.limit || 10;
-      const searchName = req.query.searchName || "";
+      const search = req.query.search || "";
       const searchDivisi = req.query.searchDivisi || "";
       const searchJaga = req.query.searchJaga || "";
       const searchStatus = req.query.searchStatus || 1;
@@ -76,7 +76,7 @@ const antrianController = {
       // const dateNow = new Date().toISOString().slice(0, 10);
       const date = req.query.date || dateDefault;
       const result = await getAntrian({
-        searchName,
+        search,
         searchDivisi,
         searchJaga,
         searchStatus,
@@ -115,7 +115,7 @@ const antrianController = {
     try {
       const page = req.query.page || 1;
       const limit = req.query.limit || 10;
-      const searchName = req.query.searchName || "";
+      const search = req.query.search || "";
       const searchDivisi = req.params.id;
       const searchJaga = req.query.searchJaga || "";
       const searchStatus = req.query.searchStatus || 1;
@@ -126,7 +126,7 @@ const antrianController = {
       // const dateNow = new Date().toISOString().slice(0, 10);
       const date = req.query.date || dateDefault;
       const result = await getQueueByScheduleId({
-        searchName,
+        search,
         searchDivisi,
         searchJaga,
         searchStatus,

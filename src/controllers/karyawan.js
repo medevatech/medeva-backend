@@ -282,13 +282,13 @@ const karyawanController = {
       const limit = req.query.limit || 10;
       const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
-      const searchName = req.query.searchName || "";
+      const search = req.query.search || "";
       const searchTipe = req.query.searchTipe || "";
       const searchSpesialis = req.query.searchSpesialis || "";
       const searchStatus = req.query.searchStatus || "";
       const offset = (page - 1) * limit;
       const result = await getKaryawan({
-        searchName,
+        search,
         searchTipe,
         searchSpesialis,
         searchStatus,

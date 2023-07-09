@@ -115,7 +115,7 @@ const createKaryawan = (data) => {
 };
 
 const getKaryawan = ({
-  searchName,
+  search,
   searchTipe,
   searchSpesialis,
   searchStatus,
@@ -126,7 +126,7 @@ const getKaryawan = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT kry.id, kry.nama, kry.username, kry.email, kry.is_dev, kry.is_manager, kry.is_admin, kry.is_resepsionis, kry.is_perawat, kry.is_dokter, kry.is_manajemen, kry.is_finance, kry.is_cashier, kry.jenis_kelamin, kry.nomor_kitas, kry.tipe_izin, kry.nomor_izin, to_char(kry.kadaluarsa_izin, 'YYYY-MM-DD') as kadaluarsa_izin, kry.nomor_hp, kry.tempat_lahir, to_char(kry.tanggal_lahir, 'YYYY-MM-DD') as tanggal_lahir, kry.alamat, kry.provinsi, kry.kota, kry.kecamatan, kry.kelurahan, kry.kode_pos, kry.status_menikah, kry.tipe, kry.spesialis, kry.is_active, to_char(kry.created_at, 'DD Month YYYY - HH24:MI') as created_at, to_char(kry.updated_at, 'DD Month YYYY - HH24:MI') as updated_at FROM tbl_karyawan as kry WHERE kry.nama ILIKE '%${searchName}%' AND kry.tipe ILIKE '%${searchTipe}%' AND kry.spesialis ILIKE '%${searchSpesialis}%' AND CAST(kry.is_active AS TEXT) ILIKE '%${searchStatus}%' ORDER BY kry.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT kry.id, kry.nama, kry.username, kry.email, kry.is_dev, kry.is_manager, kry.is_admin, kry.is_resepsionis, kry.is_perawat, kry.is_dokter, kry.is_manajemen, kry.is_finance, kry.is_cashier, kry.jenis_kelamin, kry.nomor_kitas, kry.tipe_izin, kry.nomor_izin, to_char(kry.kadaluarsa_izin, 'YYYY-MM-DD') as kadaluarsa_izin, kry.nomor_hp, kry.tempat_lahir, to_char(kry.tanggal_lahir, 'YYYY-MM-DD') as tanggal_lahir, kry.alamat, kry.provinsi, kry.kota, kry.kecamatan, kry.kelurahan, kry.kode_pos, kry.status_menikah, kry.tipe, kry.spesialis, kry.is_active, to_char(kry.created_at, 'DD Month YYYY - HH24:MI') as created_at, to_char(kry.updated_at, 'DD Month YYYY - HH24:MI') as updated_at FROM tbl_karyawan as kry WHERE kry.nama ILIKE '%${search}%' AND kry.tipe ILIKE '%${searchTipe}%' AND kry.spesialis ILIKE '%${searchSpesialis}%' AND CAST(kry.is_active AS TEXT) ILIKE '%${searchStatus}%' ORDER BY kry.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
