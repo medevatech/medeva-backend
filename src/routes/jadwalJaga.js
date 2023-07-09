@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { doctorScheduleController } = require("../controllers/jadwalDokter");
+const { doctorScheduleController } = require("../controllers/jadwalJaga");
 
 router.post("/", doctorScheduleController.create);
 router.get("/", doctorScheduleController.get);

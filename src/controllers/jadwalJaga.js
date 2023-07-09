@@ -9,7 +9,7 @@ const {
   getDoctorScheduleById,
   getDoctorScheduleByIdDivision,
   getDoctorScheduleByIdDoctor,
-} = require("../models/jadwalDokter");
+} = require("../models/jadwalJaga");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 

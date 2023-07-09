@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { nonDoctorController } = require("../controllers/jadwalNonDokter");
+const { nonDoctorController } = require("../controllers/shift");
 // const { protect } = require("../middleware/auth");
 
 router.post("/", nonDoctorController.create);
