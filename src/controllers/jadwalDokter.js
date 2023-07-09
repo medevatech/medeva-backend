@@ -87,13 +87,16 @@ const doctorScheduleController = {
           start_time: startTime,
           end_time: endTime,
         };
+        console.log(data);
         await createDoctorSchedule(data);
         response(res, 200, true, data, "Tambah jadwal dokter berhasil");
       }
     } catch (err) {
       // console.log(err);
-      if ((err.message = "Cannot read property 'id' of undefined")) {
+      if (err.message === "Cannot read property 'id' of undefined") {
         response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
+      } else if (err.message !== "Cannot read property 'id' of undefined") {
+        response(res, 400, false, err, "Tambah jadwal dokter gagal");
       } else {
         response(res, 400, false, err, "Tambah jadwal dokter gagal");
       }
