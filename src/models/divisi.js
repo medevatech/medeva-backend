@@ -15,25 +15,25 @@ const findDivisi = (tipe) => {
   });
 };
 
-const countDivisi = ({ searchName, searchKlinik, searchStatus }) => {
+const countDivisi = ({ search, searchKlinik, searchStatus }) => {
   return pool.query(
     `SELECT COUNT(*) AS total
       FROM tbl_divisi
       INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
       WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND tbl_klinik.id ILIKE '%${searchKlinik}%'
-      AND tbl_divisi.tipe ILIKE '%${searchName}%'`
+      AND tbl_divisi.tipe ILIKE '%${search}%'`
   );
 };
 
-const countDivisiDisticnt = ({ searchName, searchKlinik, searchStatus }) => {
+const countDivisiDisticnt = ({ search, searchKlinik, searchStatus }) => {
   return pool.query(
     `SELECT COUNT(DISTINCT (tbl_divisi.id, tbl_divisi.tipe)) AS total
       FROM tbl_divisi
       INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
       WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND tbl_klinik.id ILIKE '%${searchKlinik}%'
-      AND tbl_divisi.tipe ILIKE '%${searchName}%'`
+      AND tbl_divisi.tipe ILIKE '%${search}%'`
   );
 };
 
