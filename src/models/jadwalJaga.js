@@ -17,6 +17,24 @@ const createDoctorSchedule = (data) => {
   });
 };
 
+const countSchedule = ({ search }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total
+    FROM tbl_jadwal_jaga
+    INNER JOIN tbl_divisi ON tbl_jadwal_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${search}%'`
+  );
+};
+
+const countScheduleDistinct = ({ search }) => {
+  return pool.query(
+    `SELECT COUNT(DISTINCT tbl_divisi.id) AS total
+    FROM tbl_jadwal_jaga
+    INNER JOIN tbl_divisi ON tbl_jadwal_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.tipe ILIKE '%${search}%'`
+  );
+};
+
 const getDoctorSchedule = () => {
   return new Promise((resolve, reject) => {
     pool.query(
@@ -81,6 +99,28 @@ const getDoctorScheduleByIdDoctor = (id) => {
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
       FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
       WHERE jd.id_dokter = '${id}'
+      `,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
+const getDistinctSchedule = ({ search }) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT DISTINCT ON(jd.id_divisi) jd.id, jd.id_klinik, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
+      FROM tbl_jadwal_jaga AS jd
+      INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
+      INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
+      FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
+      WHERE kry.nama ILIKE '%${search}%'
+      OR dvs.tipe ILIKE '%${search}%'
       `,
       (err, res) => {
         if (!err) {
@@ -189,10 +229,13 @@ const deleteDoctorSchedule = (id) => {
 
 module.exports = {
   createDoctorSchedule,
+  countSchedule,
+  countScheduleDistinct,
   getDoctorSchedule,
   getDoctorScheduleById,
   getDoctorScheduleByIdDivision,
   getDoctorScheduleByIdDoctor,
+  getDistinctSchedule,
   updateDoctorSchedule,
   archiveDoctorSchedule,
   activateDoctorSchedule,

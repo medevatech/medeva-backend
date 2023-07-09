@@ -4,6 +4,7 @@ const { doctorScheduleController } = require("../controllers/jadwalJaga");
 
 router.post("/", doctorScheduleController.create);
 router.get("/", doctorScheduleController.get);
+router.get("/distinct", doctorScheduleController.getDistinct);
 router.get("/:id", doctorScheduleController.getById);
 router.get("/divisi/:id", doctorScheduleController.getByIdDivision);
 router.get("/personal/:id", doctorScheduleController.getByIdDoctor);
