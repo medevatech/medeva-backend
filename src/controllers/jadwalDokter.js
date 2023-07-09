@@ -73,7 +73,7 @@ const doctorScheduleController = {
             end_time: dataArray[i].end_time,
           };
           // console.log("temp", temp);
-          await createPracticeSchedule(temp);
+          await createDoctorSchedule(temp);
           // response(res, 200, true, dataArray, "Create schedule success")
           // res.status(200).json({ message: "Successfully" });
         }
@@ -92,7 +92,7 @@ const doctorScheduleController = {
         response(res, 200, true, data, "Tambah jadwal dokter berhasil");
       }
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       if (err.message === "Cannot read property 'id' of undefined") {
         response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
       } else if (err.message !== "Cannot read property 'id' of undefined") {
