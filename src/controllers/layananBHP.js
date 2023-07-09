@@ -1,5 +1,4 @@
 const { response } = require(`../middleware/common`);
-const { insertLayanan } = require('../models/layanan');
 const {
   insertLayananBHP,
   allLayananBHP,

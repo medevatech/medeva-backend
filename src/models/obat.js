@@ -22,7 +22,7 @@ const insertObat = (data) => {
         satuan, jual_per, produsen, deskripsi, indikasi, is_active,
         created_at, updated_at) 
       VALUES
-        ('${id}', '${nama}', '${golongan}', '${kategori}', '${dosis}', '${satuan_dosis}', 
+        ('${id}', '${nama}', '${golongan}', '${kategori}', ${dosis}, '${satuan_dosis}', 
         '${satuan}', '${jual_per}', '${produsen}', '${deskripsi}', '${indikasi}', ${is_active}, 
         NOW(), NOW())`,
       (err, result) => {
@@ -52,6 +52,12 @@ const allObat = ({
       FROM tbl_obat AS tbl_obat
       WHERE
         tbl_obat.nama ILIKE '%${search}%'
+      OR
+        tbl_obat.produsen ILIKE '%${search}%'
+      OR
+        tbl_obat.deskripsi ILIKE '%${search}%'
+      OR
+        tbl_obat.indikasi ILIKE '%${search}%'
       AND
         CAST (tbl_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_obat.${sortBy} ${sortOrder} 
@@ -73,6 +79,12 @@ const countAllObat = (search, searchStatus) => {
   FROM tbl_obat AS tbl_obat
   WHERE
     tbl_obat.nama ILIKE '%${search}%'
+  OR
+    tbl_obat.produsen ILIKE '%${search}%'
+  OR
+    tbl_obat.deskripsi ILIKE '%${search}%'
+  OR
+    tbl_obat.indikasi ILIKE '%${search}%'
   AND
     CAST (tbl_obat.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
 };
@@ -127,7 +139,7 @@ const editObat = (data) => {
     Pool.query(
       `UPDATE tbl_obat 
       SET
-        nama='${nama}', golongan='${golongan}', kategori='${kategori}', dosis='${dosis}', satuan_dosis='${satuan_dosis}', 
+        nama='${nama}', golongan='${golongan}', kategori='${kategori}', dosis=${dosis}, satuan_dosis='${satuan_dosis}', 
           satuan='${satuan}', jual_per='${jual_per}', produsen='${produsen}', deskripsi='${deskripsi}', indikasi='${indikasi}', is_active=${is_active}, 
         updated_at=NOW()
       WHERE id='${id}'`,

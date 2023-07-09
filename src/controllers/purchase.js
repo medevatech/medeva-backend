@@ -1,35 +1,30 @@
 const { response } = require(`../middleware/common`);
 const {
-  insertKlinikObat,
-  allKlinikObat,
-  countAllKlinikObat,
-  getKlinikObatByIdKlinikObat,
-  findKlinikObatByIdKlinikObat,
-  getKlinikObatByIdKlinik,
-  findKlinikObatByIdKlinik,
-  getKlinikObatByIdObat,
-  findKlinikObatByIdObat,
-  editKlinikObat,
-  editKlinikObatActivate,
-  editKlinikObatArchive,
-  deleteKlinikObat,
-} = require(`../models/klinikObat.js`);
+  insertPurchase,
+  allPurchase,
+  countAllPurchase,
+  getPurchaseByIdPurchase,
+  findPurchaseByIdPurchase,
+  getPurchaseByIdKlinik,
+  findPurchaseByIdKlinik,
+  getPurchaseByIdVendor,
+  findPurchaseByIdVendor,
+  editPurchase,
+  editPurchaseActivate,
+  editPurchaseArchive,
+  deletePurchase,
+} = require(`../models/purchase.js`);
 const { v4: uuidv4 } = require('uuid');
 
-const klinikObatControllers = {
+const purchaseControllers = {
   add: async (req, res, next) => {
     try {
       let data = {
         id: uuidv4(),
         id_klinik: req.body.id_klinik,
-        id_obat: req.body.id_obat,
-        harga_jual: req.body.harga_jual,
+        id_vendor: req.body.id_vendor,
         is_active: 1,
       };
-
-      if (req.body.harga_jual === '') {
-        data.besar_klaim = 0;
-      }
 
       let isError = false;
 
@@ -41,12 +36,12 @@ const klinikObatControllers = {
       }
 
       if (isError === false) {
-        await insertKlinikObat(data);
-        response(res, 200, true, data, 'insert klinik obat success');
+        await insertPurchase(data);
+        response(res, 200, true, data, 'insert purchase success');
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'insert klinik obat failed');
+      response(res, 404, false, error, 'insert purchase failed');
     }
   },
   getAll: async (req, res) => {
@@ -56,11 +51,15 @@ const klinikObatControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchNamaKlinik = req.query.searchNamaKlinik || '';
+      const searchNamaVendor = req.query.searchNamaVendor || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
-      const result = await allKlinikObat({
+      const result = await allPurchase({
         search,
+        searchNamaKlinik,
+        searchNamaVendor,
         searchStatus,
         sortBy,
         sortOrder,
@@ -70,7 +69,12 @@ const klinikObatControllers = {
 
       const {
         rows: [count],
-      } = await countAllKlinikObat(search, searchStatus);
+      } = await countAllPurchase(
+        search,
+        searchNamaKlinik,
+        searchNamaVendor,
+        searchStatus
+      );
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -81,101 +85,94 @@ const klinikObatControllers = {
         totalPage,
       };
 
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        'get klinik obat success',
-        pagination
-      );
+      response(res, 200, true, result.rows, 'get purchase success', pagination);
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get klinik obat failed');
+      response(res, 404, false, error, 'get purchase failed');
     }
   },
   getById: async (req, res) => {
     try {
       const id = req.params.id;
 
-      const result = await getKlinikObatByIdKlinikObat({
+      const result = await getPurchaseByIdPurchase({
         id,
       });
 
       const {
-        rows: [findKlinikObat],
-      } = await findKlinikObatByIdKlinikObat(id);
+        rows: [findPurchase],
+      } = await findPurchaseByIdPurchase(id);
 
-      if (findKlinikObat) {
-        response(res, 200, true, result.rows, 'get klinik obat success');
+      if (findPurchase) {
+        response(res, 200, true, result.rows, 'get purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik obat not found, check again`
+          `id purchase (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get klinik obat failed');
+      response(res, 404, false, error, 'get purchase failed');
     }
   },
   getByIdKlinik: async (req, res) => {
     try {
       const id_klinik = req.params.id_klinik;
 
-      const result = await getKlinikObatByIdKlinik({
+      const result = await getPurchaseByIdKlinik({
         id_klinik,
       });
 
       const {
         rows: [findKlinik],
-      } = await findKlinikObatByIdKlinik(id_klinik);
+      } = await findPurchaseByIdKlinik(id_klinik);
 
       if (findKlinik) {
-        response(res, 200, true, result.rows, 'get klinik obat success');
+        response(res, 200, true, result.rows, 'get purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik ${id_klinik} not found, check again`
+          `id klinik (${id_klinik}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get klinik obat failed');
+      response(res, 404, false, error, 'get purchase failed');
     }
   },
-  getByIdObat: async (req, res) => {
+  getByIdVendor: async (req, res) => {
     try {
-      const id_obat = req.params.id_obat;
+      const id_vendor = req.params.id_vendor;
 
-      const result = await getKlinikObatByIdObat({
-        id_obat,
+      const result = await getPurchaseByIdVendor({
+        id_vendor,
       });
 
       const {
-        rows: [findObat],
-      } = await findKlinikObatByIdObat(id_obat);
+        rows: [findVendor],
+      } = await findPurchaseByIdVendor(id_vendor);
 
-      if (findObat) {
-        response(res, 200, true, result.rows, 'get klinik obat success');
+      if (findVendor) {
+        response(res, 200, true, result.rows, 'get purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id obat ${id_obat} kelas not found, check again`
+          `id vendor (${id_vendor}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get klinik obat failed');
+      response(res, 404, false, error, 'get purchase failed');
     }
   },
   edit: async (req, res, next) => {
@@ -183,32 +180,31 @@ const klinikObatControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findKlinikObat],
-      } = await findKlinikObatByIdKlinikObat(id);
+        rows: [findPurchase],
+      } = await findPurchaseByIdPurchase(id);
 
-      if (findKlinikObat) {
+      if (findPurchase) {
         let data = {
           id,
           id_klinik: req.body.id_klinik,
-          id_obat: req.body.id_obat,
-          harga_jual: req.body.harga_jual,
+          id_vendor: req.body.id_vendor,
           is_active: 1,
         };
 
-        await editKlinikObat(data);
-        response(res, 200, true, data, 'edit klinik obat success');
+        await editPurchase(data);
+        response(res, 200, true, data, 'edit purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik obat not found, check again`
+          `id purchase (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit klinik obat failed');
+      response(res, 404, false, error, 'edit purchase failed');
     }
   },
   editActivate: async (req, res, next) => {
@@ -216,29 +212,29 @@ const klinikObatControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findKlinikObat],
-      } = await findKlinikObatByIdKlinikObat(id);
+        rows: [findPurchase],
+      } = await findPurchaseByIdPurchase(id);
 
-      if (findKlinikObat) {
+      if (findPurchase) {
         let data = {
           id,
           is_active: 1,
         };
 
-        await editKlinikObatActivate(data);
-        response(res, 200, true, data, 'activate klinik obat success');
+        await editPurchaseActivate(data);
+        response(res, 200, true, data, 'activate purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik obat not found, check again`
+          `id purchase (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'activate klinik obat failed');
+      response(res, 404, false, error, 'activate purchase failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -246,29 +242,29 @@ const klinikObatControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findKlinikObat],
-      } = await findKlinikObatByIdKlinikObat(id);
+        rows: [findPurchase],
+      } = await findPurchaseByIdPurchase(id);
 
-      if (findKlinikObat) {
+      if (findPurchase) {
         let data = {
           id,
           is_active: 0,
         };
 
-        await editKlinikObatArchive(data);
-        response(res, 200, true, data, 'archive klinik obat success');
+        await editPurchaseArchive(data);
+        response(res, 200, true, data, 'archive purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik obat not found, check again`
+          `id purchase (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'archive klinik obat failed');
+      response(res, 404, false, error, 'archive purchase failed');
     }
   },
   delete: async (req, res) => {
@@ -276,30 +272,30 @@ const klinikObatControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findKlinikObat],
-      } = await findKlinikObatByIdKlinikObat(id);
+        rows: [findPurchase],
+      } = await findPurchaseByIdPurchase(id);
 
-      if (findKlinikObat) {
+      if (findPurchase) {
         let data = {
           id,
         };
 
-        await deleteKlinikObat(data);
-        response(res, 200, true, data, 'delete klinik obat success');
+        await deletePurchase(data);
+        response(res, 200, true, data, 'delete purchase success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik obat not found, check again`
+          `id purchase (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'delete klinik obat failed');
+      response(res, 404, false, error, 'delete purchase failed');
     }
   },
 };
 
-exports.klinikObatControllers = klinikObatControllers;
+exports.purchaseControllers = purchaseControllers;

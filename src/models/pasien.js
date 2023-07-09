@@ -48,6 +48,7 @@ const insertPasien = (data) => {
 
 const allPasien = ({
   search,
+  searchKlinik,
   searchStatus,
   sortBy,
   sortOrder,
@@ -56,15 +57,20 @@ const allPasien = ({
 }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
+      `SELECT tbl_pasien.id, 
+        tbl_klinik_pasien.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
         tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, tbl_pasien.tanggal_lahir, tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah, tbl_pasien.is_active, 
-          tbl_pasien.created_at,
-          tbl_pasien.updated_at
+        tbl_pasien.created_at, tbl_pasien.updated_at
       FROM tbl_pasien AS tbl_pasien
+      INNER JOIN tbl_klinik_pasien AS tbl_klinik_pasien ON tbl_pasien.id = tbl_klinik_pasien.id_pasien
+      INNER JOIN tbl_klinik AS tbl_klinik ON tbl_klinik_pasien.id_klinik = tbl_klinik.id
       WHERE
         tbl_pasien.nama_lengkap ILIKE '%${search}%' 
+      AND
+        tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
       AND
         CAST(tbl_pasien.is_active AS TEXT) ILIKE '%${searchStatus}%'
       ORDER BY tbl_pasien.${sortBy} ${sortOrder} 
@@ -80,26 +86,35 @@ const allPasien = ({
   );
 };
 
-const countAllPasien = (search, searchStatus) => {
-  return Pool.query(`
-  SELECT COUNT(*) AS total
-  FROM tbl_pasien
-  WHERE
-    tbl_pasien.nama_lengkap ILIKE '%${search}%' 
-  AND
-    CAST(tbl_pasien.is_active AS TEXT) ILIKE '%${searchStatus}%'`);
+const countAllPasien = (search, searchKlinik, searchStatus) => {
+  return Pool.query(
+    `SELECT COUNT(*) AS total
+    FROM tbl_pasien AS tbl_pasien
+    INNER JOIN tbl_klinik_pasien AS tbl_klinik_pasien ON tbl_pasien.id = tbl_klinik_pasien.id_pasien
+    INNER JOIN tbl_klinik AS tbl_klinik ON tbl_klinik_pasien.id_klinik = tbl_klinik.id
+    WHERE
+      tbl_pasien.nama_lengkap ILIKE '%${search}%' 
+    AND
+      tbl_klinik.nama_klinik ILIKE '%${searchKlinik}%' 
+    AND
+      CAST(tbl_pasien.is_active AS TEXT) ILIKE '%${searchStatus}%'
+  `
+  );
 };
 
 const getPasienByIdPasien = ({ id }) => {
   return new Promise((resolve, reject) =>
     Pool.query(
-      `SELECT tbl_pasien.id, tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
+      `SELECT tbl_pasien.id, 
+        tbl_klinik_pasien.id_klinik, tbl_klinik.nama_klinik AS nama_klinik,
+        tbl_pasien.nama_lengkap, tbl_pasien.jenis_kelamin, tbl_pasien.tipe_kitas, tbl_pasien.nomor_kitas, 
         tbl_pasien.nomor_hp, tbl_pasien.tempat_lahir, tbl_pasien.tanggal_lahir, tbl_pasien.alamat, tbl_pasien.kelurahan, tbl_pasien.kecamatan,
         tbl_pasien.kota, tbl_pasien.provinsi, tbl_pasien.kode_pos, tbl_pasien.agama, tbl_pasien.kewarganegaraan, 
         tbl_pasien.pekerjaan, tbl_pasien.status_menikah, tbl_pasien.golongan_darah, tbl_pasien.is_active, 
-          tbl_pasien.created_at,
-          tbl_pasien.updated_at
+        tbl_pasien.created_at, tbl_pasien.updated_at
       FROM tbl_pasien AS tbl_pasien
+      INNER JOIN tbl_klinik_pasien AS tbl_klinik_pasien ON tbl_pasien.id = tbl_klinik_pasien.id_pasien
+      INNER JOIN tbl_klinik AS tbl_klinik ON tbl_klinik_pasien.id_klinik = tbl_klinik.id
       WHERE tbl_pasien.id = '${id}'`,
       (err, result) => {
         if (!err) {
