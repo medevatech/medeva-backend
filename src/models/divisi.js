@@ -27,7 +27,12 @@ const countDivisi = ({ search, searchKlinik, searchStatus, searchDivisi }) => {
   );
 };
 
-const countDivisiDisticnt = ({ search, searchKlinik, searchStatus }) => {
+const countDivisiDisticnt = ({
+  search,
+  searchKlinik,
+  searchStatus,
+  searchDivisi,
+}) => {
   return pool.query(
     `SELECT COUNT(DISTINCT (tbl_divisi.id, tbl_divisi.tipe)) AS total
       FROM tbl_divisi
