@@ -178,24 +178,26 @@ const doctorScheduleController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      // const sortBy = req.query.sortBy || 'id_divisi';
-      // const sortOrder = req.query.sortOrder || 'desc';
+      const sortBy = req.query.sortBy || "id_divisi";
+      const sortOrder = req.query.sortOrder || "desc";
       const search = req.query.search || "";
+      const searchClinic = req.query.searchKlinik || "";
       // const searchStatus = req.query.searchStatus || '';
       // const searchDivisi = req.query.searchDivisi || "";
       const offset = (page - 1) * limit;
       const result = await getDistinctSchedule({
         search,
+        searchClinic,
         // searchStatus,
         // searchDivisi,
-        // sortBy,
-        // sortOrder,
-        // limit,
-        // offset,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
       });
       const {
         rows: [count],
-      } = await countScheduleDistinct({ search });
+      } = await countScheduleDistinct({ search, searchClinic });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

@@ -286,12 +286,14 @@ const karyawanController = {
       const searchTipe = req.query.searchTipe || "";
       const searchSpesialis = req.query.searchSpesialis || "";
       const searchStatus = req.query.searchStatus || "";
+      const searchClinic = req.query.searchKlinik || "";
       const offset = (page - 1) * limit;
       const result = await getKaryawan({
         search,
         searchTipe,
         searchSpesialis,
         searchStatus,
+        searchClinic,
         sortBy,
         sortOrder,
         limit,
@@ -299,7 +301,13 @@ const karyawanController = {
       });
       const {
         rows: [count],
-      } = await countKaryawan();
+      } = await countKaryawan({
+        search,
+        searchTipe,
+        searchStatus,
+        searchSpesialis,
+        searchClinic,
+      });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {

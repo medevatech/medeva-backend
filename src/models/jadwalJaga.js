@@ -26,12 +26,13 @@ const countSchedule = ({ search }) => {
   );
 };
 
-const countScheduleDistinct = ({ search }) => {
+const countScheduleDistinct = ({ search, searchClinic }) => {
   return pool.query(
     `SELECT COUNT(DISTINCT tbl_divisi.id) AS total
     FROM tbl_jadwal_jaga
     INNER JOIN tbl_divisi ON tbl_jadwal_jaga.id_divisi = tbl_divisi.id
-    WHERE tbl_divisi.tipe ILIKE '%${search}%'`
+    WHERE tbl_jadwal_jaga.id_klinik ILIKE '%${searchClinic}%'
+    AND tbl_divisi.tipe ILIKE '%${search}%'`
   );
 };
 
@@ -111,7 +112,14 @@ const getDoctorScheduleByIdDoctor = (id) => {
   });
 };
 
-const getDistinctSchedule = ({ search }) => {
+const getDistinctSchedule = ({
+  search,
+  searchClinic,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT DISTINCT ON(jd.id_divisi) jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
@@ -119,8 +127,10 @@ const getDistinctSchedule = ({ search }) => {
       INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
       INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
       FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
-      WHERE kry.nama ILIKE '%${search}%'
-      OR dvs.tipe ILIKE '%${search}%'
+      WHERE jd.id_klinik ILIKE '%${searchClinic}%'
+      AND (kry.nama ILIKE '%${search}%' OR dvs.tipe ILIKE '%${search}%')
+      ORDER BY jd.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+      
       `,
       (err, res) => {
         if (!err) {

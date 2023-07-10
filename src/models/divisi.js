@@ -15,13 +15,14 @@ const findDivisi = (tipe) => {
   });
 };
 
-const countDivisi = ({ search, searchKlinik, searchStatus }) => {
+const countDivisi = ({ search, searchKlinik, searchStatus, searchDivisi }) => {
   return pool.query(
     `SELECT COUNT(*) AS total
       FROM tbl_divisi
       INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
       WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND tbl_klinik.id ILIKE '%${searchKlinik}%'
+      AND tbl_divisi.id ILIKE '%${searchDivisi}%'
       AND tbl_divisi.tipe ILIKE '%${search}%'`
   );
 };
@@ -33,6 +34,7 @@ const countDivisiDisticnt = ({ search, searchKlinik, searchStatus }) => {
       INNER JOIN tbl_klinik ON tbl_divisi.id_klinik = tbl_klinik.id
       WHERE CAST(tbl_divisi.is_active AS TEXT) ILIKE '%${searchStatus}%'
       AND tbl_klinik.id ILIKE '%${searchKlinik}%'
+      AND tbl_divisi.id ILIKE '%${searchDivisi}%'
       AND tbl_divisi.tipe ILIKE '%${search}%'`
   );
 };
@@ -68,7 +70,13 @@ const getDivisi = ({
       `SELECT divisi.id, divisi.id_klinik, divisi.tipe, klinik.nama_klinik as nama_klinik, divisi.is_active
         FROM tbl_divisi as divisi 
         INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
-        WHERE divisi.tipe ILIKE ('%${search}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
+        WHERE divisi.tipe ILIKE ('%${search}%')
+        AND divisi.is_active ILIKE '%${searchStatus}%'
+        AND divisi.id_klinik ILIKE '%${searchKlinik}%'
+        AND divisi.id ILIKE '%${searchDivisi}%'
+        ORDER BY divisi.${sortBy} ${sortOrder}
+        LIMIT ${limit}
+        OFFSET ${offset}
       `,
       (err, res) => {
         if (!err) {
@@ -96,7 +104,13 @@ const getDistictDivision = ({
       `SELECT DISTINCT ON(divisi.id, divisi.tipe) divisi.id, divisi.tipe, divisi.id_klinik, klinik.nama_klinik
       FROM tbl_divisi as divisi
       INNER JOIN tbl_klinik as klinik ON divisi.id_klinik = klinik.id
-      WHERE divisi.tipe ILIKE ('%${search}%') AND divisi.is_active ILIKE '%${searchStatus}%' AND divisi.id_klinik ILIKE '%${searchKlinik}%' AND divisi.id ILIKE '%${searchDivisi}%' ORDER BY divisi.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE divisi.tipe ILIKE ('%${search}%')
+      AND divisi.is_active ILIKE '%${searchStatus}%'
+      AND divisi.id_klinik ILIKE '%${searchKlinik}%'
+      AND divisi.id ILIKE '%${searchDivisi}%'
+      ORDER BY divisi.${sortBy} ${sortOrder}
+      LIMIT ${limit}
+      OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
