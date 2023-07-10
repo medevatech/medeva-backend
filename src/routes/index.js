@@ -49,6 +49,7 @@ const bahanObatRouter = require('./bahanObat.js');
 const klinikPurchasingObatRouter = require('./klinikPurchasingObat.js');
 const klinikStokObatRouter = require('./klinikStokObat.js');
 const layananJasaRouter = require('./layananJasa.js');
+const salesRouter = require('./sales.js');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -110,6 +111,7 @@ router.use('/bahan-obat', bahanObatRouter);
 router.use('/klinik-purchasing-obat', klinikPurchasingObatRouter);
 router.use('/klinik-stok-obat', klinikStokObatRouter);
 router.use('/layanan-jasa', layananJasaRouter);
+router.use('/sales', salesRouter);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
