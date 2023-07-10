@@ -47,6 +47,7 @@ const klinikStokBHPRouter = require('./klinikStokBHP.js');
 const terdaftarRouter = require('./terdaftar.js');
 const bahanObatRouter = require('./bahanObat.js');
 const klinikPurchasingObatRouter = require('./klinikPurchasingObat.js');
+const klinikStokObatRouter = require('./klinikStokObat.js');
 
 const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
@@ -106,6 +107,7 @@ router.use('/klinik-stok-bhp', klinikStokBHPRouter);
 router.use('/terdaftar', terdaftarRouter);
 router.use('/bahan-obat', bahanObatRouter);
 router.use('/klinik-purchasing-obat', klinikPurchasingObatRouter);
+router.use('/klinik-stok-obat', klinikStokObatRouter);
 
 router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
