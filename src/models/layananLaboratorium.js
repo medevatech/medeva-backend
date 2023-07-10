@@ -4,6 +4,16 @@ const countLayananLaboratorium = () => {
   return pool.query(`SELECT COUNT(*) AS total FROM tbl_layanan_laboratorium`);
 };
 
+const countLayananLaboratoriumByIdLab = ({ id }) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total
+    FROM tbl_layanan_laboratorium
+    INNER JOIN tbl_laboratorium ON tbl_layanan_laboratorium.id_laboratorium = tbl_laboratorium.id
+    INNER JOIN tbl_pemeriksaan ON tbl_layanan_laboratorium.id_pemeriksaan = tbl_pemeriksaan.id
+    WHERE tbl_layanan_laboratorium.id_laboratorium = '${id}'`
+  );
+};
+
 const createLayananLaboratorium = (data) => {
   const { id, id_laboratorium, id_pemeriksaan, kategori } = data;
   return new Promise((resolve, reject) => {
@@ -91,6 +101,34 @@ const getLayananLaboratoriumById = (id) => {
   });
 };
 
+const getLayananLaboratoriumByIdLab = ({
+  id,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT ll.id, ll.id_laboratorium, ll.id_pemeriksaan, ll.kategori, lab.nama AS nama_laboratorium, pm.nama AS nama_pemeriksaan, ll.created_at, ll.updated_at
+      FROM tbl_layanan_laboratorium AS ll
+      INNER JOIN tbl_laboratorium AS lab ON ll.id_laboratorium = lab.id
+      INNER JOIN tbl_pemeriksaan AS pm ON ll.id_pemeriksaan = pm.id
+      WHERE ll.id_laboratorium = '${id}'
+      ORDER BY ll.${sortBy} ${sortOrder}
+      LIMIT ${limit}
+      OFFSET ${offset}`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const updateLayananLaboratorium = (data) => {
   const { id, id_laboratorium, id_pemeriksaan, kategori } = data;
   return new Promise((resolve, reject) => {
@@ -125,12 +163,31 @@ const deleteLayananLaboratorium = (id) => {
   });
 };
 
+const deleteLayananLaboratoriumByIdLab = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `DELETE FROM tbl_layanan_laboratorium
+      WHERE id_laboratorium = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   createLayananLaboratorium,
   countLayananLaboratorium,
+  countLayananLaboratoriumByIdLab,
   getLayananLaboratorium,
   getDistinctLayananLaboratorium,
   getLayananLaboratoriumById,
+  getLayananLaboratoriumByIdLab,
   updateLayananLaboratorium,
   deleteLayananLaboratorium,
+  deleteLayananLaboratoriumByIdLab,
 };
