@@ -181,12 +181,12 @@ const layananLaboratoriumController = {
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const id_labo = req.body.id_labo;
+      const id_lab = req.body.id_lab;
       const id_pemeriksaan = req.body.id_pemeriksaan;
       const kategori = req.body.kategori;
       const data = {
         id,
-        id_labo,
+        id_lab,
         id_pemeriksaan,
         kategori,
       };
