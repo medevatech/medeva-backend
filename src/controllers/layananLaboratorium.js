@@ -22,7 +22,7 @@ const layananLaboratoriumController = {
       }
       const data = {
         id,
-        id_laboratorium: req.body.id_laboratorium,
+        id_lab: req.body.id_lab,
         id_pemeriksaan: req.body.id_pemeriksaan,
         kategori: req.body.kategori,
       };
