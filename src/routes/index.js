@@ -48,13 +48,12 @@ const karyawanRouter = require('./karyawan');
 const klinikRouter = require('./klinik');
 const divisiRouter = require('./divisi');
 const shiftRouter = require('./shift');
-const jagaRouter = require('./jaga');
+const jagaRouter = require('./jadwalJaga');
 const antrianRouter = require('./antrian');
 const laboratoriumRouter = require('./laboratorium');
 const layananLaboratoriumRouter = require('./layananLaboratorium');
 const jblRouter = require('./jadwalBukaLaboratorium');
 
-const doctorScheduleRouter = require('./jadwalDokter');
 const contractRouter = require('./kontrak');
 
 router.use('/pasien', pasienRouter);
@@ -104,13 +103,12 @@ router.use('/karyawan', karyawanRouter);
 router.use('/klinik', klinikRouter);
 router.use('/divisi', divisiRouter);
 router.use('/shift', shiftRouter);
-router.use('/jaga', jagaRouter);
 router.use('/antrian', antrianRouter);
 router.use('/laboratorium', laboratoriumRouter);
 router.use('/layanan-laboratorium', layananLaboratoriumRouter);
 router.use('/jbl', jblRouter);
 
-router.use('/jadwal-dokter', doctorScheduleRouter);
+router.use('/jadwal-jaga', jagaRouter);
 router.use('/kontrak', contractRouter);
 
 module.exports = router;

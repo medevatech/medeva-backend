@@ -9,7 +9,9 @@ const {
   getDoctorScheduleById,
   getDoctorScheduleByIdDivision,
   getDoctorScheduleByIdDoctor,
-} = require("../models/jadwalDokter");
+  getDistinctSchedule,
+  countScheduleDistinct,
+} = require("../models/jadwalJaga");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 
@@ -73,7 +75,7 @@ const doctorScheduleController = {
             end_time: dataArray[i].end_time,
           };
           // console.log("temp", temp);
-          await createPracticeSchedule(temp);
+          await createDoctorSchedule(temp);
           // response(res, 200, true, dataArray, "Create schedule success")
           // res.status(200).json({ message: "Successfully" });
         }
@@ -87,13 +89,16 @@ const doctorScheduleController = {
           start_time: startTime,
           end_time: endTime,
         };
+        console.log(data);
         await createDoctorSchedule(data);
         response(res, 200, true, data, "Tambah jadwal dokter berhasil");
       }
     } catch (err) {
-      // console.log(err);
-      if ((err.message = "Cannot read property 'id' of undefined")) {
+      console.log(err);
+      if (err.message === "Cannot read property 'id' of undefined") {
         response(res, 200, true, dataArray, "Tambah jadwal dokter berhasil");
+      } else if (err.message !== "Cannot read property 'id' of undefined") {
+        response(res, 400, false, err, "Tambah jadwal dokter gagal");
       } else {
         response(res, 400, false, err, "Tambah jadwal dokter gagal");
       }
@@ -166,6 +171,49 @@ const doctorScheduleController = {
         null,
         "Get jadwal dokter berdasarkan id dokter gagal"
       );
+    }
+  },
+  getDistinct: async (req, res, next) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      // const sortBy = req.query.sortBy || 'id_divisi';
+      // const sortOrder = req.query.sortOrder || 'desc';
+      const search = req.query.search || "";
+      // const searchStatus = req.query.searchStatus || '';
+      // const searchDivisi = req.query.searchDivisi || "";
+      const offset = (page - 1) * limit;
+      const result = await getDistinctSchedule({
+        search,
+        // searchStatus,
+        // searchDivisi,
+        // sortBy,
+        // sortOrder,
+        // limit,
+        // offset,
+      });
+      const {
+        rows: [count],
+      } = await countScheduleDistinct({ search });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get distinct schedule success",
+        pagination
+      );
+    } catch (err) {
+      console.log("err", err);
+      response(res, 400, false, null, "Get distinct schedule error");
     }
   },
   update: async (req, res, next) => {

@@ -1,151 +1,173 @@
-const { response } = require('../middleware/common');
+const { response } = require("../middleware/common");
 const {
-  createShift,
-  countShift,
-  getShift,
-  getShiftById,
-  updateShift,
-  archiveShift,
-  activateShift,
-  deleteShift,
-} = require('../models/shift');
+  createNonDoctorSchedule,
+  getNonDoctorSchedule,
+  getNonDoctorScheduleById,
+  getNonDoctorScheduleByIdDivision,
+  getNonDoctorScheduleByIdEmployee,
+  updateNonDoctorSchedule,
+  archiveNonDoctorSchedule,
+  activateNonDoctorSchedule,
+  deleteNonDoctorSchedule,
+  getNonDoctorScheduleByIdDoctorSchedule,
+} = require("../models/shift");
+const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
-const shiftController = {
+const nonDoctorController = {
   create: async (req, res, next) => {
     try {
-      let digits = '0123456789';
-      let id = 'SHF';
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
+      const id = uuidv4();
+      const id_doctor_schedule = req.body.id_doctor_schedule;
+      const id_employee = req.body.id_employee;
+      // const diff_days = req.body.diff_days;
+      // const interval = req.body.interval;
+      // const id_subtitute = req.body.id_pengganti
       const data = {
-        id,
-        id_schedule: req.body.id_schedule,
-        id_employee: req.body.id_employee,
+        id: id,
+        id_doctor_schedule: id_doctor_schedule,
+        id_employee: id_employee,
       };
-      console.log(data);
-      await createShift(data);
-      response(res, 200, true, data, 'Create shift success');
+      await createNonDoctorSchedule(data);
+      response(res, 200, true, data, "Tambah jadwal non dokter berhasil");
     } catch (err) {
       console.log(err);
-      response(res, 400, false, err, 'Create shift failed');
+      response(res, 400, false, err, "Tambah jadwal non dokter gagal");
     }
   },
   get: async (req, res, next) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      const sortBy = req.query.sortBy || 'hari';
-      const sortOrder = req.query.sortOrder || 'desc';
-      const searchName = req.query.searchName || '';
-      const searchStatus = req.query.searchStatus || '';
-      const offset = (page - 1) * limit;
-      const result = await getShift({
-        searchName,
-        searchStatus,
-        sortBy,
-        sortOrder,
-        limit,
-        offset,
-      });
-      const {
-        rows: [count],
-      } = await countShift();
-      const totalData = parseInt(count.total);
-      const totalPage = Math.ceil(totalData / limit);
-      const pagination = {
-        currentPage: page,
-        limit,
-        totalData,
-        totalPage,
-      };
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        'Get shift data success',
-        pagination
-      );
+      const result = await getNonDoctorSchedule();
+      response(res, 200, true, result.rows, "Get jadwal non dokter berhasil");
     } catch (err) {
-      console.log('Get shift data error', err);
-      response(res, 400, false, null, 'Get shift data failed');
+      console.log(err);
+      response(res, 400, false, err, "Get jadwal non dokter gagal");
     }
   },
   getById: async (req, res, next) => {
     try {
-      const result = await getShiftById(req.params.id);
-      response(res, 200, true, result.rows, 'Get shift data by ID success');
-    } catch (err) {
-      console.log('Get shift data by ID error', err);
-      response(res, 400, false, err, 'Get shift data by ID failed');
-    }
-  },
-  getByIdClinic: async (req, res, next) => {
-    try {
-      const result = await getShiftByIdClinic(req.params.id);
+      const id = req.params.id;
+      const result = await getNonDoctorScheduleById(id);
       response(
         res,
         200,
         true,
         result.rows,
-        'Get shift data by ID clinic success'
+        "Get jadwal non dokter berdasarkan id berhasil"
       );
     } catch (err) {
-      console.log('Get shift data by ID error', err);
-      response(res, 400, false, err, 'Get shift data by ID clinic failed');
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        err,
+        "Get jadwal non dokter berdasarkan id gagal"
+      );
+    }
+  },
+  getByIdDivision: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getNonDoctorScheduleByIdDivision(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal non dokter berdasarkan id divisi berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        err,
+        "Get jadwal non dokter berdasarkan id divisi gagal"
+      );
+    }
+  },
+  getByIdEmployee: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getNonDoctorScheduleByIdEmployee(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal non dokter berdasarkan id karyawan berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        err,
+        "Get jadwal non dokter berdasarkan id karyawan gagal"
+      );
+    }
+  },
+  getByIdDoctorSchedule: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const result = await getNonDoctorScheduleByIdDoctorSchedule(id);
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal non dokter berdasarkan id jadwal jaga berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        err,
+        "Get jadwal non dokter berdasarkan id jadwal jaga gagal"
+      );
     }
   },
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const id_klinik = req.body.id_klinik;
-      const id_divisi = req.body.id_divisi;
-      const hari = req.body.hari;
-      const tanggal = req.body.tanggal;
-      const waktu_mulai = req.body.waktu_mulai;
-      const waktu_selesai = req.body.waktu_selesai;
+      const { id_doctor_schedule, id_employee } = req.body;
       const data = {
-        id,
-        id_klinik,
-        id_divisi,
-        hari,
-        tanggal,
-        waktu_mulai,
-        waktu_selesai,
+        id: id,
+        id_doctor_schedule: id_doctor_schedule,
+        id_employee: id_employee,
       };
-      await updateShift(data);
-      response(res, 200, true, data, 'Update shift data success');
+      await updateNonDoctorSchedule(data);
+      response(res, 200, true, data, "Edit jadwal non dokter berhasil");
     } catch (err) {
-      console.log('Update shift data error', err);
-      response(res, 400, false, 'Update shift data failed');
+      console.log(err);
+      response(res, 400, false, err, "Edit jadwal non dokter gagal");
     }
   },
   archive: async (req, res, next) => {
     try {
-      await archiveShift(req.params.id);
-      return response(res, 200, true, null, 'Archive shift success');
+      const id = req.params.id;
+      await archiveNonDoctorSchedule(id);
+      response(res, 200, true, [], "Arsip jadwal non dokter berhasil");
     } catch (err) {
-      return response(res, 400, false, err, 'Archive shift failed');
+      console.log(err);
+      response(res, 400, false, null, "Arsip jadwal non dokter gagal");
     }
   },
   activate: async (req, res, next) => {
     try {
-      await activateShift(req.params.id);
-      return response(res, 200, true, null, 'Activate shift success');
+      const id = req.params.id;
+      await activateNonDoctorSchedule(id);
+      response(res, 200, true, [], "Aktivasi jadwal non dokter berhasil");
     } catch (err) {
-      return response(res, 400, false, err, 'Activate shift failed');
-    }
-  },
-  delete: async (req, res, next) => {
-    try {
-      await deleteShift(req.params.id);
-      response(res, 200, true, null, 'Delete shift success');
-    } catch (err) {
-      console.log('Delete shift error', err);
-      response(res, 400, false, err, 'Delete shift failed');
+      console.log(err);
+      response(res, 400, false, null, "Aktivasi jadwal non dokter gagal");
     }
   },
 };
 
-exports.shiftController = shiftController;
+exports.nonDoctorController = nonDoctorController;

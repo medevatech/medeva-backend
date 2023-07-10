@@ -64,7 +64,7 @@ const createAntrian = (data) => {
 };
 
 const getAntrian = ({
-  searchName,
+  search,
   searchDivisi,
   searchJaga,
   searchStatus,
@@ -85,7 +85,7 @@ const getAntrian = ({
       INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
       INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
       INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
-      WHERE antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${search}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -119,7 +119,7 @@ const getQueueByScheduleId = ({
   date,
   searchDivisi,
   searchStatus,
-  searchName,
+  search,
   searchJaga,
   searchDoctor,
   sortBy,
@@ -140,7 +140,7 @@ const getQueueByScheduleId = ({
       INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
       INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
       INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
-      WHERE jaga.id_divisi = '${searchDivisi}' AND antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND pasien.nama_lengkap ILIKE '%${searchName}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' AND jaga.id_karyawan ILIKE '%${searchDoctor}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE jaga.id_divisi = '${searchDivisi}' AND antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND pasien.nama_lengkap ILIKE '%${search}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' AND jaga.id_karyawan ILIKE '%${searchDoctor}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
