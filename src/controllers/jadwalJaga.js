@@ -11,6 +11,7 @@ const {
   getDoctorScheduleByIdDoctor,
   getDistinctSchedule,
   countScheduleDistinct,
+  getScheduleToday,
 } = require("../models/jadwalJaga");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
@@ -214,6 +215,35 @@ const doctorScheduleController = {
     } catch (err) {
       console.log("err", err);
       response(res, 400, false, null, "Get distinct schedule error");
+    }
+  },
+  getToday: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const today = new Date().toISOString().substr(0, 10);
+      const day = req.query.day || today;
+      console.log(day);
+      // const tempDay = moment(day).format("yyyy-MM-DD");
+      const result = await getScheduleToday({
+        id: id,
+        day: day,
+      });
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal jaga berdasarkan id divisi dan tanggal berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get jadwal jaga berdasarkan id divisi dan tanggal gagal"
+      );
     }
   },
   update: async (req, res, next) => {

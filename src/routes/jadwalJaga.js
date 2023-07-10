@@ -8,6 +8,7 @@ router.get("/distinct", doctorScheduleController.getDistinct);
 router.get("/:id", doctorScheduleController.getById);
 router.get("/divisi/:id", doctorScheduleController.getByIdDivision);
 router.get("/personal/:id", doctorScheduleController.getByIdDoctor);
+router.get("/today/:id", doctorScheduleController.getToday);
 router.put("/:id", doctorScheduleController.update);
 router.put("/archive/:id", doctorScheduleController.archive);
 router.put("/activate/:id", doctorScheduleController.activate);

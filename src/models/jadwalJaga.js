@@ -133,6 +133,30 @@ const getDistinctSchedule = ({ search }) => {
   });
 };
 
+const getScheduleToday = ({ id, day }) => {
+  console.log(day);
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT jd.id, jd.id_klinik, jd.id_divisi, jd.id_dokter, jd.id_pengganti, jd.tanggal, jd.waktu_mulai AS start, jd.waktu_selesai AS end, jd.is_active, dvs.tipe AS nama_divisi, kry.nama AS nama_karyawan, kry.is_dokter, sub.nama AS nama_pengganti
+      FROM tbl_jadwal_jaga AS jd
+      INNER JOIN tbl_divisi AS dvs ON jd.id_divisi = dvs.id
+      INNER JOIN tbl_karyawan AS kry ON jd.id_dokter = kry.id
+      FULL OUTER JOIN tbl_karyawan AS sub ON jd.id_pengganti = sub.id
+      WHERE jd.id_divisi = '${id}'
+      AND jd.tanggal = '${day}'
+      AND kry.is_dokter = 1
+      `,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const updateDoctorSchedule = (data) => {
   const {
     id,
@@ -236,6 +260,7 @@ module.exports = {
   getDoctorScheduleByIdDivision,
   getDoctorScheduleByIdDoctor,
   getDistinctSchedule,
+  getScheduleToday,
   updateDoctorSchedule,
   archiveDoctorSchedule,
   activateDoctorSchedule,

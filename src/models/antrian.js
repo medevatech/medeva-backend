@@ -20,9 +20,9 @@ const countAntrianAll = ({ searchDivisi, searchStatus, date }) => {
   return pool.query(
     `SELECT COUNT(*) AS total
     FROM tbl_antrian
-    INNER JOIN tbl_jaga ON tbl_antrian.id_jaga = tbl_jaga.id
-    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
-    WHERE tbl_divisi.id = '${searchDivisi}'
+    INNER JOIN tbl_jadwal_jaga ON tbl_antrian.id_jaga = tbl_jadwal_jaga.id
+    INNER JOIN tbl_divisi ON tbl_jadwal_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_jadwal_jaga.id_divisi ILIKE '%${searchDivisi}%'
     AND tbl_antrian.tanggal = '${date}'
     AND CAST(tbl_antrian.status AS TEXT) ILIKE '%${searchStatus}%'`
   );
@@ -37,12 +37,12 @@ const countAntrianDoctor = ({
   return pool.query(
     `SELECT COUNT(*) AS total
     FROM tbl_antrian
-    INNER JOIN tbl_jaga ON tbl_antrian.id_jaga = tbl_jaga.id
-    INNER JOIN tbl_divisi ON tbl_jaga.id_divisi = tbl_divisi.id
-    WHERE tbl_divisi.id = '${searchDivisi}'
+    INNER JOIN tbl_jadwal_jaga ON tbl_antrian.id_jaga = tbl_jadwal_jaga.id
+    INNER JOIN tbl_divisi ON tbl_jadwal_jaga.id_divisi = tbl_divisi.id
+    WHERE tbl_divisi.id ILIKE '%${searchDivisi}%'
     AND tbl_antrian.tanggal = '${date}'
     AND CAST(tbl_antrian.status AS TEXT) ILIKE '%${searchStatus}%'
-    AND tbl_jaga.id_karyawan ILIKE '%${searchDoctor}%'`
+    AND tbl_jadwal_jaga.id_dokter ILIKE '%${searchDoctor}%'`
   );
 };
 
@@ -74,18 +74,26 @@ const getAntrian = ({
   offset,
   date,
 }) => {
+  console.log(date);
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_dokter as id_dokter, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
-      INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
-      INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id 
+      INNER JOIN tbl_jadwal_jaga as jaga ON antrian.id_jaga = jaga.id 
+      INNER JOIN tbl_karyawan as karyawan ON jaga.id_dokter = karyawan.id 
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id 
       INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
       INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
       INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
-      WHERE antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND divisi.id ILIKE '%${searchDivisi}%' AND pasien.nama_lengkap ILIKE '%${search}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE antrian.tanggal = '${date}'
+      AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%'
+      AND divisi.id ILIKE '%${searchDivisi}%'
+      AND pasien.nama_lengkap ILIKE '%${search}%'
+      AND antrian.id_jaga ILIKE '%${searchJaga}%'
+      ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder}
+      LIMIT ${limit}
+      OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -131,16 +139,24 @@ const getQueueByScheduleId = ({
     console.log(searchDivisi);
     console.log(date);
     pool.query(
-      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_karyawan as id_karyawan, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
+      `SELECT antrian.id, antrian.id_jaga, antrian.id_pasien, antrian.no_antrian, antrian.status, antrian.prioritas, antrian.id_peserta, peserta.id_asuransi, peserta.id_asuransi_kelas, peserta.nomor_asuransi, asuransi.nama as nama_asuransi, asuransi_kelas.nama_kelas, pasien.nama_lengkap as nama_lengkap, pasien.tipe_kitas as tipe_kitas, pasien.nomor_kitas as nomor_kitas, pasien.golongan_darah as golongan_darah, pasien.jenis_kelamin as jenis_kelamin, to_char(pasien.tanggal_lahir, 'YYYY-MM-DD') AS tanggal_lahir, jaga.id_dokter as id_dokter, jaga.id_divisi as id_divisi, karyawan.nama as nama_karyawan, divisi.tipe as divisi, antrian.created_at, antrian.updated_at 
       FROM tbl_antrian as antrian 
       INNER JOIN tbl_pasien as pasien ON antrian.id_pasien = pasien.id 
-      INNER JOIN tbl_jaga as jaga ON antrian.id_jaga = jaga.id 
-      INNER JOIN tbl_karyawan as karyawan ON jaga.id_karyawan = karyawan.id 
+      INNER JOIN tbl_jadwal_jaga as jaga ON antrian.id_jaga = jaga.id 
+      INNER JOIN tbl_karyawan as karyawan ON jaga.id_dokter = karyawan.id 
       INNER JOIN tbl_divisi as divisi ON jaga.id_divisi = divisi.id 
       INNER JOIN tbl_peserta as peserta ON antrian.id_peserta = peserta.id
       INNER JOIN tbl_asuransi as asuransi ON peserta.id_asuransi = asuransi.id
       INNER JOIN tbl_asuransi_kelas as asuransi_kelas ON peserta.id_asuransi_kelas = asuransi_kelas.id
-      WHERE jaga.id_divisi = '${searchDivisi}' AND antrian.tanggal = '${date}' AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%' AND pasien.nama_lengkap ILIKE '%${search}%' AND antrian.id_jaga ILIKE '%${searchJaga}%' AND jaga.id_karyawan ILIKE '%${searchDoctor}%' ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+      WHERE jaga.id_divisi = '${searchDivisi}'
+      AND antrian.tanggal = '${date}'
+      AND CAST(antrian.status AS TEXT) ILIKE '%${searchStatus}%'
+      AND pasien.nama_lengkap ILIKE '%${search}%'
+      AND antrian.id_jaga ILIKE '%${searchJaga}%'
+      AND jaga.id_dokter ILIKE '%${searchDoctor}%'
+      ORDER BY antrian.${sortBy}, antrian.no_antrian ${sortOrder}
+      LIMIT ${limit}
+      OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
