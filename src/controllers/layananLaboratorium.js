@@ -10,16 +10,15 @@ const {
   getLayananLaboratoriumByIdLab,
   countLayananLaboratoriumByIdLab,
   deleteLayananLaboratoriumByIdLab,
+  archiveLayananLaboratorium,
+  activateLayananLaboratoriun,
 } = require("../models/layananLaboratorium");
+const { v4: uuidv4 } = require("uuid");
 
 const layananLaboratoriumController = {
   create: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "LLB";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
+      const id = uuidv4();
       const data = {
         id,
         id_lab: req.body.id_lab,
@@ -39,14 +38,12 @@ const layananLaboratoriumController = {
       const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
-      const searchLaboratorium = req.query.searchLaboratorium || "";
-      const searchPemeriksaan = req.query.searchPemeriksaan || "";
-      const searchKategori = req.query.searchKategori || "";
+      const search = req.query.search || "";
+      const searchStatus = req.query.searchStatus || 1;
       const offset = (page - 1) * limit;
       const result = await getLayananLaboratorium({
-        searchLaboratorium,
-        searchPemeriksaan,
-        searchKategori,
+        searchStatus,
+        search,
         sortBy,
         sortOrder,
         limit,
@@ -54,7 +51,7 @@ const layananLaboratoriumController = {
       });
       const {
         rows: [count],
-      } = await countLayananLaboratorium();
+      } = await countLayananLaboratorium({ search, searchStatus });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -198,6 +195,26 @@ const layananLaboratoriumController = {
     } catch (err) {
       console.log("Update layanan lab data error", err);
       response(res, 400, false, "Update layanan lab data failed");
+    }
+  },
+  archive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await archiveLayananLaboratorium(id);
+      response(res, 200, true, [], "Arsip layanan laboratorium berhasil");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Arsip layanan laboratorium gagal");
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await activateLayananLaboratoriun(id);
+      response(req, 200, true, [], "Aktivasi layanan laboratorium berhasil");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Aktivasi layanan laboratorium gagal");
     }
   },
   delete: async (req, res, next) => {

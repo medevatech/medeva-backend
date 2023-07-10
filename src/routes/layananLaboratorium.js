@@ -11,6 +11,8 @@ router.get("/distinct", protect, layananLaboratoriumController.getDistinct);
 router.get("/laboratorium/:id", layananLaboratoriumController.getByIdLab);
 router.get("/:id", protect, layananLaboratoriumController.getById);
 router.put("/:id", protect, layananLaboratoriumController.update);
+router.put("/archive/:id", protect, layananLaboratoriumController.archive);
+router.put("/activate/:id", protect, layananLaboratoriumController.activate);
 router.delete("/laboratorium/:id", layananLaboratoriumController.deleteByIdLab);
 router.delete("/:id", protect, layananLaboratoriumController.delete);
 
