@@ -37,6 +37,23 @@ const createLayananLaboratorium = (data) => {
   });
 };
 
+const findLayananLaboratoriumByIdLab = (id) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      `SELECT *
+      FROM tbl_layanan_laboratorium
+      WHERE id = '${id}'`,
+      (err, res) => {
+        if (!err) {
+          resolve(res);
+        } else {
+          reject(err);
+        }
+      }
+    );
+  });
+};
+
 const getLayananLaboratorium = ({
   searchStatus,
   search,
@@ -227,6 +244,7 @@ module.exports = {
   createLayananLaboratorium,
   countLayananLaboratorium,
   countLayananLaboratoriumByIdLab,
+  findLayananLaboratoriumByIdLab,
   getLayananLaboratorium,
   getDistinctLayananLaboratorium,
   getLayananLaboratoriumById,

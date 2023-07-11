@@ -12,6 +12,7 @@ const {
   deleteLayananLaboratoriumByIdLab,
   archiveLayananLaboratorium,
   activateLayananLaboratoriun,
+  findLayananLaboratoriumByIdLab,
 } = require("../models/layananLaboratorium");
 const { v4: uuidv4 } = require("uuid");
 
@@ -159,14 +160,27 @@ const layananLaboratoriumController = {
         totalData,
         totalPage,
       };
-      response(
-        res,
-        200,
-        true,
-        result.rows,
-        "Get layanan laboratorium berdasarkan id laboratorium berhasil",
-        pagination
-      );
+      const {
+        rows: [findLayananLabByIdLab],
+      } = await findLayananLaboratoriumByIdLab(id);
+      if (findLayananLabByIdLab) {
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          "Get layanan laboratorium berdasarkan id laboratorium berhasil",
+          pagination
+        );
+      } else {
+        response(
+          res,
+          400,
+          false,
+          null,
+          `ID laboratorium (${id}) tidak ditemukan`
+        );
+      }
     } catch (err) {
       console.log(err);
       response(
