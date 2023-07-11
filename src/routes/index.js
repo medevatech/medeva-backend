@@ -65,6 +65,7 @@ const jblRouter = require("./jadwalBukaLaboratorium");
 
 const contractRouter = require("./kontrak");
 const serviceClinicRouter = require("./klinikJasa");
+const buildingLandAssetClinicRouter = require("./klinikAsetTanahBangunan");
 
 router.use("/pasien", pasienRouter);
 router.use("/asuransi", asuransiRouter);
@@ -130,5 +131,6 @@ router.use("/jbl", jblRouter);
 router.use("/jadwal-jaga", jagaRouter);
 router.use("/kontrak", contractRouter);
 router.use("/klinik-jasa", serviceClinicRouter);
+router.use("/klinik-aset-tanah-bangunan", buildingLandAssetClinicRouter);
 
 module.exports = router;
