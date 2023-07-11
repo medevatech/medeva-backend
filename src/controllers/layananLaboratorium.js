@@ -187,7 +187,7 @@ const layananLaboratoriumController = {
         res,
         400,
         false,
-        null,
+        [],
         "Get layanan laboratorium berdasarkan id laboratorium gagal"
       );
     }
