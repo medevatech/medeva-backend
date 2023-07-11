@@ -23,11 +23,15 @@ const salesLayananControllers = {
         id: uuidv4(),
         id_sales: req.body.id_sales,
         id_klinik_layanan: req.body.id_klinik_layanan,
+        tanggal: req.body.tanggal,
         harga_jual: req.body.harga_jual,
         jumlah_jual: req.body.jumlah_jual,
         is_active: 1,
       };
 
+      req.body.tanggal === ''
+        ? (data.tanggal = '1970-01-01')
+        : req.body.tanggal;
       req.body.harga_jual === '' ? (data.harga_jual = 0) : req.body.harga_jual;
       req.body.jumlah_jual === ''
         ? (data.jumlah_jual = 0)
@@ -193,11 +197,15 @@ const salesLayananControllers = {
           id,
           id_sales: req.body.id_sales,
           id_klinik_layanan: req.body.id_klinik_layanan,
+          tanggal: req.body.tanggal,
           harga_jual: req.body.harga_jual,
           jumlah_jual: req.body.jumlah_jual,
           is_active: 1,
         };
 
+        req.body.tanggal === ''
+          ? (data.tanggal = '1970-01-01')
+          : req.body.tanggal;
         req.body.harga_jual === ''
           ? (data.harga_jual = 0)
           : req.body.harga_jual;
