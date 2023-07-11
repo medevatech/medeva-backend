@@ -136,12 +136,18 @@ const pemakaianJasaControllers = {
           404,
           false,
           null,
-          `id layanan bhp (${id}) tidak ditemukan, cek lagi`
+          `id (${id}) tidak ditemukan, cek lagi`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Get data pemakaian jasa gagal');
+      response(
+        res,
+        404,
+        false,
+        error,
+        'Get data pemakaian jasa berdasarkan id gagal'
+      );
     }
   },
   getByIdLayananJasa: async (req, res) => {
@@ -157,19 +163,31 @@ const pemakaianJasaControllers = {
       } = await findPemakaianJasaByIdLayananJasa(id_layanan_jasa);
 
       if (findLayananJasa) {
-        response(res, 200, true, result.rows, 'get layanan bhp success');
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'Get data pemakaian jasa berdasarkan id berhasil'
+        );
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id layanan jasa (${id_layanan_jasa}) tidak ditemukan, cek lagi`
+          `id_layanan_jasa (${id_layanan_jasa}) tidak ditemukan, cek lagi`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Get data pemakaian jasa gagal');
+      response(
+        res,
+        404,
+        false,
+        error,
+        'Get data pemakaian jasa berdasarkan id gagal'
+      );
     }
   },
   getByIdSales: async (req, res) => {
@@ -185,19 +203,31 @@ const pemakaianJasaControllers = {
       } = await findPemakaianJasaByIdSales(id_sales);
 
       if (findSales) {
-        response(res, 200, true, result.rows, 'get layanan bhp success');
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'Get data pemakaian jasa berdasarkan id berhasil'
+        );
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales (${id_sales}) tidak ditemukan, cek lagi`
+          `id_sales (${id_sales}) tidak ditemukan, cek lagi`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Get data pemakaian jasa gagal');
+      response(
+        res,
+        404,
+        false,
+        error,
+        'Get data pemakaian jasa berdasarkan id gagal'
+      );
     }
   },
   getByIdSalesLayanan: async (req, res) => {
@@ -213,19 +243,31 @@ const pemakaianJasaControllers = {
       } = await findPemakaianJasaByIdSalesLayanan(id_sales_layanan);
 
       if (findSalesLayanan) {
-        response(res, 200, true, result.rows, 'get layanan bhp success');
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'Get data pemakaian jasa berdasarkan id berhasil'
+        );
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id_sales_layanan}) tidak ditemukan, cek lagi`
+          `id_sales_layanan (${id_sales_layanan}) tidak ditemukan, cek lagi`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Get data pemakaian jasa gagal');
+      response(
+        res,
+        404,
+        false,
+        error,
+        'Get data pemakaian jasa berdasarkan id gagal'
+      );
     }
   },
   getByIdSalesPaket: async (req, res) => {
@@ -241,19 +283,31 @@ const pemakaianJasaControllers = {
       } = await findPemakaianJasaByIdSalesPaket(id_sales_paket);
 
       if (findSalesPaket) {
-        response(res, 200, true, result.rows, 'get layanan bhp success');
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          'Get data pemakaian jasa berdasarkan id berhasil'
+        );
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales paket (${id_sales_paket}) tidak ditemukan, cek lagi`
+          `id_sales_paket (${id_sales_paket}) tidak ditemukan, cek lagi`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Get data pemakaian jasa gagal');
+      response(
+        res,
+        404,
+        false,
+        error,
+        'Get data pemakaian jasa berdasarkan id gagal'
+      );
     }
   },
   edit: async (req, res, next) => {
@@ -304,7 +358,7 @@ const pemakaianJasaControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Update data pemeriksaan jasa gagal');
+      response(res, 404, false, error, 'Update data pemakaian jasa gagal');
     }
   },
   editActivate: async (req, res, next) => {
@@ -393,7 +447,7 @@ const pemakaianJasaControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'Hapus pemakaian jasa berhasil');
+      response(res, 404, false, error, 'Hapus pemakaian jasa gagal');
     }
   },
 };

@@ -21,8 +21,8 @@ const insertPemakaianJasa = (data) => {
         is_active, created_at, updated_at) 
       VALUES
         ('${id}', '${id_layanan_jasa}', '${id_sales}', '${id_sales_layanan}', '${id_sales_paket}', 
-        '${tanggal}', '${batch_num}', ${harga_jual}, ${jumlah_pakai}, ${is_active}, 
-        NOW(), NOW())`,
+        '${tanggal}', '${batch_num}', ${harga_jual}, ${jumlah_pakai}, 
+        ${is_active}, NOW(), NOW())`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -318,8 +318,7 @@ const editPemakaianJasa = (data) => {
       SET
         id_layanan_jasa='${id_layanan_jasa}', id_sales='${id_sales}', id_sales_layanan='${id_sales_layanan}', id_sales_paket='${id_sales_paket}', 
         tanggal='${tanggal}', batch_num='${batch_num}', harga_jual=${harga_jual}, jumlah_pakai=${jumlah_pakai}, 
-        is_active=${is_active}, 
-        updated_at=NOW()
+        is_active=${is_active}, updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
@@ -338,8 +337,7 @@ const editPemakaianJasaActivate = (data) => {
     Pool.query(
       `UPDATE tbl_pemakaian_jasa 
       SET
-        is_active=${is_active}, 
-        updated_at=NOW()
+        is_active=${is_active}, updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
@@ -358,8 +356,7 @@ const editPemakaianJasaArchive = (data) => {
     Pool.query(
       `UPDATE tbl_pemakaian_jasa 
       SET
-        is_active=${is_active}, 
-        updated_at=NOW()
+        is_active=${is_active}, updated_at=NOW()
       WHERE id='${id}'`,
       (err, result) => {
         if (!err) {
