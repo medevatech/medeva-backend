@@ -235,7 +235,7 @@ const karyawanController = {
         let refreshToken = generateRefreshToken(payload);
         const resData = {
           id: users.id,
-          id_klinik: users.id_klinik,
+          id_klinik: idClinic,
           nama: users.nama,
           email: users.email,
           username: users.username,
