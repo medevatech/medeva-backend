@@ -114,7 +114,7 @@ const activateContract = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `UPDATE tbl_kontrak
-            SEt is_active = 1
+            SET is_active = 1
             WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {

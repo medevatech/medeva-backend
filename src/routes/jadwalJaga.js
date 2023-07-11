@@ -1,16 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const { doctorScheduleController } = require("../controllers/jadwalJaga");
+const { protect } = require("../middleware/auth");
 
-router.post("/", doctorScheduleController.create);
-router.get("/", doctorScheduleController.get);
-router.get("/distinct", doctorScheduleController.getDistinct);
-router.get("/:id", doctorScheduleController.getById);
-router.get("/divisi/:id", doctorScheduleController.getByIdDivision);
-router.get("/personal/:id", doctorScheduleController.getByIdDoctor);
-router.put("/:id", doctorScheduleController.update);
-router.put("/archive/:id", doctorScheduleController.archive);
-router.put("/activate/:id", doctorScheduleController.activate);
-router.delete("/:id", doctorScheduleController.delete);
+router.post("/", protect, doctorScheduleController.create);
+router.get("/", protect, doctorScheduleController.get);
+router.get("/distinct", protect, doctorScheduleController.getDistinct);
+router.get("/:id", protect, doctorScheduleController.getById);
+router.get("/divisi/:id", protect, doctorScheduleController.getByIdDivision);
+router.get("/personal/:id", protect, doctorScheduleController.getByIdDoctor);
+router.get("/today/:id", protect, doctorScheduleController.getToday);
+router.put("/:id", protect, doctorScheduleController.update);
+router.put("/archive/:id", protect, doctorScheduleController.archive);
+router.put("/activate/:id", protect, doctorScheduleController.activate);
+router.delete("/:id", protect, doctorScheduleController.delete);
 
 module.exports = router;

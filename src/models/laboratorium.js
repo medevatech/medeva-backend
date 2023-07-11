@@ -20,10 +20,10 @@ const countLaboratorium = () => {
 };
 
 const createLaboratorium = (data) => {
-  const { id, nama, no_telepon, alamat } = data;
+  const { id, nama, nomor_telepon, alamat } = data;
   return new Promise((resolve, reject) => {
     pool.query(
-      `INSERT INTO tbl_laboratorium (id, nama, no_telepon, alamat, is_active, created_at, updated_at) VALUES('${id}', '${nama}', '${no_telepon}', '${alamat}', '1', NOW(), NOW())`,
+      `INSERT INTO tbl_laboratorium (id, nama, nomor_telepon, alamat, is_active, created_at, updated_at) VALUES('${id}', '${nama}', '${nomor_telepon}', '${alamat}', '1', NOW(), NOW())`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -45,7 +45,7 @@ const getLaboratorium = ({
 }) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT lab.id, lab.nama, lab.no_telepon, lab.alamat, lab.is_active FROM tbl_laboratorium as lab
+      `SELECT lab.id, lab.nama, lab.nomor_telepon, lab.alamat, lab.is_active FROM tbl_laboratorium as lab
         WHERE lab.nama ILIKE ('%${searchName}%') AND lab.is_active ILIKE '%${searchStatus}%' ORDER BY lab.${sortBy} ${sortOrder} LIMIT ${limit} OFFSET ${offset}
       `,
       (err, res) => {
@@ -62,7 +62,7 @@ const getLaboratorium = ({
 const getLaboratoriumById = (id) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      `SELECT lab.id, lab.nama, lab.no_telepon, lab.alamat, lab.is_active FROM tbl_laboratorium as lab
+      `SELECT lab.id, lab.nama, lab.nomor_telepon, lab.alamat, lab.is_active FROM tbl_laboratorium as lab
       WHERE lab.id = '${id}'`,
       (err, res) => {
         if (!err) {
@@ -76,11 +76,11 @@ const getLaboratoriumById = (id) => {
 };
 
 const updateLaboratorium = (data) => {
-  const { id, nama, no_telepon, alamat } = data;
+  const { id, nama, nomor_telepon, alamat } = data;
   return new Promise((resolve, reject) => {
     pool.query(
       `UPDATE tbl_laboratorium
-                SET nama = '${nama}', no_telepon = '${no_telepon}', alamat = '${alamat}'
+                SET nama = '${nama}', nomor_telepon = '${nomor_telepon}', alamat = '${alamat}'
                 WHERE id = '${id}'`,
       (err, res) => {
         if (!err) {

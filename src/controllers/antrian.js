@@ -75,6 +75,7 @@ const antrianController = {
       const offset = (page - 1) * limit;
       // const dateNow = new Date().toISOString().slice(0, 10);
       const date = req.query.date || dateDefault;
+      console.log(date);
       const result = await getAntrian({
         search,
         searchDivisi,

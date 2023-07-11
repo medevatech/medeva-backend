@@ -11,6 +11,7 @@ const {
   getDoctorScheduleByIdDoctor,
   getDistinctSchedule,
   countScheduleDistinct,
+  getScheduleToday,
 } = require("../models/jadwalJaga");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
@@ -177,24 +178,26 @@ const doctorScheduleController = {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
-      // const sortBy = req.query.sortBy || 'id_divisi';
-      // const sortOrder = req.query.sortOrder || 'desc';
+      const sortBy = req.query.sortBy || "id_divisi";
+      const sortOrder = req.query.sortOrder || "desc";
       const search = req.query.search || "";
+      const searchClinic = req.query.searchKlinik || "";
       // const searchStatus = req.query.searchStatus || '';
       // const searchDivisi = req.query.searchDivisi || "";
       const offset = (page - 1) * limit;
       const result = await getDistinctSchedule({
         search,
+        searchClinic,
         // searchStatus,
         // searchDivisi,
-        // sortBy,
-        // sortOrder,
-        // limit,
-        // offset,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
       });
       const {
         rows: [count],
-      } = await countScheduleDistinct({ search });
+      } = await countScheduleDistinct({ search, searchClinic });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -214,6 +217,35 @@ const doctorScheduleController = {
     } catch (err) {
       console.log("err", err);
       response(res, 400, false, null, "Get distinct schedule error");
+    }
+  },
+  getToday: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const today = new Date().toISOString().substr(0, 10);
+      const day = req.query.day || today;
+      console.log(day);
+      // const tempDay = moment(day).format("yyyy-MM-DD");
+      const result = await getScheduleToday({
+        id: id,
+        day: day,
+      });
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get jadwal jaga berdasarkan id divisi dan tanggal berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get jadwal jaga berdasarkan id divisi dan tanggal gagal"
+      );
     }
   },
   update: async (req, res, next) => {

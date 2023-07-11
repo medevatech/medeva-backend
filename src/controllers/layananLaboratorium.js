@@ -7,19 +7,22 @@ const {
   getLayananLaboratoriumById,
   updateLayananLaboratorium,
   deleteLayananLaboratorium,
+  getLayananLaboratoriumByIdLab,
+  countLayananLaboratoriumByIdLab,
+  deleteLayananLaboratoriumByIdLab,
+  archiveLayananLaboratorium,
+  activateLayananLaboratoriun,
+  findLayananLaboratoriumByIdLab,
 } = require("../models/layananLaboratorium");
+const { v4: uuidv4 } = require("uuid");
 
 const layananLaboratoriumController = {
   create: async (req, res, next) => {
     try {
-      let digits = "0123456789";
-      let id = "LLB";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
+      const id = uuidv4();
       const data = {
         id,
-        id_laboratorium: req.body.id_laboratorium,
+        id_lab: req.body.id_lab,
         id_pemeriksaan: req.body.id_pemeriksaan,
         kategori: req.body.kategori,
       };
@@ -36,14 +39,12 @@ const layananLaboratoriumController = {
       const limit = parseInt(req.query.limit) || 10;
       const sortBy = req.query.sortBy || "created_at";
       const sortOrder = req.query.sortOrder || "desc";
-      const searchLaboratorium = req.query.searchLaboratorium || "";
-      const searchPemeriksaan = req.query.searchPemeriksaan || "";
-      const searchKategori = req.query.searchKategori || "";
+      const search = req.query.search || "";
+      const searchStatus = req.query.searchStatus || 1;
       const offset = (page - 1) * limit;
       const result = await getLayananLaboratorium({
-        searchLaboratorium,
-        searchPemeriksaan,
-        searchKategori,
+        searchStatus,
+        search,
         sortBy,
         sortOrder,
         limit,
@@ -51,7 +52,7 @@ const layananLaboratoriumController = {
       });
       const {
         rows: [count],
-      } = await countLayananLaboratorium();
+      } = await countLayananLaboratorium({ search, searchStatus });
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
@@ -131,15 +132,75 @@ const layananLaboratoriumController = {
       response(res, 400, false, err, "Get layanan lab data by ID failed");
     }
   },
+  getByIdLab: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const sortBy = req.query.sortBy || "created_at";
+      const sortOrder = req.query.sortOrder || "desc";
+      const offset = (page - 1) * limit;
+      const result = await getLayananLaboratoriumByIdLab({
+        id,
+        sortBy,
+        sortOrder,
+        offset,
+        limit,
+      });
+      const {
+        rows: [count],
+      } = await countLayananLaboratoriumByIdLab({
+        id,
+      });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      const {
+        rows: [findLayananLabByIdLab],
+      } = await findLayananLaboratoriumByIdLab(id);
+      if (findLayananLabByIdLab) {
+        response(
+          res,
+          200,
+          true,
+          result.rows,
+          "Get layanan laboratorium berdasarkan id laboratorium berhasil",
+          pagination
+        );
+      } else {
+        response(
+          res,
+          400,
+          false,
+          null,
+          `ID laboratorium (${id}) tidak ditemukan`
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Get layanan laboratorium berdasarkan id laboratorium gagal"
+      );
+    }
+  },
   update: async (req, res, next) => {
     try {
       const id = req.params.id;
-      const id_laboratorium = req.body.id_laboratorium;
+      const id_lab = req.body.id_lab;
       const id_pemeriksaan = req.body.id_pemeriksaan;
       const kategori = req.body.kategori;
       const data = {
         id,
-        id_laboratorium,
+        id_lab,
         id_pemeriksaan,
         kategori,
       };
@@ -150,6 +211,26 @@ const layananLaboratoriumController = {
       response(res, 400, false, "Update layanan lab data failed");
     }
   },
+  archive: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await archiveLayananLaboratorium(id);
+      response(res, 200, true, [], "Arsip layanan laboratorium berhasil");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Arsip layanan laboratorium gagal");
+    }
+  },
+  activate: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await activateLayananLaboratoriun(id);
+      response(req, 200, true, [], "Aktivasi layanan laboratorium berhasil");
+    } catch (err) {
+      console.log(err);
+      response(res, 400, false, null, "Aktivasi layanan laboratorium gagal");
+    }
+  },
   delete: async (req, res, next) => {
     try {
       await deleteLayananLaboratorium(req.params.id);
@@ -157,6 +238,28 @@ const layananLaboratoriumController = {
     } catch (err) {
       console.log("Delete layanan lab error", err);
       response(res, 400, false, err, "Delete layanan lab failed");
+    }
+  },
+  deleteByIdLab: async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await deleteLayananLaboratoriumByIdLab(id);
+      response(
+        res,
+        200,
+        true,
+        [],
+        "Hapus layanan laboratorium berdasarkan id laboratorium berhasil"
+      );
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        400,
+        false,
+        null,
+        "Hapus layanan laboratorium berdasarkan id laboratorium gagal"
+      );
     }
   },
 };

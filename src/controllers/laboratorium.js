@@ -10,6 +10,7 @@ const {
   activateLaboratorium,
   deleteLaboratorium,
 } = require("../models/laboratorium");
+const { v4: uuidv4 } = require("uuid");
 
 const laboratoriumController = {
   create: async (req, res, next) => {
@@ -20,15 +21,11 @@ const laboratoriumController = {
       response(res, 400, false, null, "Name of lab is already used");
     }
     try {
-      let digits = "0123456789";
-      let id = "LAB";
-      for (let i = 0; i < 6; i++) {
-        id += digits[Math.floor(Math.random() * 10)];
-      }
+      const id = uuidv4();
       const data = {
-        id,
+        id: id,
         nama: req.body.nama,
-        no_telepon: req.body.no_telepon,
+        nomor_telepon: req.body.nomor_telepon,
         alamat: req.body.alamat,
       };
       await createLaboratorium(data);
@@ -85,12 +82,12 @@ const laboratoriumController = {
     try {
       const id = req.params.id;
       const nama = req.body.nama;
-      const no_telepon = req.body.no_telepon;
+      const nomor_telepon = req.body.nomor_telepon;
       const alamat = req.body.alamat;
       const data = {
         id,
         nama,
-        no_telepon,
+        nomor_telepon,
         alamat,
       };
       await updateLaboratorium(data);
