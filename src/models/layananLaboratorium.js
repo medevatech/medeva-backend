@@ -42,7 +42,7 @@ const findLayananLaboratoriumByIdLab = (id) => {
     pool.query(
       `SELECT *
       FROM tbl_layanan_laboratorium
-      WHERE id = '${id}'`,
+      WHERE id_lab = '${id}'`,
       (err, res) => {
         if (!err) {
           resolve(res);
