@@ -1,6 +1,7 @@
 const { response } = require("../middleware/common");
 const {
   createServiceClinic,
+  countServiceClinic,
   getServiceClinic,
   getServiceClinicById,
   updateServiceClinic,
@@ -29,11 +30,49 @@ const serviceClinicController = {
   },
   get: async (req, res, next) => {
     try {
-      const result = await getServiceClinic();
-      response(res, 200, true, result.rows, "Get klinik jasa berhasil");
+      const search = req.query.search || "";
+      const searchClinic = req.query.searchKlinik || "";
+      const searchStatus = req.query.searchStatus || "";
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const sortBy = req.query.sortBy || "created_at";
+      const sortOrder = req.query.sortOrder || "desc";
+      const offset = (page - 1) * limit;
+      const result = await getServiceClinic({
+        search,
+        searchClinic,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countServiceClinic({
+        search,
+        searchClinic,
+        searchStatus,
+      });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
+      response(
+        res,
+        200,
+        true,
+        result.rows,
+        "Get klinik jasa berhasil",
+        pagination
+      );
     } catch (err) {
       console.log(err);
-      response(res, 400, false, null, "Get klniik jasa gagal");
+      response(res, 400, false, null, "Get klinik jasa gagal");
     }
   },
   getById: async (req, res, next) => {

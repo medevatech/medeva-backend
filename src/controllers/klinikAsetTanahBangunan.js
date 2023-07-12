@@ -6,6 +6,7 @@ const {
   updateBuildingLandAssetClinic,
   archiveBuildingLandAssetClinic,
   activateBuildingLandAssetClinic,
+  countBuildingLandAssetClinic,
 } = require("../models/klinikAsetTanahBangunan");
 const { v4: uuidv4 } = require("uuid");
 
@@ -47,13 +48,45 @@ const buildingLandAssetClinicController = {
   },
   get: async (req, res, next) => {
     try {
-      const result = await getBuildingLandAssetClinic();
+      const search = req.query.search || "";
+      const searchClinic = req.query.searchKlinik || "";
+      const searchStatus = req.query.searchStatus || "";
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const sortBy = req.query.sortBy || "created_at";
+      const sortOrder = req.query.sortOrder || "desc";
+      const offset = (page - 1) * limit;
+      const result = await getBuildingLandAssetClinic({
+        search,
+        searchClinic,
+        searchStatus,
+        sortBy,
+        sortOrder,
+        limit,
+        offset,
+      });
+      const {
+        rows: [count],
+      } = await countBuildingLandAssetClinic({
+        search,
+        searchClinic,
+        searchStatus,
+      });
+      const totalData = parseInt(count.total);
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        currentPage: page,
+        limit,
+        totalData,
+        totalPage,
+      };
       response(
         res,
         200,
         true,
         result.rows,
-        "Get klinik aset tanah bangunan berhasil"
+        "Get klinik aset tanah bangunan berhasil",
+        pagination
       );
     } catch (err) {
       console.log(err);

@@ -26,12 +26,41 @@ const createBuildingLandAssetClinic = (data) => {
   });
 };
 
-const getBuildingLandAssetClinic = () => {
+const countBuildingLandAssetClinic = ({
+  search,
+  searchClinic,
+  searchStatus,
+}) => {
+  return pool.query(
+    `SELECT COUNT(*) AS total
+        FROM tbl_klinik_aset_tanah_bangunan
+            INNER JOIN tbl_klinik ON tbl_klinik_aset_tanah_bangunan.id_klinik = tbl_klinik.id
+            WHERE tbl_klinik_aset_tanah_bangunan.nama ILIKE '%${search}%'
+            AND CAST(tbl_klinik_aset_tanah_bangunan.id_klinik AS TEXT) ILIKE '%${searchClinic}%'
+            AND CAST(tbl_klinik_aset_tanah_bangunan.is_active AS TEXT) ILIKE '%${searchStatus}%'`
+  );
+};
+
+const getBuildingLandAssetClinic = ({
+  search,
+  searchClinic,
+  searchStatus,
+  sortBy,
+  sortOrder,
+  limit,
+  offset,
+}) => {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT katb.id, katb.id_klinik, kln.nama_klinik, katb.nama, katb.tanggal_beli, katb.harga_beli, katb.tipe, katb.habis_masa_hidup, katb.metode_depresiasi, katb.is_active, katb.created_at, katb.updated_at
       FROM tbl_klinik_aset_tanah_bangunan AS katb
-      INNER JOIN tbl_klinik AS kln ON katb.id_klinik = kln.id`,
+      INNER JOIN tbl_klinik AS kln ON katb.id_klinik = kln.id
+      WHERE katb.nama ILIKE '%${search}%'
+      AND CAST(katb.id_klinik AS TEXT) ILIKE '%${searchClinic}%'
+      AND CAST(katb.is_active AS TEXT) ILIKE '%${searchStatus}%'
+      ORDER BY katb.${sortBy} ${sortOrder}
+      LIMIT ${limit}
+      OFFSET ${offset}`,
       (err, res) => {
         if (!err) {
           resolve(res);
@@ -122,6 +151,7 @@ const activateBuildingLandAssetClinic = (id) => {
 
 module.exports = {
   createBuildingLandAssetClinic,
+  countBuildingLandAssetClinic,
   getBuildingLandAssetClinic,
   getBuildingLandAssetClinicById,
   updateBuildingLandAssetClinic,
