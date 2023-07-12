@@ -1,28 +1,28 @@
 const { response } = require(`../middleware/common`);
 const {
-  insertSalesLayanan,
-  allSalesLayanan,
-  countAllSalesLayanan,
-  getSalesLayananByIdSalesLayanan,
-  findSalesLayananByIdSalesLayanan,
-  getSalesLayananByIdSales,
-  findSalesLayananByIdSales,
-  getSalesLayananByIdKlinikLayanan,
-  findSalesLayananByIdKlinikLayanan,
-  editSalesLayanan,
-  editSalesLayananActivate,
-  editSalesLayananArchive,
-  deleteSalesLayanan,
-} = require(`../models/salesLayanan.js`);
+  insertSalesPaket,
+  allSalesPaket,
+  countAllSalesPaket,
+  getSalesPaketByIdSalesPaket,
+  findSalesPaketByIdSalesPaket,
+  getSalesPaketByIdSales,
+  findSalesPaketByIdSales,
+  getSalesPaketByIdKlinikPaket,
+  findSalesPaketByIdKlinikPaket,
+  editSalesPaket,
+  editSalesPaketActivate,
+  editSalesPaketArchive,
+  deleteSalesPaket,
+} = require(`../models/salesPaket.js`);
 const { v4: uuidv4 } = require('uuid');
 
-const salesLayananControllers = {
+const salesPaketControllers = {
   add: async (req, res, next) => {
     try {
       let data = {
         id: uuidv4(),
         id_sales: req.body.id_sales,
-        id_klinik_layanan: req.body.id_klinik_layanan,
+        id_klinik_paket: req.body.id_klinik_paket,
         tanggal: req.body.tanggal,
         harga_jual: req.body.harga_jual,
         jumlah_jual: req.body.jumlah_jual,
@@ -47,12 +47,12 @@ const salesLayananControllers = {
       }
 
       if (isError === false) {
-        await insertSalesLayanan(data);
-        response(res, 200, true, data, 'insert sales layanan success');
+        await insertSalesPaket(data);
+        response(res, 200, true, data, 'insert sales paket success');
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'insert sales layanan failed');
+      response(res, 404, false, error, 'insert sales paket failed');
     }
   },
   getAll: async (req, res) => {
@@ -62,11 +62,13 @@ const salesLayananControllers = {
       const sortBy = req.query.sortBy || 'created_at';
       const sortOrder = req.query.sortOrder || 'DESC';
       const search = req.query.search || '';
+      const searchNamaKlinikPaket = req.query.searchNamaKlinikPaket || '';
       const searchStatus = req.query.searchStatus || '';
       const offset = (page - 1) * limit;
 
-      const result = await allSalesLayanan({
+      const result = await allSalesPaket({
         search,
+        searchNamaKlinikPaket,
         searchStatus,
         sortBy,
         sortOrder,
@@ -76,7 +78,7 @@ const salesLayananControllers = {
 
       const {
         rows: [count],
-      } = await countAllSalesLayanan(search, searchStatus);
+      } = await countAllSalesPaket(search, searchNamaKlinikPaket, searchStatus);
 
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -92,56 +94,56 @@ const salesLayananControllers = {
         200,
         true,
         result.rows,
-        'get sales layanan success',
+        'get sales paket success',
         pagination
       );
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get sales layanan failed');
+      response(res, 404, false, error, 'get sales paket failed');
     }
   },
   getById: async (req, res) => {
     try {
       const id = req.params.id;
 
-      const result = await getSalesLayananByIdSalesLayanan({
+      const result = await getSalesPaketByIdSalesPaket({
         id,
       });
 
       const {
-        rows: [findSalesLayanan],
-      } = await findSalesLayananByIdSalesLayanan(id);
+        rows: [findSalesPaket],
+      } = await findSalesPaketByIdSalesPaket(id);
 
-      if (findSalesLayanan) {
-        response(res, 200, true, result.rows, 'get sales layanan success');
+      if (findSalesPaket) {
+        response(res, 200, true, result.rows, 'get sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id}) not found, check again`
+          `id sales paket (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get sales layanan failed');
+      response(res, 404, false, error, 'get sales paket failed');
     }
   },
   getByIdSales: async (req, res) => {
     try {
       const id_sales = req.params.id_sales;
 
-      const result = await getSalesLayananByIdSales({
+      const result = await getSalesPaketByIdSales({
         id_sales,
       });
 
       const {
         rows: [findSales],
-      } = await findSalesLayananByIdSales(id_sales);
+      } = await findSalesPaketByIdSales(id_sales);
 
       if (findSales) {
-        response(res, 200, true, result.rows, 'get sales layanan success');
+        response(res, 200, true, result.rows, 'get sales paket success');
       } else {
         return response(
           res,
@@ -153,35 +155,35 @@ const salesLayananControllers = {
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get sales layanan failed');
+      response(res, 404, false, error, 'get sales paket failed');
     }
   },
-  getByIdKlinikLayanan: async (req, res) => {
+  getByIdKlinikPaket: async (req, res) => {
     try {
-      const id_klinik_layanan = req.params.id_klinik_layanan;
+      const id_klinik_paket = req.params.id_klinik_paket;
 
-      const result = await getSalesLayananByIdKlinikLayanan({
-        id_klinik_layanan,
+      const result = await getSalesPaketByIdKlinikPaket({
+        id_klinik_paket,
       });
 
       const {
-        rows: [findKlinikLayanan],
-      } = await findSalesLayananByIdKlinikLayanan(id_klinik_layanan);
+        rows: [findKlinikPaket],
+      } = await findSalesPaketByIdKlinikPaket(id_klinik_paket);
 
-      if (findKlinikLayanan) {
-        response(res, 200, true, result.rows, 'get sales layanan success');
+      if (findKlinikPaket) {
+        response(res, 200, true, result.rows, 'get sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id klinik layanan (${id_klinik_layanan}) not found, check again`
+          `id klinik paket (${id_klinik_paket}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'get sales layanan failed');
+      response(res, 404, false, error, 'get sales paket failed');
     }
   },
   edit: async (req, res, next) => {
@@ -189,14 +191,14 @@ const salesLayananControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findSalesLayanan],
-      } = await findSalesLayananByIdSalesLayanan(id);
+        rows: [findSalesPaket],
+      } = await findSalesPaketByIdSalesPaket(id);
 
-      if (findSalesLayanan) {
+      if (findSalesPaket) {
         let data = {
           id,
           id_sales: req.body.id_sales,
-          id_klinik_layanan: req.body.id_klinik_layanan,
+          id_klinik_paket: req.body.id_klinik_paket,
           tanggal: req.body.tanggal,
           harga_jual: req.body.harga_jual,
           jumlah_jual: req.body.jumlah_jual,
@@ -213,20 +215,20 @@ const salesLayananControllers = {
           ? (data.jumlah_jual = 0)
           : req.body.jumlah_jual;
 
-        await editSalesLayanan(data);
-        response(res, 200, true, data, 'edit sales layanan success');
+        await editSalesPaket(data);
+        response(res, 200, true, data, 'edit sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id}) not found, check again`
+          `id sales paket (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'edit sales layanan failed');
+      response(res, 404, false, error, 'edit sales paket failed');
     }
   },
   editActivate: async (req, res, next) => {
@@ -234,29 +236,29 @@ const salesLayananControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findSalesLayanan],
-      } = await findSalesLayananByIdSalesLayanan(id);
+        rows: [findSalesPaket],
+      } = await findSalesPaketByIdSalesPaket(id);
 
-      if (findSalesLayanan) {
+      if (findSalesPaket) {
         let data = {
           id,
           is_active: 1,
         };
 
-        await editSalesLayananActivate(data);
-        response(res, 200, true, data, 'activate sales layanan success');
+        await editSalesPaketActivate(data);
+        response(res, 200, true, data, 'activate sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id}) not found, check again`
+          `id sales paket (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'activate sales layanan failed');
+      response(res, 404, false, error, 'activate sales paket failed');
     }
   },
   editArchive: async (req, res, next) => {
@@ -264,29 +266,29 @@ const salesLayananControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findSalesLayanan],
-      } = await findSalesLayananByIdSalesLayanan(id);
+        rows: [findSalesPaket],
+      } = await findSalesPaketByIdSalesPaket(id);
 
-      if (findSalesLayanan) {
+      if (findSalesPaket) {
         let data = {
           id,
           is_active: 0,
         };
 
-        await editSalesLayananArchive(data);
-        response(res, 200, true, data, 'archive sales layanan success');
+        await editSalesPaketArchive(data);
+        response(res, 200, true, data, 'archive sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id}) not found, check again`
+          `id sales paket (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'archive sales layanan failed');
+      response(res, 404, false, error, 'archive sales paket failed');
     }
   },
   delete: async (req, res) => {
@@ -294,30 +296,30 @@ const salesLayananControllers = {
       const id = req.params.id;
 
       const {
-        rows: [findSalesLayanan],
-      } = await findSalesLayananByIdSalesLayanan(id);
+        rows: [findSalesPaket],
+      } = await findSalesPaketByIdSalesPaket(id);
 
-      if (findSalesLayanan) {
+      if (findSalesPaket) {
         let data = {
           id,
         };
 
-        await deleteSalesLayanan(data);
-        response(res, 200, true, data, 'delete sales layanan success');
+        await deleteSalesPaket(data);
+        response(res, 200, true, data, 'delete sales paket success');
       } else {
         return response(
           res,
           404,
           false,
           null,
-          `id sales layanan (${id}) not found, check again`
+          `id sales paket (${id}) not found, check again`
         );
       }
     } catch (error) {
       console.log(error);
-      response(res, 404, false, error, 'delete sales layanan failed');
+      response(res, 404, false, error, 'delete sales paket failed');
     }
   },
 };
 
-exports.salesLayananControllers = salesLayananControllers;
+exports.salesPaketControllers = salesPaketControllers;
